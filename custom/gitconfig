@@ -1,0 +1,6 @@
+[user]
+    name = 
+    email = 
+[core]
+    excludesfile = ~/.gitignore
+    fileMode = false

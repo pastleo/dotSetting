@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ps $@ -u $USER -o pid,%cpu,%mem,command | less ;

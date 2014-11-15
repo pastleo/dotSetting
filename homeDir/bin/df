@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ $# -ge 2 ]]; then
+    using_sys_path df $@
+else
+    using_sys_path df -h $@
+fi
+

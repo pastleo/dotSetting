@@ -1,0 +1,8 @@
+#!/bin/bash
+
+path_user=$PATH
+export PATH=$path_sys
+
+$@
+
+export PATH=$path_user

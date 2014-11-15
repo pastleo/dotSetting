@@ -1,0 +1,25 @@
+#!/bin/bash
+
+BRed="\033[1;31m"
+NC="\033[0m"
+
+echo -e "\nYou are logged on ${BRed}$(hostname)$NC"
+echo -e "\n${BRed}Additionnal information:$NC " ; uname -a
+if ! [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "\n${BRed}Users logged on:$NC " ; w -hs |
+         cut -d " " -f1 | sort | uniq
+fi
+
+echo -e "\n${BRed}Current date :$NC " ; date
+echo -e "\n${BRed}Machine stats :$NC " ; uptime
+if ! [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "\n${BRed}Memory stats :$NC " ; free
+fi
+echo -e "\n${BRed}Diskspace :$NC " ; mydf / $HOME
+echo -e "\n${BRed}Local IP Address :$NC" ; my_ip
+if ! [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "\n${BRed}Open connections :$NC "; netstat -pan --inet;
+else
+    echo -e "\n${BRed}Open connections :$NC "; lsof -i -n -P | grep LISTEN;
+fi
+echo ""

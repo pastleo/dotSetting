@@ -1,0 +1,3 @@
+#!/bin/bash
+
+using_sys_path reattach-to-user-namespace atom $@

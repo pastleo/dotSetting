@@ -1,0 +1,779 @@
+# ===============================================================
+# PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
+# By PastLeo
+# ===============================================================
+# the "Last Modified for this file" I remember to update:
+# 2014/11/16
+#
+# Modifed from Emmanuel Rouat [no-email] Tue Nov 20 22:04:47 CET 2012
+
+# ===============================================================
+# Declaration and Simple Readme
+# ===============================================================
+#
+#  This file is normally read by interactive shells only.
+#  Here is the place to define your aliases, functions and
+#  other interactive features like your prompt.
+#
+#  The majority of the code here assumes you are on a GNU
+#  system (most likely a Linux box) and is often based on code
+#  found on Usenet or Internet.
+#
+#  See for instance:
+#  http://tldp.org/LDP/abs/html/index.html
+#  http://www.caliban.org/bash
+#  http://www.shelldorado.com/scripts/categories.html
+#  http://www.dotfiles.org
+#
+#  The choice of colors was done for a shell with a dark background
+#  (white on black), and this is usually also suited for pure text-mode
+#  consoles (no X server available). If you use a white background,
+#  you'll have to do some other choices for readability.
+#
+#  This bashrc file is a bit overcrowded.
+#  Remember, it is just just an example.
+#  Tailor it to your needs.
+#
+# ===============================================================
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# Source global definitions (if any)
+if [ -f /etc/bashrc ]; then
+      . /etc/bashrc   # --> Read /etc/bashrc, if present.
+fi
+
+#--------------------------------------------------------------
+#  Automatic setting of $DISPLAY (if not set already).
+#  This works for me - your mileage may vary. . . .
+#  The problem is that different types of terminals give
+#+ different answers to 'who am i' (rxvt in particular can be
+#+ troublesome) - however this code seems to work in a majority
+#+ of cases.
+#--------------------------------------------------------------
+
+function get_xserver ()
+{
+    case $TERM in
+        xterm )
+            XSERVER=$(who am i | awk '{print $NF}' | tr -d ')''(' )
+            # Ane-Pieter Wieringa suggests the following alternative:
+            #  I_AM=$(who am i)
+            #  SERVER=${I_AM#*(}
+            #  SERVER=${SERVER%*)}
+            XSERVER=${XSERVER%%:*}
+            ;;
+            aterm | rxvt)
+            # Find some code that works here. ...
+            ;;
+    esac
+}
+
+if [ -z ${DISPLAY:=""} ]; then
+    get_xserver
+    if [[ -z ${XSERVER}  || ${XSERVER} == $(hostname) ||
+       ${XSERVER} == "unix" ]]; then
+          DISPLAY=":0.0"          # Display on local host.
+    else
+       DISPLAY=${XSERVER}:0.0     # Display on remote host.
+    fi
+fi
+
+export DISPLAY
+
+# ================================================
+# terminal bash color codes:
+# ================================================
+# color control unit: "\[\033["+color_code+"m\]"
+#
+# Color codes:
+
+# Normal Colors (Foreground)
+Foregrounds="Black Red Green Yellow Blue Purple Cyan White"
+
+Black="0;30"
+Red="0;31"
+Green="0;32"
+Yellow="0;33"
+Blue="0;34"
+Purple="0;35"
+Cyan="0;36"
+White="0;37"
+
+# Bright & Bold (Foreground)
+Bolds="BBlack BRed BGreen BYellow BBlue BPurple BCyan BWhite"
+
+BBlack="1;30"
+BRed="1;31"
+BGreen="1;32"
+BYellow="1;33"
+BBlue="1;34"
+BPurple="1;35"
+BCyan="1;36"
+BWhite="1;37"
+
+
+# Background
+Backgrounds="bBlack bRed bGreen bYellow bBlue bPurple bCyan bWhite"
+
+bBlack="40"
+bRed="41"
+bGreen="42"
+bYellow="43"
+bBlue="44"
+bPurple="45"
+bCyan="46"
+bWhite="47"
+
+c()
+{
+    if [[ "$#" -ge 1 ]]; then
+        for codes in $@; do
+            printf "\033[%sm" "$( eval echo \$$codes )"
+        done
+    else
+        printf "\033[0m"
+    fi
+}
+
+c_inline()
+{
+    if [[ "$#" -ge 1 ]]; then for codes in $@; do printf "\033[%sm" "$( eval echo \$$codes )"; done else printf "\033[0m"; fi
+}
+
+cprintf()
+{
+    c "$1"
+    shift
+    printf "$@"
+    c
+}
+
+cecho()
+{
+    c "$1"
+    printf "$2"
+    c
+    printf "\n"
+}
+
+
+draw_color_matrix()
+{
+    echo ""
+    echo "=== Background: [Default] =============================================================================="
+    for fore in $Foregrounds; do
+        cprintf "$fore" " [%7s :> " "$fore"
+    done
+    echo ""
+    for fore in $Bolds; do
+        cprintf "$fore" " [%7s :> " "$fore"
+    done
+    c
+    echo ""
+    echo ""
+
+    for back in $Backgrounds; do
+        cecho $back "=== Background: [$( printf "%7s" $back )] =============================================================================="
+        for fore in $Foregrounds; do
+            cprintf "$fore $back" " [%7s :> " "$fore"
+        done
+        echo ""
+        for fore in $Bolds; do
+            cprintf "$fore $back" " [%7s :> " "$fore"
+        done
+        c
+        echo ""
+        echo ""
+    done
+}
+
+#-------------------------------------------------------------
+# Greeting, motd etc. ...
+#-------------------------------------------------------------
+
+echo -e "$(c Cyan)This is BASH $( cprintf 'BYellow' ${BASH_VERSION%.*} )$(c Cyan) at $(cprintf BBlue $(hostname) )$(c Cyan) ... DISPLAY on [$( cprintf 'BCyan' $DISPLAY )]"
+
+# You can specify your own greeting message!
+if [[ -f "$HOME/.welcomeMsg" ]]; then
+    cat ~/.welcomeMsg
+fi
+
+date
+if [ -x /usr/games/fortune ]; then
+    /usr/games/fortune -s     # Makes our day a bit more fun.... :-)
+fi
+
+function _exit()              # Function to run upon exit of shell.
+{
+    cecho "BRed" "Hasta la vista, baby"
+}
+trap _exit EXIT
+
+# ================================================
+# locale and encoding setting
+# ================================================
+
+export LC_CTYPE=zh_TW.UTF-8
+export LC_MESSAGES=zh_TW.UTF-8
+export LC_TIME=zh_TW.UTF-8
+
+# ================================================
+# path variable
+# ================================================
+
+if [[ "$path_sys" ]]; then
+    export PATH=$path_sys
+fi
+add_path()
+{
+    tmp="$1:${PATH//$1/}"
+    export PATH="${tmp//::/:}"
+}
+add_path "/usr/local/bin"
+add_path "/usr/local/sbin"
+
+export path_sys=$PATH
+
+add_path "$HOME/.bin"
+
+# ================================================
+# Add some vars for some programs
+# ================================================
+
+export VAGRANT_DOTFILE_PATH=".vagrant_$HOSTNAME"
+
+# #####################################################
+# If there is more thing to add for both fish and bash
+# put them down below before fish starts
+# #####################################################
+
+# ================================================
+# Start fish shell if this machine has
+# ================================================
+
+if [ ! $disable_fish ]; then
+    if hash fish 2>/dev/null; then
+        echo "$(c Cyan)><> ><> $(c Blue)><(((^> $(c Green)Starting Fish Shell$(c Blue) <^)))>< $(c Cyan)<>< <><$(c)"
+        fish
+        exit
+    else
+        echo "$(c bRed BPurple) <.{{{><$(c bRed BBlack) You dont have fish shell ... $(c bRed BPurple)><{{{.> $(c)"
+        echo "$(c Yellow)Visit http://fishshell.com/ to get the modern shell!$(c)"
+    fi
+fi
+
+# ================================================
+# If no fish shell, continue the bash setting...
+# ================================================
+
+#-------------------------------------------------------------
+# Some settings
+#-------------------------------------------------------------
+
+#set -o nounset     # These  two options are useful for debugging.
+#set -o xtrace
+alias debug="set -o nounset; set -o xtrace"
+
+ulimit -S -c 0      # Don't want coredumps.
+set -o notify
+set -o noclobber
+set -o ignoreeof
+
+
+# Enable options:
+shopt -s cdspell
+shopt -s cdable_vars
+shopt -s checkhash
+shopt -s checkwinsize
+shopt -s sourcepath
+shopt -s no_empty_cmd_completion
+shopt -s cmdhist
+shopt -s histappend histreedit histverify
+shopt -s extglob       # Necessary for programmable completion.
+
+# Disable options:
+shopt -u mailwarn
+unset MAILCHECK        # Don't want my shell to warn me of incoming mail.
+
+# Case insensitive
+bind "set completion-ignore-case on"
+
+# ================================================
+# PastLeo custome static terminal prompt theme:
+# (use PS1.* to choose one)
+# ================================================
+
+alias PS1.no-color='export PS1="\u | \W $ "'
+
+alias PS1.lagacy='export PS1="\[\e[0;32m\]\u\[\e[0;37m\] | \[\e[0;36m\]\W \[\e[0m\]"$'
+
+alias PS1.hostname_on-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[44m\]◤ \[\033[1;30m\]\H\[\033[1;34m\]\[\033[40m\]◤ \[\033[1;36m\]\W\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
+alias PS1.hostname_off-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[40m\]◤ \W\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
+alias PS1.fullpath-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[40m\]◤ \w\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
+
+alias PS1.hostname_off='export PS1="\[\033[42m\]\[\033[1;30m\]\u \[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"'
+alias PS1.hostname_on='export PS1="\[\033[42m\]\[\033[1;30m\]\u \[\033[1;30m\]\[\033[44m\] \H \[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"'
+
+# =============================================================
+# PastLeo Dynamic Shell Prompt (Not Support when ssh or su!)
+# Only detect if is remote...
+# =============================================================
+#
+# Format:
+#    User  Host  PWD  >
+#    [   ][    ][   ][ ]
+#
+# USER:
+#    Green     == normal user
+#    Yellow    == SU to user
+#    Red       == root
+# HOST:
+#    Hidden    == local session
+#    Blue      == secured remote connection (via ssh)
+#    Red       == unsecured remote connection
+# PWD:
+#    Black
+# >:
+#    Black
+#
+#    Command is added to the history file each time you hit enter,
+#    so it's available to all shells (using 'history -a').
+
+PS1.PastLeoDynamicPrompt()
+{
+    local promptTmp
+    local color
+
+    # promptTmp="$(c BBlack)"
+
+    # Test user type:
+    if [[ ${USER} == "root" ]]; then
+        # User is root.
+        promptTmp="\[\033[41m\]\[\033[1;30m\]\u "
+        color="Red"
+    elif [[ ${USER} != $(logname) ]]; then
+        # User is not login user.
+        promptTmp="\[\033[43m\]\[\033[1;30m\]\u "
+        color="Yellow"
+    else
+        # User is normal (well ... most of us are).
+        promptTmp="\[\033[42m\]\[\033[1;30m\]\u "
+        color="Green"
+    fi
+    # promptTmp=$promptTmp"$(c b$color)\u "
+
+    # Test connection type:
+    if [ -n "${SSH_CONNECTION}" ]; then
+        # Connected on remote machine, via ssh (good).
+        # promptTmp=$promptTmp"$(c bBlue) \H "
+        promptTmp=$promptTmp"\[\033[1;30m\]\[\033[44m\] \H "
+        color="Blue"
+    elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+        # Connected on remote machine, not via ssh (bad).
+        # promptTmp=$promptTmp"$(c bPurple) \H "
+        promptTmp=$promptTmp"\[\033[1;30m\]\[\033[45m\] \H "
+        color="Purple"
+    fi
+
+    case $color in
+        Red)
+        promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+            ;;
+        Yellow)
+        promptTmp=$promptTmp"\[\033[1;33m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+            ;;
+        Green)
+        promptTmp=$promptTmp"\[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+            ;;
+        Blue)
+        promptTmp=$promptTmp"\[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+            ;;
+        Purple)
+        promptTmp=$promptTmp"\[\033[1;35m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+            ;;
+    esac
+    # promptTmp=$promptTmp"$(c B$color bBlack) \W $(c Black) > $(c)"
+
+    export PS1=$promptTmp
+}
+
+# =============================================================
+# Default PS1:
+PS1.PastLeoDynamicPrompt
+# =============================================================
+
+# =============================================================
+# PROMPT_COMMAND
+# =============================================================
+case $TERM in
+xterm*|vte*)
+  if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+      PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+  elif [ "${VTE_VERSION:-0}" -ge 3405 ]; then
+      PROMPT_COMMAND="__vte_prompt_command"
+  else
+      PROMPT_COMMAND='printf "\033]0;%s\007" "${PWD##*/}"'
+  fi
+  ;;
+screen*)
+  if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+      PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+  else
+    PROMPT_COMMAND='printf "\033k[%s]\033\\" "${PWD##*/}"'
+  fi
+  ;;
+*)
+  [ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+  ;;
+esac
+
+export TIMEFORMAT=$'\nreal %3R\tuser %3U\tsys %3S\tpcpu %P\n'
+export HISTIGNORE="&:bg:fg:ll:h"
+export HISTTIMEFORMAT="$(echo -e ${BCyan})[%d/%m %H:%M:%S]$(echo -e ${NC}) "
+export HISTCONTROL=ignoredups
+export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
+
+#============================================================
+#
+#  ALIASES AND FUNCTIONS
+#
+#  I move most of them into the ~/.bin/ to make fish able to 
+#  use them
+#  By PastLeo 20141116
+#
+#============================================================
+
+#-------------------------------------------------------------
+# Tailoring 'less'
+#-------------------------------------------------------------
+
+alias more='less'
+export PAGER=less
+# export LESSCHARSET='latin1'
+export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
+                # Use this if lesspipe.sh exists.
+export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
+:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# LESS man page colors (makes Man pages more readable).
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+#-------------------------------------------------------------
+# The 'ls' family
+#-------------------------------------------------------------
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    alias ls='ls -h --color'
+    alias lx='ls -lXB'         #  Sort by extension.
+    alias lk='ls -lSr'         #  Sort by size, biggest last.
+    alias lt='ls -ltr'         #  Sort by date, most recent last.
+    alias lc='ls -ltcr'        #  Sort by/show change time,most recent last.
+    alias lu='ls -ltur'        #  Sort by/show access time,most recent last.
+    
+    # The ubiquitous 'll': directories first, with alphanumeric sorting:
+    alias ll="ls -lv --group-directories-first"
+    alias lm='ll |more'        #  Pipe through 'more'
+    alias lr='ll -R'           #  Recursive ls.
+    alias la='ll -A'           #  Show hidden files.
+    alias tree='tree -Csuh'    #  Nice alternative to 'recursive ls' ...
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    alias ls='ls -G'
+    alias la='ls -alG'
+    alias ll='ls -lG'
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    echo 'Your OS is cygwin. Skip ls aliasing.'
+elif [[ "$OSTYPE" == "win32" ]]; then
+    alias ls='dir'
+    alias ll='dir'
+    alias la='dir'
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    alias ls='ls -G'
+    alias la='ls -alG'
+    alias ll='ls -lG'
+else
+    echo 'Your OS is unknown. Skip ls aliasing.'
+fi
+
+#-------------------------------------------------------------
+# Spelling typos - highly personnal and keyboard-dependent :-)
+#-------------------------------------------------------------
+
+alias xs='cd'
+alias vf='cd'
+alias moer='more'
+alias moew='more'
+alias kk='ll'
+
+#=========================================================================
+#  PROGRAMMABLE COMPLETION SECTION
+#  Most are taken from the bash 2.05 documentation and from Ian McDonald's
+# 'Bash completion' package (http://www.caliban.org/bash/#completion)
+#  You will in fact need bash more recent then 3.0 for some features.
+#
+#  Note that most linux distributions now provide many completions
+# 'out of the box' - however, you might need to make your own one day,
+#  so I kept those here as examples.
+#=========================================================================
+
+if [ "${BASH_VERSION%.*}" \< "3.0" ]; then
+    echo "You will need to upgrade to version 3.0 for full \
+          programmable completion features"
+else
+    shopt -s extglob        # Necessary.
+
+    complete -A hostname   rsh rcp telnet rlogin ftp ping disk
+    complete -A export     printenv
+    complete -A variable   export local readonly unset
+    complete -A enabled    builtin
+    complete -A alias      alias unalias
+    complete -A function   function
+    complete -A user       su mail finger
+
+    complete -A helptopic  help     # Currently same as builtins.
+    complete -A shopt      shopt
+    complete -A stopped -P '%' bg
+    complete -A job -P '%'     fg jobs disown
+
+    complete -A directory  mkdir rmdir
+    complete -A directory   -o default cd
+
+    # Compression
+    complete -f -o default -X '*.+(zip|ZIP)'  zip
+    complete -f -o default -X '!*.+(zip|ZIP)' unzip
+    complete -f -o default -X '*.+(z|Z)'      compress
+    complete -f -o default -X '!*.+(z|Z)'     uncompress
+    complete -f -o default -X '*.+(gz|GZ)'    gzip
+    complete -f -o default -X '!*.+(gz|GZ)'   gunzip
+    complete -f -o default -X '*.+(bz2|BZ2)'  bzip2
+    complete -f -o default -X '!*.+(bz2|BZ2)' bunzip2
+    complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract
+
+
+    # Documents - Postscript,pdf,dvi.....
+    complete -f -o default -X '!*.+(ps|PS)'  gs ghostview ps2pdf ps2ascii
+    complete -f -o default -X \
+    '!*.+(dvi|DVI)' dvips dvipdf xdvi dviselect dvitype
+    complete -f -o default -X '!*.+(pdf|PDF)' acroread pdf2ps
+    complete -f -o default -X '!*.@(@(?(e)ps|?(E)PS|pdf|PDF)?\
+    (.gz|.GZ|.bz2|.BZ2|.Z))' gv ggv
+    complete -f -o default -X '!*.texi*' makeinfo texi2dvi texi2html texi2pdf
+    complete -f -o default -X '!*.tex' tex latex slitex
+    complete -f -o default -X '!*.lyx' lyx
+    complete -f -o default -X '!*.+(htm*|HTM*)' lynx html2ps
+    complete -f -o default -X \
+    '!*.+(doc|DOC|xls|XLS|ppt|PPT|sx?|SX?|csv|CSV|od?|OD?|ott|OTT)' soffice
+
+    # Multimedia
+    complete -f -o default -X \
+    '!*.+(gif|GIF|jp*g|JP*G|bmp|BMP|xpm|XPM|png|PNG)' xv gimp ee gqview
+    complete -f -o default -X '!*.+(mp3|MP3)' mpg123 mpg321
+    complete -f -o default -X '!*.+(ogg|OGG)' ogg123
+    complete -f -o default -X \
+    '!*.@(mp[23]|MP[23]|ogg|OGG|wav|WAV|pls|\
+    m3u|xm|mod|s[3t]m|it|mtm|ult|flac)' xmms
+    complete -f -o default -X '!*.@(mp?(e)g|MP?(E)G|wma|avi|AVI|\
+    asf|vob|VOB|bin|dat|vcd|ps|pes|fli|viv|rm|ram|yuv|mov|MOV|qt|\
+    QT|wmv|mp3|MP3|ogg|OGG|ogm|OGM|mp4|MP4|wav|WAV|asx|ASX)' xine
+
+
+
+    complete -f -o default -X '!*.pl'  perl perl5
+
+
+    #  This is a 'universal' completion function - it works when commands have
+    #+ a so-called 'long options' mode , ie: 'ls --all' instead of 'ls -a'
+    #  Needs the '-o' option of grep
+    #+ (try the commented-out version if not available).
+
+    #  First, remove '=' from completion word separators
+    #+ (this will allow completions like 'ls --color=auto' to work correctly).
+
+    COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+
+
+    _get_longopts()
+    {
+      #$1 --help | sed  -e '/--/!d' -e 's/.*--\([^[:space:].,]*\).*/--\1/'| \
+      #grep ^"$2" |sort -u ;
+        $1 --help | grep -o -e "--[^[:space:].,]*" | grep -e "$2" |sort -u
+    }
+
+    _longopts()
+    {
+        local cur
+        cur=${COMP_WORDS[COMP_CWORD]}
+
+        case "${cur:-*}" in
+           -*)      ;;
+            *)      return ;;
+        esac
+
+        case "$1" in
+           \~*)     eval cmd="$1" ;;
+             *)     cmd="$1" ;;
+        esac
+        COMPREPLY=( $(_get_longopts ${1} ${cur} ) )
+    }
+    complete  -o default -F _longopts configure bash
+    complete  -o default -F _longopts wget id info a2ps ls recode
+
+    _tar()
+    {
+        local cur ext regex tar untar
+
+        COMPREPLY=()
+        cur=${COMP_WORDS[COMP_CWORD]}
+
+        # If we want an option, return the possible long options.
+        case "$cur" in
+            -*)     COMPREPLY=( $(_get_longopts $1 $cur ) ); return 0;;
+        esac
+
+        if [ $COMP_CWORD -eq 1 ]; then
+            COMPREPLY=( $( compgen -W 'c t x u r d A' -- $cur ) )
+            return 0
+        fi
+
+        case "${COMP_WORDS[1]}" in
+            ?(-)c*f)
+                COMPREPLY=( $( compgen -f $cur ) )
+                return 0
+                ;;
+            +([^Izjy])f)
+                ext='tar'
+                regex=$ext
+                ;;
+            *z*f)
+                ext='tar.gz'
+                regex='t\(ar\.\)\(gz\|Z\)'
+                ;;
+            *[Ijy]*f)
+                ext='t?(ar.)bz?(2)'
+                regex='t\(ar\.\)bz2\?'
+                ;;
+            *)
+                COMPREPLY=( $( compgen -f $cur ) )
+                return 0
+                ;;
+
+        esac
+
+        if [[ "$COMP_LINE" == tar*.$ext' '* ]]; then
+            # Complete on files in tar file.
+            #
+            # Get name of tar file from command line.
+            tar=$( echo "$COMP_LINE" | \
+                            sed -e 's|^.* \([^ ]*'$regex'\) .*$|\1|' )
+            # Devise how to untar and list it.
+            untar=t${COMP_WORDS[1]//[^Izjyf]/}
+
+            COMPREPLY=( $( compgen -W "$( echo $( tar $untar $tar \
+                                    2>/dev/null ) )" -- "$cur" ) )
+            return 0
+
+        else
+            # File completion on relevant files.
+            COMPREPLY=( $( compgen -G $cur\*.$ext ) )
+
+        fi
+
+        return 0
+
+    }
+
+    complete -F _tar -o default tar
+
+    _make()
+    {
+        local mdef makef makef_dir="." makef_inc gcmd cur prev i;
+        COMPREPLY=();
+        cur=${COMP_WORDS[COMP_CWORD]};
+        prev=${COMP_WORDS[COMP_CWORD-1]};
+        case "$prev" in
+            -*f)
+                COMPREPLY=($(compgen -f $cur ));
+                return 0
+                ;;
+        esac;
+        case "$cur" in
+            -*)
+                COMPREPLY=($(_get_longopts $1 $cur ));
+                return 0
+                ;;
+        esac;
+
+        # ... make reads
+        #          GNUmakefile,
+        #     then makefile
+        #     then Makefile ...
+        if [ -f ${makef_dir}/GNUmakefile ]; then
+            makef=${makef_dir}/GNUmakefile
+        elif [ -f ${makef_dir}/makefile ]; then
+            makef=${makef_dir}/makefile
+        elif [ -f ${makef_dir}/Makefile ]; then
+            makef=${makef_dir}/Makefile
+        else
+           makef=${makef_dir}/*.mk         # Local convention.
+        fi
+
+
+        #  Before we scan for targets, see if a Makefile name was
+        #+ specified with -f.
+        for (( i=0; i < ${#COMP_WORDS[@]}; i++ )); do
+            if [[ ${COMP_WORDS[i]} == -f ]]; then
+                # eval for tilde expansion
+                eval makef=${COMP_WORDS[i+1]}
+                break
+            fi
+        done
+        [ ! -f $makef ] && return 0
+
+        # Deal with included Makefiles.
+        makef_inc=$( grep -E '^-?include' $makef |
+                     sed -e "s,^.* ,"$makef_dir"/," )
+        for file in $makef_inc; do
+            [ -f $file ] && makef="$makef $file"
+        done
+
+
+        #  If we have a partial word to complete, restrict completions
+        #+ to matches of that word.
+        if [ -n "$cur" ]; then gcmd='grep "^$cur"' ; else gcmd=cat ; fi
+
+        COMPREPLY=( $( awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ \
+                                   {split($1,A,/ /);for(i in A)print A[i]}' \
+                                    $makef 2>/dev/null | eval $gcmd  ))
+
+    }
+
+    complete -F _make -X '+($*|*.[cho])' make gmake pmake
+
+    _killall()
+    {
+        local cur prev
+        COMPREPLY=()
+        cur=${COMP_WORDS[COMP_CWORD]}
+
+        #  Get a list of processes
+        #+ (the first sed evaluation
+        #+ takes care of swapped out processes, the second
+        #+ takes care of getting the basename of the process).
+        COMPREPLY=( $( ps -u $USER -o comm  | \
+            sed -e '1,1d' -e 's#[]\[]##g' -e 's#^.*/##'| \
+            awk '{if ($0 ~ /^'$cur'/) print $0}' ))
+
+        return 0
+    }
+
+    complete -F _killall killall killps
+fi
+
+# End:
