@@ -5,4 +5,4 @@
 	excludesfile = ~/.gitignore
 	fileMode = false
 [push]
-    default = simple
+    default = matching
