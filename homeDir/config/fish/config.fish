@@ -7,7 +7,7 @@ set fish_theme pastfish
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-fish/plugins/*)
 # Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
 # Example format: set fish_plugins autojump bundler
-set fish_plugins autojump bundler sendprompt
+set fish_plugins sendprompt tmux brew gi better-alias
 
 # Path to your custom folder (default path is $FISH/custom)
 set fish_custom $HOME/.config/fish/custom
@@ -22,8 +22,8 @@ else
   type git >/dev/null
   and git clone https://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
   or begin
-      echo (set_color -b red -o purple)" <*)))<"(set_color -b red -o black)" git not installed. Skip enabling oh-my-fish "(set_color -b red -o purple)">(((*> "
-      exit
+    echo (set_color -b red -o purple)" <*)))<"(set_color -b red -o black)" git not installed. Skip enabling oh-my-fish "(set_color -b red -o purple)">(((*> "
+    exit
   end
 end
 
