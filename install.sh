@@ -51,3 +51,5 @@ chmod -R u+x "$HOME/.bin/"
 echo "~/.bin/ exec permission added!"
 
 cd $oriPwd
+
+echo "============= dotSetting auto installation completed! ============="
