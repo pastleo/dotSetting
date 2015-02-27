@@ -1,8 +1,11 @@
 [user]
-	name = 
-	email = 
+    name =
+    email =
 [core]
-	excludesfile = ~/.gitignore
-	fileMode = false
+    excludesfile = ~/.gitignore
+    fileMode = false
+    autocrlf = true
 [push]
     default = matching
+[branch]
+    autosetuprebase = always

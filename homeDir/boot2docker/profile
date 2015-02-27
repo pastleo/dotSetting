@@ -1,0 +1,25 @@
+# boot2docker profile filename: ~/.boot2docker/profile
+Init = false
+Verbose = false
+Driver = "virtualbox"
+SSH = "ssh"
+SSHGen = "ssh-keygen"
+# SSHKey = "$HOME/.ssh/id_boot2docker"
+VM = "boot2docker-vm"
+# Dir = "$HOME/.boot2docker"
+ISOURL = "https://api.github.com/repos/boot2docker/boot2docker/releases"
+# ISO = "$HOME/.boot2docker/boot2docker.iso"
+DiskSize = 20000
+Memory = 2048
+SSHPort = 2022
+DockerPort = 0
+HostIP = "192.168.59.3"
+DHCPIP = "192.168.59.99"
+NetMask = [255, 255, 255, 0]
+LowerIP = "192.168.8.13"
+UpperIP = "192.168.8.13"
+DHCPEnabled = true
+Serial = false
+# SerialFile = "$HOME/.boot2docker/boot2docker-vm.sock"
+Waittime = 300
+Retries = 75

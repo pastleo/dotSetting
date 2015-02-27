@@ -3,13 +3,13 @@ dotSetting
 
 After few years of usage in cli, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...  
 When the time to migrate at a new machine, it might be somehow troubling. So I make this small provision tool to make it more easy~  
-Further more, I share my setting in this repo inside `homeDir` folder while you can still keeping your own settings inside `custom` folder (or fork this repo XDD). 
+Further more, I share my setting in this repo inside `homeDir` folder while you can still keeping your own settings inside `custom` folder (or fork this repo XDD).
 
 ## Requirement
 
  * bash
  * git, mostly
- * rsync 
+ * rsync
 
 ## HOW TO USE THIS?
 
@@ -18,8 +18,8 @@ Further more, I share my setting in this repo inside `homeDir` folder while you 
  * `mkdir custom` to create the space you can specify (this folder is excluded from git)
  * copy your original setting to the `custom` folder, it is good to look through my setting and modify yours or mine (forking is welcome again XD) to get it work better.
  * `cd` to the root of this repo
- * **backup** your original setting just in case. 
- * `sh install.sh` to provision all of them
+ * **backup** your original setting just in case.
+ * `sh install.sh` to provision all of them (using the default only)
  * `source ~/.bashrc` or restart your session to test if it works
 
 ## Setting Conponents in this repo
@@ -40,10 +40,17 @@ Further more, I share my setting in this repo inside `homeDir` folder while you 
     * `vim/`
  * ssh
     * `ssh/authorized_keys`
+ * boot2docker & docker
 
-## How the `install.sh` works?
+## Usage of `install.sh`
 
-Foreach `homeDir` and `custom`, rsyncs each files / folders in it to your home folder with adding the `.` at the beginning of filename.
+```
+sh install.sh [folder_1 [folder_2 ...]]
+```
+
+If no `folder_1` specified, it will foreach `homeDir` and `custom`, rsyncs each files / folders in it to your home folder with adding the `.` at the beginning of filename.  
+
+Otherwise will foreach folder you specified, rsyncs each files / folders in it to your home folder with adding the `.` at the beginning of filename.  
 
 ## Advance usage of the custom folder by git
 

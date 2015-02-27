@@ -8,7 +8,19 @@ oriPwd="$PWD"
 
 exeDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-for src in homeDir custom; do
+if [ ! $1 ]; then
+    echo "dotSetting installer"
+    echo "=========================="
+    echo "Usage:"
+    echo "    sh $0 [folder_1 [folder_2 ...]]"
+    echo ""
+
+    src_folders="homeDir custom"
+else
+    src_folders=$@
+fi
+
+for src in $src_folders; do
     echo "====================================================="
     echo "Processing all files under"
     echo "$exeDIR/$src"
@@ -16,22 +28,30 @@ for src in homeDir custom; do
     cd "$exeDIR/$src" &> /dev/null;
 
     if [[ ! "$?" -eq "0" ]]; then
-        echo "This folder does not exists!"
+        echo "The $src folder does not exists!"
         echo "You can specify your own setting under the folder"
         echo "====================================================="
         echo ""
         continue
     fi
     echo "====================================================="
-    
+
     for f in *
     do
         if [[ -d "$exeDIR/$src/$f" ]]; then
             echo "rsync -av $exeDIR/$src/$f/ $HOME/.$f"
             rsync -av "$exeDIR/$src/$f/" "$HOME/.$f"
         else
-            echo "rsync -av $exeDIR/$src/$f $HOME/.$f"
-            rsync -av "$exeDIR/$src/$f" "$HOME/.$f"
+            case $f in
+            README*)
+                ;;
+            *.sh)
+                ;;
+            *)
+                echo "rsync -av $exeDIR/$src/$f $HOME/.$f"
+                rsync -av "$exeDIR/$src/$f" "$HOME/.$f"
+                ;;
+            esac
         fi
     done
     echo ""

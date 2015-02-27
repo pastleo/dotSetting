@@ -7,12 +7,12 @@ set fish_theme pastfish
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-fish/plugins/*)
 # Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
 # Example format: set fish_plugins autojump bundler
-set fish_plugins sendprompt tmux brew gi better-alias
+set fish_plugins tmux autojump extract
 
 # Path to your custom folder (default path is $FISH/custom)
 set fish_custom $HOME/.config/fish/custom
 
-
+# Test if oh-my-fish is installed
 if test -d $fish_path
   echo (set_color white)"}{} }{} "(set_color red)"<(^O^)> "(set_color yellow)"Enabling OH_MY_FISH "(set_color red)"<(^O^)> "(set_color white)"{}{ {}{"
 else
@@ -26,6 +26,15 @@ else
     exit
   end
 end
+
+# Test if brew is installed
+if test (which brew)
+    # Test if autojump is installed
+    if test -e (brew --prefix)/etc/autojump.fish
+        . (brew --prefix)/etc/autojump.fish
+    end
+end;
+
 
 #-------------------------------------------------------------
 # Tailoring 'less' from bashrc

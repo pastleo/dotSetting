@@ -244,6 +244,21 @@ add_path "$HOME/.bin"
 
 export VAGRANT_DOTFILE_PATH=".vagrant_$HOSTNAME"
 
+# ================================================
+# Boot2Docker & Docker client
+# ================================================
+
+if [ ! $disable_boot2docker ]; then
+    export BOOT2DOCKER_PROFILE=$HOME/.boot2docker/profile
+    export DOCKER_CERT_PATH=$HOME/.boot2docker/certs/boot2docker-vm
+    export DOCKER_TLS_VERIFY=1
+    export DOCKER_HOST=tcp://boot2docker:2376 # I have lock ip to this value in ~/.boot2docker/profile
+fi
+
+if [ $dockeR_bin ] && [ ! $(which dockeR) ]; then
+    $dockeR_bin --install
+fi
+
 # #####################################################
 # If there is more thing to add for both fish and bash
 # put them down below before fish starts
@@ -439,7 +454,7 @@ export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
 #
 #  ALIASES AND FUNCTIONS
 #
-#  I move most of them into the ~/.bin/ to make fish able to 
+#  I move most of them into the ~/.bin/ to make fish able to
 #  use them
 #  By PastLeo 20141116
 #
@@ -477,7 +492,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     alias lt='ls -ltr'         #  Sort by date, most recent last.
     alias lc='ls -ltcr'        #  Sort by/show change time,most recent last.
     alias lu='ls -ltur'        #  Sort by/show access time,most recent last.
-    
+
     # The ubiquitous 'll': directories first, with alphanumeric sorting:
     alias ll="ls -lv --group-directories-first"
     alias lm='ll |more'        #  Pipe through 'more'
