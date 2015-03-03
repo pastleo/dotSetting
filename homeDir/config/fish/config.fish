@@ -28,7 +28,7 @@ else
 end
 
 # Test if brew is installed
-if test (which brew)
+if test (which brew 2> /dev/null)
     # Test if autojump is installed
     if test -e (brew --prefix)/etc/autojump.fish
         . (brew --prefix)/etc/autojump.fish
