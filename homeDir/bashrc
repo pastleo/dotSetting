@@ -248,15 +248,13 @@ export VAGRANT_DOTFILE_PATH=".vagrant_$HOSTNAME"
 # Boot2Docker & Docker client
 # ================================================
 
-if [ ! $disable_boot2docker ]; then
-    export BOOT2DOCKER_PROFILE=$HOME/.boot2docker/profile
-    export DOCKER_CERT_PATH=$HOME/.boot2docker/certs/boot2docker-vm
-    export DOCKER_TLS_VERIFY=1
-    export DOCKER_HOST=tcp://boot2docker:2376 # I have lock ip to this value in ~/.boot2docker/profile
-fi
-
-if [ $dockeR_bin ] && [ ! $(which dockeR) ]; then
-    $dockeR_bin --install
+if [ $(which boot2docker) ]; then
+    case $(boot2docker status) in
+    "running")
+        $(boot2docker shellinit 2> /dev/null)
+        echo "You have boot2docker running, and the variable is now set!"
+        ;;
+    esac
 fi
 
 # #####################################################
