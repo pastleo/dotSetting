@@ -248,7 +248,7 @@ export VAGRANT_DOTFILE_PATH=".vagrant_$HOSTNAME"
 # Boot2Docker & Docker client
 # ================================================
 
-if [ $(which boot2docker 1> dev/null) ]; then
+if [ $(which boot2docker 2> /dev/null) ]; then
     case $(boot2docker status) in
     "running")
         $(boot2docker shellinit 2> /dev/null)
