@@ -10,7 +10,8 @@ RUN apt-get install -y \
   unzip \
   vim \
   docker \
-  man
+  man \
+  tmux
 RUN apt-get clean
 
 RUN mkdir /dotSetting
