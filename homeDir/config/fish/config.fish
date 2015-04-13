@@ -7,7 +7,15 @@ set fish_theme pastfish
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-fish/plugins/*)
 # Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
 # Example format: set fish_plugins autojump bundler
-set fish_plugins tmux autojump extract
+set fish_plugins tmux extract jump ssh z brew
+
+# ====================================================
+# You need to install z (autojump tool) on your own by
+#
+#     brew install z
+#
+# if you are using OSX
+# ====================================================
 
 # Path to your custom folder (default path is $FISH/custom)
 set fish_custom $HOME/.config/fish/custom
@@ -26,15 +34,6 @@ else
     exit
   end
 end
-
-# Test if brew is installed
-if test (which brew 2> /dev/null)
-    # Test if autojump is installed
-    if test -e (brew --prefix)/etc/autojump.fish
-        . (brew --prefix)/etc/autojump.fish
-    end
-end;
-
 
 #-------------------------------------------------------------
 # Tailoring 'less' from bashrc
