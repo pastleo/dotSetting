@@ -7,7 +7,7 @@ call pathogen#helptags()
 " set statusline=%<\ %n:%f\ %m%r%y%=%-35.(line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)%)
 
 set background=dark
-colorscheme wombat
+colorscheme lucius " modified by PastLeo
 
 " ================= vgod's vimrc ================= "
 
@@ -71,8 +71,6 @@ set tm=500
 
 " TAB setting{
    set expandtab        "replace <TAB> with spaces
-   set softtabstop=3 
-   set shiftwidth=3 
 
    au FileType Makefile set noexpandtab
 "}                                  
@@ -210,9 +208,7 @@ fun! IncludeGuard()
    call append(0, "#ifndef " . guard)
    call append(1, "#define " . guard)
    call append( line("$"), "#endif // for #ifndef " . guard)
-endfun
-
-
+endfunction
 
 " Enable omni completion. (Ctrl-X Ctrl-O)
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
