@@ -27,18 +27,6 @@ else
   end
 end
 
-# ====================================================
-# z (autojump tool) is required from
-#     https://github.com/rupa/z
-#     https://github.com/rupa/z/raw/master/z.sh
-if not test -x /usr/local/etc/profile.d/z.sh
-    echo Installing z - jump around tool ...
-    mkdir -p /usr/local/etc/profile.d; or sudo mkdir -p /usr/local/etc/profile.d;
-    wget -O /usr/local/etc/profile.d/z.sh https://github.com/rupa/z/raw/master/z.sh; or sudo wget -O /usr/local/etc/profile.d/z.sh https://github.com/rupa/z/raw/master/z.sh;
-    chmod ugo+x /usr/local/etc/profile.d/z.sh; or sudo chmod ugo+x /usr/local/etc/profile.d/z.sh;
-end
-# ====================================================
-
 #-------------------------------------------------------------
 # Tailoring 'less' from bashrc
 #-------------------------------------------------------------
@@ -60,4 +48,17 @@ alias kk='ll'
 # ====================================================
 . $fish_path/oh-my-fish.fish
 
+# ====================================================
+# z (autojump tool) is required from
+#     https://github.com/rupa/z
+#     https://github.com/rupa/z/raw/master/z.sh
+set -g Z_SCRIPT_PATH ~/.bin/z.sh # Overwrite the z path to bin folder at home
+if not test \( -x $Z_SCRIPT_PATH \) -a \( -f $Z_SCRIPT_PATH \)
+    # if $Z_SCRIPT_PATH (/usr/local/etc/profile.d/z.sh) is not executable
+    echo Installing z - jump around tool to $Z_SCRIPT_PATH
+    rm -rf $Z_SCRIPT_PATH
+    wget -v -O $Z_SCRIPT_PATH https://github.com/rupa/z/raw/master/z.sh
+    chmod u+x $Z_SCRIPT_PATH
+end
+# ====================================================
 
