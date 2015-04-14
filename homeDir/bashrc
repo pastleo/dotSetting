@@ -249,7 +249,7 @@ export VAGRANT_DOTFILE_PATH=".vagrant_$HOSTNAME"
 # ================================================
 
 if [ $(which boot2docker 2> /dev/null) ]; then
-    case $(boot2docker status) in
+    case $(boot2docker status 2> /dev/null || echo "error") in
     "running")
         $(boot2docker shellinit 2> /dev/null)
         echo "You have boot2docker running, and the variable is now set!"

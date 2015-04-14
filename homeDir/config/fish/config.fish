@@ -9,14 +9,6 @@ set fish_theme pastfish
 # Example format: set fish_plugins autojump bundler
 set fish_plugins tmux extract jump ssh z brew
 
-# ====================================================
-# You need to install z (autojump tool) on your own by
-#
-#     brew install z
-#
-# if you are using OSX
-# ====================================================
-
 # Path to your custom folder (default path is $FISH/custom)
 set fish_custom $HOME/.config/fish/custom
 
@@ -34,6 +26,18 @@ else
     exit
   end
 end
+
+# ====================================================
+# z (autojump tool) is required from
+#     https://github.com/rupa/z
+#     https://github.com/rupa/z/raw/master/z.sh
+if not test -x /usr/local/etc/profile.d/z.sh
+    echo Installing z - jump around tool ...
+    mkdir -p /usr/local/etc/profile.d; or sudo mkdir -p /usr/local/etc/profile.d;
+    wget -O /usr/local/etc/profile.d/z.sh https://github.com/rupa/z/raw/master/z.sh; or sudo wget -O /usr/local/etc/profile.d/z.sh https://github.com/rupa/z/raw/master/z.sh;
+    chmod ugo+x /usr/local/etc/profile.d/z.sh; or sudo chmod ugo+x /usr/local/etc/profile.d/z.sh;
+end
+# ====================================================
 
 #-------------------------------------------------------------
 # Tailoring 'less' from bashrc
