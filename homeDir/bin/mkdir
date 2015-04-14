@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [[ $# -ge 2 ]]; then
-    using_sys_path mkdir $@
-else
-    using_sys_path mkdir -p $@
-fi
