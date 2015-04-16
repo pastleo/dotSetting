@@ -53,6 +53,8 @@ fi
 #+ of cases.
 #--------------------------------------------------------------
 
+hostname &> /dev/null && export HOSTNAME=$(hostname)
+
 function get_xserver ()
 {
     case $TERM in
@@ -261,6 +263,11 @@ fi
 # If there is more thing to add for both fish and bash
 # put them down below before fish starts
 # #####################################################
+
+# Get JAVA HOME for OSX
+if [ -f /usr/libexec/java_home ]; then
+    export JAVA_HOME=$(/usr/libexec/java_home)
+fi
 
 # ================================================
 # Start fish shell if this machine has
