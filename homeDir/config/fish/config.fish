@@ -26,6 +26,12 @@ else
     exit
   end
 end
+#-------------------------------------------------------------
+# The fuck from https://github.com/nvbn/thefuck
+#-------------------------------------------------------------
+function fuck
+    eval (thefuck $history[1])
+end
 
 #-------------------------------------------------------------
 # Tailoring 'less' from bashrc
