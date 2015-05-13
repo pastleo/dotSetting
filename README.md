@@ -45,7 +45,7 @@ Further more, I share my setting in this repo inside `homeDir` folder while you 
 ## Usage of `install.sh`
 
 ```
-sh install.sh [folder_1 [folder_2 ...]]
+bash install.sh [folder_1 [folder_2 ...]]
 ```
 
 If no `folder_1` specified, it will foreach `homeDir` and `custom`, rsyncs each files / folders in it to your home folder with adding the `.` at the beginning of filename.  

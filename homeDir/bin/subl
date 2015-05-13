@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [[ $(using_sys_path which subl) ]]; then
+    if [[ $TMUX ]] && [[ $(which reattach-to-user-namespace) ]]; then
+        using_sys_path reattach-to-user-namespace subl $@
+    else
+        using_sys_path subl $@
+    fi
+else
+    echo "subl not found in system path"
+fi
