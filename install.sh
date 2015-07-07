@@ -72,4 +72,11 @@ echo "~/.bin/ exec permission added!"
 
 cd $oriPwd
 
-echo "============= dotSetting auto installation completed! ============="
+if [[ -d ~/.oh-my-fish ]]; then
+    echo "Do you want to remove '~/.oh-my-fish'?" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) rm -Rvf ~/.oh-my-fish ;;
+    esac
+fi
+
+echo "============= dotSetting auto installation completed! =============\n >> You need to restart the session to apply the config!"

@@ -1,13 +1,8 @@
+# Remove fish default greeting
+set --erase fish_greeting
+
 # Path to your oh-my-fish.
 set fish_path $HOME/.oh-my-fish
-
-# Theme
-set fish_theme pastfish
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-fish/plugins/*)
-# Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
-# Example format: set fish_plugins autojump bundler
-set fish_plugins tmux extract jump ssh z brew
 
 # Path to your custom folder (default path is $FISH/custom)
 set fish_custom $HOME/.config/fish/custom
@@ -21,11 +16,33 @@ else
   echo (set_color red)"==========================================================="
   type git >/dev/null
   and git clone https://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
+  and set _initing 1
   or begin
     echo (set_color -b red -o purple)" <*)))<"(set_color -b red -o black)" git not installed. Skip enabling oh-my-fish "(set_color -b red -o purple)">(((*> "
     exit
   end
 end
+
+# ====================================================
+# Load oh-my-fish configuration.
+# ====================================================
+. $fish_path/oh-my-fish.fish
+
+# Theme
+# set fish_theme pastfish
+Theme "pastfish"
+
+# Which plugins would you like to load? set them in the variable `_fish_plugins` below
+set _fish_plugins tmux extract jump ssh z brew rvm
+
+for p in $_fish_plugins
+    Plugin $p
+end
+
+if [ $_initing ]
+    omf install
+end
+
 #-------------------------------------------------------------
 # The fuck from https://github.com/nvbn/thefuck
 #-------------------------------------------------------------
@@ -49,10 +66,6 @@ alias moer='more'
 alias moew='more'
 alias kk='ll'
 
-# ====================================================
-# Load oh-my-fish configuration.
-# ====================================================
-. $fish_path/oh-my-fish.fish
 
 # ====================================================
 # z (autojump tool) is required from
@@ -67,4 +80,3 @@ if not test \( -x $Z_SCRIPT_PATH \) -a \( -f $Z_SCRIPT_PATH \)
     chmod u+x $Z_SCRIPT_PATH
 end
 # ====================================================
-

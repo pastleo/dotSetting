@@ -239,6 +239,7 @@ add_path "/usr/local/sbin"
 export path_sys=$PATH
 
 add_path "$HOME/.bin"
+add_path "$HOME/.rvm/bin"
 
 # ================================================
 # Add some vars for some programs
@@ -257,6 +258,14 @@ if [ $(which boot2docker 2> /dev/null) ]; then
         echo "You have boot2docker running, and the variable is now set!"
         ;;
     esac
+fi
+
+# ================================================
+# Personal Environment
+# ================================================
+
+if [ -f ~/.per_env ]; then
+    source ~/.per_env
 fi
 
 # #####################################################
