@@ -8,6 +8,23 @@ oriPwd="$PWD"
 
 exeDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+function ask()
+{
+        echo "Do you want to do the following command?"
+        echo "$@" 
+        echo ' Your choise: [y/n] ' ; read ans
+        case "$ans" in
+            y*|Y*) $@ ;;
+        esac
+}
+    
+function remove_after_confirm ()
+{
+    if [[ -d $1 ]]; then
+        ask rm -Rvf $1
+    fi
+}
+
 if [ ! $1 ]; then
     echo "dotSetting installer"
     echo "=========================="
@@ -19,6 +36,13 @@ if [ ! $1 ]; then
 else
     src_folders=$@
 fi
+
+# Update all submodules
+cd $exeDIR
+ask git submodule foreach --recursive git pull
+
+remove_after_confirm ~/.vim/autoload
+remove_after_confirm ~/.vim/bundle
 
 for src in $src_folders; do
     echo "====================================================="
@@ -72,11 +96,9 @@ echo "~/.bin/ exec permission added!"
 
 cd $oriPwd
 
-if [[ -d ~/.oh-my-fish ]]; then
-    echo "Do you want to remove '~/.oh-my-fish'?" '[y/n] ' ; read ans
-    case "$ans" in
-        y*|Y*) rm -Rvf ~/.oh-my-fish ;;
-    esac
-fi
+remove_after_confirm ~/.oh-my-fish
 
-echo "============= dotSetting auto installation completed! =============\n >> You need to restart the session to apply the config!"
+ask vim +PluginInstall +qall
+
+echo "============= dotSetting auto installation completed! ============="
+echo " >> You need to restart the session to apply the config!"

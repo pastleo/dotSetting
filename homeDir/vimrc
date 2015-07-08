@@ -1,13 +1,12 @@
-" ================= sachet generated vimrc ================= "
-
-" Pathogen
-call pathogen#infect()
-call pathogen#helptags()
- 
-" set statusline=%<\ %n:%f\ %m%r%y%=%-35.(line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)%)
+" ================================================
+" PastLeo's vimrc
+" ================================================
+" Modified from vgod, changing autoload to Vundle
+"
+" 
 
 set background=dark
-colorscheme lucius " modified by PastLeo
+colorscheme lucius
 
 " ================= vgod's vimrc ================= "
 
@@ -22,10 +21,22 @@ set autoread        " auto read when file is changed from outside
 
 filetype off          " necessary to make ftdetect work on Linux
 syntax on
-filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
 
+" ================= Vundle ================= "
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Plugins
+Plugin 'tomtom/tcomment_vim'
+Plugin 'tpope/vim-surround'
+Plugin 'ervandew/supertab'
+
+call vundle#end()
+filetype plugin indent on
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost .vimrc source ~/.vimrc
