@@ -10,18 +10,17 @@ exeDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function ask()
 {
-        echo "Do you want to do the following command?"
-        echo "$@" 
+        echo "Do you want to $1?"
         echo ' Your choise: [y/n] ' ; read ans
         case "$ans" in
-            y*|Y*) $@ ;;
+            y*|Y*) shift; $@ ;;
         esac
 }
     
 function remove_after_confirm ()
 {
     if [[ -d $1 ]]; then
-        ask rm -Rvf $1
+        ask "remove $1" rm -Rvf $1
     fi
 }
 
@@ -39,7 +38,7 @@ fi
 
 # Update all submodules
 cd $exeDIR
-ask git submodule foreach --recursive git pull
+ask "update all submodule of this repo" git submodule update --init --recursive && git submodule foreach --recursive git pull origin master
 
 remove_after_confirm ~/.vim/autoload
 remove_after_confirm ~/.vim/bundle
@@ -98,7 +97,7 @@ cd $oriPwd
 
 remove_after_confirm ~/.oh-my-fish
 
-ask vim +PluginInstall +qall
+ask "install vim plugins" vim +PluginInstall +qall
 
 echo "============= dotSetting auto installation completed! ============="
 echo " >> You need to restart the session to apply the config!"
