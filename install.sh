@@ -38,8 +38,14 @@ fi
 
 # Update all submodules
 cd $exeDIR
-ask "update all submodule of this repo" git submodule update --init --recursive && git submodule foreach --recursive git pull origin master
 
+function update_all_submodule()
+{
+    git submodule update --init --recursive
+    git submodule foreach --recursive git pull origin master
+}
+
+ask "update all submodule of this repo" update_all_submodule
 remove_after_confirm ~/.vim/autoload
 remove_after_confirm ~/.vim/bundle
 

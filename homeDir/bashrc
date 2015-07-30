@@ -217,9 +217,23 @@ trap _exit EXIT
 # locale and encoding setting
 # ================================================
 
-export LC_CTYPE=zh_TW.UTF-8
-export LC_MESSAGES=zh_TW.UTF-8
-export LC_TIME=zh_TW.UTF-8
+locale_setting="en_US.UTF-8"
+
+export LANG=$locale_setting
+export LANGUAGE=$locale_setting
+export LC_CTYPE=$locale_setting
+export LC_NUMERIC=$locale_setting
+export LC_TIME=$locale_setting
+export LC_COLLATE=$locale_setting
+export LC_MONETARY=$locale_setting
+export LC_MESSAGES=$locale_setting
+export LC_PAPER=$locale_setting
+export LC_NAME=$locale_setting
+export LC_ADDRESS=$locale_setting
+export LC_TELEPHONE=$locale_setting
+export LC_MEASUREMENT=$locale_setting
+export LC_IDENTIFICATION=$locale_setting
+export LC_ALL=$locale_setting
 
 # ================================================
 # path variable
@@ -499,37 +513,37 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 # The 'ls' family
 #-------------------------------------------------------------
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    alias ls='ls -h --color'
-    alias lx='ls -lXB'         #  Sort by extension.
-    alias lk='ls -lSr'         #  Sort by size, biggest last.
-    alias lt='ls -ltr'         #  Sort by date, most recent last.
-    alias lc='ls -ltcr'        #  Sort by/show change time,most recent last.
-    alias lu='ls -ltur'        #  Sort by/show access time,most recent last.
+case "$OSTYPE" in
+    "linux-gnu"* )
+        alias ls='ls -h --color'
+        alias lx='ls -lXB'         #  Sort by extension.
+        alias lk='ls -lSr'         #  Sort by size, biggest last.
+        alias lt='ls -ltr'         #  Sort by date, most recent last.
+        alias lc='ls -ltcr'        #  Sort by/show change time,most recent last.
+        alias lu='ls -ltur'        #  Sort by/show access time,most recent last.
 
-    # The ubiquitous 'll': directories first, with alphanumeric sorting:
-    alias ll="ls -lv --group-directories-first"
-    alias lm='ll |more'        #  Pipe through 'more'
-    alias lr='ll -R'           #  Recursive ls.
-    alias la='ll -A'           #  Show hidden files.
-    alias tree='tree -Csuh'    #  Nice alternative to 'recursive ls' ...
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    alias ls='ls -G'
-    alias la='ls -alG'
-    alias ll='ls -lG'
-elif [[ "$OSTYPE" == "cygwin" ]]; then
-    echo 'Your OS is cygwin. Skip ls aliasing.'
-elif [[ "$OSTYPE" == "win32" ]]; then
-    alias ls='dir'
-    alias ll='dir'
-    alias la='dir'
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
-    alias ls='ls -G'
-    alias la='ls -alG'
-    alias ll='ls -lG'
-else
-    echo 'Your OS is unknown. Skip ls aliasing.'
-fi
+        # The ubiquitous 'll': directories first, with alphanumeric sorting:
+        alias ll="ls -lv --group-directories-first"
+        alias lm='ll |more'        #  Pipe through 'more'
+        alias lr='ll -R'           #  Recursive ls.
+        alias la='ll -A'           #  Show hidden files.
+        alias tree='tree -Csuh'    #  Nice alternative to 'recursive ls' ...
+        ;;
+    "darwin"*|"freebsd"* )
+        alias ls='ls -G'
+        alias la='ls -alG'
+        alias ll='ls -lG'
+        ;;
+    "win32" )
+        alias ls='dir'
+        alias ll='dir'
+        alias la='dir'
+        ;;
+    * )
+        alias la='ls -al'
+        alias ll='ls -l'
+        ;;
+esac
 
 #-------------------------------------------------------------
 # Spelling typos - highly personnal and keyboard-dependent :-)
