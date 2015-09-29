@@ -1,0 +1,45 @@
+#!/bin/bash
+
+###################################
+# host.set
+###################################
+# Set a hostname to a specified ip
+hosts_file="/etc/hosts"
+
+if ! [ $2 ]; then
+    echo "Usage:"
+    echo "    host.set {hostname} {ip}"
+    exit 255
+fi
+
+line=$(cat $hosts_file | grep $1 | head -n1)
+# echo $line
+# exit
+if [ -n "$line" ]; then
+    if [ -n "$(echo $line | grep $2)" ]; then
+        echo "Already set!"
+        exit 1
+    else
+        echo "Overwritting original setting, require root access"
+        case "$OSTYPE" in
+            "darwin"*|"freebsd"* )
+                sed_inline_op="-i ''"
+                ;;
+            * )
+                sed_inline_op="-i"
+                ;;
+        esac
+        sudo sed $sed_inline_op "s/^.*$1*$/$2 $1/g" $hosts_file || exit 255
+    fi
+else
+    echo "Adding a new setting, require root access"
+    sudo -- sh -c "echo '$2 $1' >> $hosts_file" || exit 255
+fi
+
+case "$OSTYPE" in
+    "darwin"*|"freebsd"* )
+        dscacheutil -flushcache
+        ;;
+esac
+echo "Done!"
+

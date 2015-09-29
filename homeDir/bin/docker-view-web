@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker_domain=$(docker-domain)
+
+if [ -n "$docker_domain" ]; then
+    open http://$docker_domain
+fi
+
