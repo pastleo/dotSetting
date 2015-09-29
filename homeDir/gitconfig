@@ -17,6 +17,7 @@
     br = branch
     co = checkout
     aa = add --all
+    rev = remote -v
     pull = pull --rebase
     logg = log --graph --oneline --decorate --all
     logn = log --stat --graph --oneline --decorate --all
