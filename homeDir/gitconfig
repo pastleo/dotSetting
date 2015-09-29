@@ -7,5 +7,18 @@
     autocrlf = input
 [push]
     default = matching
+[pull]
+    default = current
 [branch]
     autosetuprebase = always
+[alias]
+    s = status
+    ci = commit
+    br = branch
+    co = checkout
+    aa = add --all
+    pull = pull --rebase
+    logg = log --graph --oneline --decorate --all
+    logn = log --stat --graph --oneline --decorate --all
+    diffn = diff --name-only
+
