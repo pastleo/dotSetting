@@ -1,82 +1,64 @@
-# Remove fish default greeting
-set --erase fish_greeting
 
-# Path to your oh-my-fish.
-set fish_path $HOME/.oh-my-fish
+# ===========================================================
+# _   _       _   _
+# | \ | |     | | (_)
+# |  \| | ___ | |_ _  ___ ___
+# | . ` |/ _ \| __| |/ __/ _ \
+# | |\  | (_) | |_| | (_|  __/
+# \_| \_/\___/ \__|_|\___\___|
+#
+# This script is used as my installer for my oh-my-fish
+# ===========================================================
 
-# Path to your custom folder (default path is $FISH/custom)
-set fish_custom $HOME/.config/fish/custom
+# Fish config and oh-my-fish path
+set -gx FISH_CONFIG $HOME/.config/fish
+set -gx OMF_CONFIG $HOME/.config/omf
+set -gx OMF_PATH $HOME/.local/share/omf
 
-# Test if oh-my-fish is installed
-if test -d $fish_path
-  echo (set_color white)"}{} }{} "(set_color red)"<(^O^)> "(set_color yellow)"Enabling OH_MY_FISH "(set_color red)"<(^O^)> "(set_color white)"{}{ {}{"
+function die -a msg
+  printf (set_color -b red -o purple)" <*)))<"(set_color -b red -o black)" %-35s "(set_color -b red -o purple)">(((*> \n" "$msg Skipping."
+  exit 1
+end
+
+echo  (set_color black)"==================================================="
+
+if not type git 2> /dev/null 1> /dev/null
+  die "Git not installed."
+end
+if type wget 2> /dev/null 1> /dev/null
+  set wget_or_curl "wget -qO-"
+else if type curl 2> /dev/null 1> /dev/null
+  set wget_or_curl "curl -L"
 else
-  echo (set_color red)"==========================================================="
-  echo (set_color yellow)">>>>>  oh-my-fish not installed... trying to grab...  <<<<<"
-  echo (set_color red)"==========================================================="
-  type git >/dev/null
-  and git clone https://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
-  and set _initing 1
-  or begin
-    echo (set_color -b red -o purple)" <*)))<"(set_color -b red -o black)" git not installed. Skip enabling oh-my-fish "(set_color -b red -o purple)">(((*> "
-    exit
-  end
+  die "Both wget and curl are not installed."
 end
 
-# ====================================================
-# Load oh-my-fish configuration.
-# ====================================================
-. $fish_path/oh-my-fish.fish
-
-# Theme
-# set fish_theme pastfish
-Theme "pastfish"
-
-# Which plugins would you like to load? set them in the variable `_fish_plugins` below
-set _fish_plugins tmux extract jump ssh z brew rvm
-
-for p in $_fish_plugins
-    Plugin $p
-end
-
-if [ $_initing ]
-    omf install
-end
-
-#-------------------------------------------------------------
-# The fuck from https://github.com/nvbn/thefuck
-#-------------------------------------------------------------
-function fuck
-    eval (thefuck $history[1])
-end
-
-#-------------------------------------------------------------
-# Tailoring 'less' from bashrc
-#-------------------------------------------------------------
-
-alias more='less'
-
-#-------------------------------------------------------------
-# Spelling typos from bashrc
-#-------------------------------------------------------------
-
-alias xs='cd'
-alias vf='cd'
-alias moer='more'
-alias moew='more'
-alias kk='ll'
-
+echo (set_color white)"}{}"(set_color yellow)"   Install oh-my-fish and awsome stuff ...   "(set_color white)"{}{"
 
 # ====================================================
 # z (autojump tool) is required from
-#     https://github.com/rupa/z
-#     https://github.com/rupa/z/raw/master/z.sh
-set -g Z_SCRIPT_PATH ~/.bin/z.sh # Overwrite the z path to bin folder at home
-if not test \( -x $Z_SCRIPT_PATH \) -a \( -f $Z_SCRIPT_PATH \)
-    # if $Z_SCRIPT_PATH (/usr/local/etc/profile.d/z.sh) is not executable
-    echo Installing z - jump around tool to $Z_SCRIPT_PATH
-    rm -rf $Z_SCRIPT_PATH
-    wget -v -O $Z_SCRIPT_PATH https://github.com/rupa/z/raw/master/z.sh
-    chmod u+x $Z_SCRIPT_PATH
-end
+#   https://github.com/rupa/z
+#   https://github.com/rupa/z/raw/master/z.sh
+set -g Z_SCRIPT_PATH ~/.bin/z.sh
+echo (set_color green)">> Installing z ..."
+mkdir -p (dirname $Z_SCRIPT_PATH)
+rm -rf $Z_SCRIPT_PATH
+eval "$wget_or_curl https://github.com/rupa/z/raw/master/z.sh >> $Z_SCRIPT_PATH"
+
 # ====================================================
+# install oh-my-fish
+#   https://github.com/oh-my-fish/oh-my-fish
+if test -f $OMF_PATH/init.fish
+  echo (set_color blue)">> oh-my-fish already installed, clean up ..."
+  mv -vf $FISH_CONFIG/config.deployed.fish $FISH_CONFIG/config.fish
+  source $FISH_CONFIG/config.fish
+else
+  echo (set_color green)">> Installing oh-my-fish ..."
+  rm -vf $FISH_CONFIG/config.fish
+  eval "$wget_or_curl https://github.com/oh-my-fish/oh-my-fish/raw/master/bin/install | fish"
+
+  echo (set_color black)"==================================================="
+  echo  (set_color cyan)">      use 'exit' (again) to exit the shell       <"
+  echo (set_color black)"==================================================="
+  exit
+end

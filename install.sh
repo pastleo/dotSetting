@@ -16,9 +16,12 @@ function ask()
             y*|Y*) shift; $@ ;;
         esac
 }
-    
+
 function remove_after_confirm ()
 {
+    if ! [[ -a $1 ]]; then
+        return
+    fi
     if [[ -d $1 ]]; then
         ask "remove $1" rm -Rvf $1
     fi
@@ -102,6 +105,7 @@ echo "~/.bin/ exec permission added!"
 cd $oriPwd
 
 remove_after_confirm ~/.oh-my-fish
+remove_after_confirm ~/.local/share/omf
 
 ask "install vim plugins" vim +PluginInstall +qall
 
