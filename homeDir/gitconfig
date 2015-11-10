@@ -8,6 +8,7 @@
     excludesfile = ~/.gitignore
     fileMode = false
     autocrlf = input
+    editor = vim
 [push]
     default = upstream
 [pull]
