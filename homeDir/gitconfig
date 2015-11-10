@@ -1,12 +1,15 @@
-[user]
-    name =
-    email =
+;[user]
+;   name =
+;   email =
+; Use `include.path` [~/.gituser] file to store user settings for git 1.7.10+
+[include]
+    path = .gituser
 [core]
     excludesfile = ~/.gitignore
     fileMode = false
     autocrlf = input
 [push]
-    default = matching
+    default = upstream
 [pull]
     default = current
 [branch]
