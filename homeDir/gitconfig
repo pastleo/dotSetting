@@ -13,8 +13,7 @@
     default = upstream
 [pull]
     default = current
-[branch]
-    autosetuprebase = always
+    rebase = true
 [alias]
     s = status
     ci = commit
@@ -22,7 +21,6 @@
     co = checkout
     aa = add --all
     rev = remote -v
-    pull = pull --rebase
     logg = log --graph --oneline --decorate --all
     logn = log --stat --graph --oneline --decorate --all
     diffn = diff --name-only
