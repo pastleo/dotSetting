@@ -12,6 +12,10 @@ if ! [ $2 ]; then
     exit 255
 fi
 
+if ! [ -e $hosts_file ]; then
+    exit 255
+fi
+
 line=$(cat $hosts_file | grep $1 | head -n1)
 # echo $line
 # exit
@@ -42,4 +46,3 @@ case "$OSTYPE" in
         ;;
 esac
 echo "Done!"
-

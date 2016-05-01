@@ -275,9 +275,12 @@ export machine_hostname_postfix="docker-machine.foo"
 if [ $(which docker-machine 2> /dev/null) ]; then
     docker_running_machine=$(docker-machine ls | grep Running | head -n1 | cut -d " " -f1) # Get first running machine
     if [ -n "$docker_running_machine" ]; then
-        echo "You have a docker-machine '$docker_running_machine' running, setting the variables and host ip to '${docker_running_machine}.$machine_hostname_postfix'"
-        eval "$(docker-machine env $docker_running_machine)"
+        echo "You have a docker-machine '$docker_running_machine' running, setting the env"
+        eval "$(docker-machine env --shell bash $docker_running_machine)"
         host.set ${docker_running_machine}.$machine_hostname_postfix $(docker-machine ip $docker_running_machine) >> /dev/null
+        if ! [ $? ]; then
+            echo "hostname '${docker_running_machine}.$machine_hostname_postfix' for the machine is set!"
+        fi
     fi
 elif [ $(which boot2docker 2> /dev/null) ]; then
     case $(boot2docker status 2> /dev/null || echo "error") in
@@ -305,6 +308,14 @@ fi
 # Get JAVA HOME for OSX
 if [ -f /usr/libexec/java_home ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
+fi
+
+# ================================================
+# Start from out side term workdir by env
+# ================================================
+
+if [ -d "$_START_WD" ]; then
+    cd "$_START_WD"
 fi
 
 # ================================================
@@ -509,20 +520,6 @@ export HOSTFILE=$HOME/.hosts    # Put a list of remote hosts in ~/.hosts
 
 alias more='less'
 export PAGER=less
-# export LESSCHARSET='latin1'
-export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
-                # Use this if lesspipe.sh exists.
-export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
-:stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
-
-# LESS man page colors (makes Man pages more readable).
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
 
 #-------------------------------------------------------------
 # The 'ls' family

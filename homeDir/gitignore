@@ -4,3 +4,6 @@ desktop.ini
 Icon?
 .tags
 .tags1
+.*.swp
+.*.swo
+.vim-sessions

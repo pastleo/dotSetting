@@ -17,7 +17,7 @@ function ask()
         esac
 }
 
-function remove_after_confirm ()
+function remove_after_confirm()
 {
     if ! [[ -a $1 ]]; then
         return
@@ -41,16 +41,6 @@ fi
 
 # Update all submodules
 cd $exeDIR
-
-function update_all_submodule()
-{
-    git submodule update --init --recursive
-    git submodule foreach --recursive git pull origin master
-}
-
-ask "update all submodule of this repo" update_all_submodule
-remove_after_confirm ~/.vim/autoload
-remove_after_confirm ~/.vim/bundle
 
 for src in $src_folders; do
     echo "====================================================="
@@ -100,14 +90,20 @@ fi
 
 chmod -R u+x "$HOME/.bin/"
 
-echo "~/.bin/ exec permission added!"
+echo "$HOME/.bin/ exec permission added!"
 
 cd $oriPwd
 
-remove_after_confirm ~/.oh-my-fish
-remove_after_confirm ~/.local/share/omf
+remove_after_confirm $HOME/.oh-my-fish
+remove_after_confirm $HOME/.local/share/omf
 
-ask "install vim plugins" vim +PluginInstall +qall
+plug_vim_dir=$HOME/.vim/autoload
+mkdir -p $plug_vim_dir
+cd $plug_vim_dir
+curl -fLo plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+ask "install vim plugins" vim +PlugInstall +qall 
+# ask "install vim plugins" vim +PluginInstall +qall
 
 echo "============= dotSetting auto installation completed! ============="
 echo " >> You need to restart the session to apply the config!"

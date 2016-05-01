@@ -1,276 +1,466 @@
-" ================================================
 " PastLeo's vimrc
 " ================================================
-" Modified from vgod, changing autoload to Vundle
-"
-" 
 
-set background=dark
-colorscheme lucius
-
-" ================= vgod's vimrc ================= "
-
-" General Settings
-
+"--------------------------------------------------------------------------- 
+" Some Basic config before vim-plug
+"--------------------------------------------------------------------------- 
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
 set nocompatible    " not compatible with the old-fashion vi mode
-set bs=2        " allow backspacing over everything in insert mode
-set history=50      " keep 50 lines of command line history
-set ruler       " show the cursor position all the time
-set autoread        " auto read when file is changed from outside
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+" Only do this part when compiled with support for autocommands.
+" set t_Co=256
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+    au!
+
+    " For all text files set 'textwidth' to 78 characters.
+    autocmd FileType text setlocal textwidth=78
+
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    " Also don't do it when the mark is in the first line, that is the default
+    " position when opening a file.
+    autocmd BufReadPost *
+          \ if line("'\"") > 1 && line("'\"") <= line("$") |
+          \   exe "normal! g`\"" |
+          \ endif
+
+  augroup END
+else
+  set autoindent    " always set autoindenting on
+  finish "require autocmd to continue
+endif " has("autocmd")
+
+"--------------------------------------------------------------------------- 
+" Terminal and platform specific settings
+"--------------------------------------------------------------------------- 
+let s:bad_term=0
+
+if has('win32')
+  " set shell=powershell.exe\ -executionpolicy\ bypass
+  if has('gui_running') " Using gvim
+    let $LANG="en_US.UTF-8"
+    set langmenu=en_US.utf-8
+    set encoding=utf8
+    set guifont=Consolas:h10
+
+    set guioptions-=m  "remove menu bar
+    set guioptions-=T  "remove toolbar
+    set guioptions-=r  "remove right-hand scroll bar
+    set guioptions-=L  "remove left-hand scroll bar
+    set guioptions-=e  "use console tab instead of ugly gui tab
+
+    set guicursor=n-v-c:block-Cursor
+    set guicursor+=i:ver100-iCursor
+    set guicursor+=n-v-c:blinkon0
+    set guicursor+=i:blinkwait10
 
 
-filetype off          " necessary to make ftdetect work on Linux
-syntax on
+    " reload menu with UTF-8 encoding
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+  elseif !empty($CONEMUBUILD)
+    if !empty($CONEMU_UTF8)
+      set encoding=utf-8
+      set termencoding=utf8
+    endif
+    if !empty($CONEMU_XTERM)
+      set term=xterm
+      set t_Co=256
+      let &t_AB="\e[48;5;%dm"
+      let &t_AF="\e[38;5;%dm"
+    else
+      let s:bad_term=1
+    endif
 
-" ================= Vundle ================= "
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+    " Mouse scroll
+    inoremap <Esc>[62~ <C-X><C-E>
+    inoremap <Esc>[63~ <C-X><C-Y>
+    nnoremap <Esc>[62~ <C-E>
+    nnoremap <Esc>[63~ <C-Y>
+  else
+    let s:bad_term=1
+  endif
+endif
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+"--------------------------------------------------------------------------- 
+" ENCODING SETTINGS
+"--------------------------------------------------------------------------- 
+if has("multi_byte") && s:bad_term == 0
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  "setglobal bomb
+  set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
+endif
 
-" Plugins
-Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-surround'
-Plugin 'ervandew/supertab'
+"--------------------------------------------------------------------------- 
+" vim-plug
+"--------------------------------------------------------------------------- 
 
-call vundle#end()
-filetype plugin indent on
+call plug#begin('~/.vim/plugged')
+
+" Command packages
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
+Plug 'ervandew/supertab'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-airline/vim-airline'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
+Plug 'tpope/vim-sleuth'
+Plug 'nathanaelkane/vim-indent-guides'
+
+" Load only when being called
+Plug 'mattn/emmet-vim', {'on': 'Emmet'}
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+" Languages
+Plug 'digitaltoad/vim-pug', {'for': 'pug'}
+Plug 'slim-template/vim-slim', {'for': 'slim'}
+Plug 'tpope/vim-rails', {'for': 'ruby'}
+Plug 'tpope/vim-markdown', {'for': 'markdown'}
+Plug 'pprovost/vim-ps1', {'for': 'ps1'}
+Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+
+" Add plugins to &runtimepath
+call plug#end()
+
+"--------------------------------------------------------------------------- 
+" General Settings
+"--------------------------------------------------------------------------- 
+
+" auto read when file is changed from outside
+set autoread
+
+" allow backspacing over everything in insert mode
+set backspace=2
+set backspace=indent,eol,start
+
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+" keep 50 lines of command line history
+set history=50
+
+" show the cursor position all the time
+set ruler
+
+" do not keep a backup file, use versions instead
+set nobackup
+
+" display incomplete commands
+set showcmd
+
+" do incremental searching
+set incsearch
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
-
-syntax on       " syntax highlight
-set hlsearch        " search highlighting
-
-if has("gui_running")   " GUI color and font settings
-  set guifont=Osaka-Mono:h20
-  set background=dark 
-  set t_Co=256          " 256 color mode
-  set cursorline        " highlight current line
-  colors moria
-  highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
-else
-" terminal color settings
-  "colors vgod   " use colorscheme wombat by pastleo
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
 endif
 
-set clipboard=unnamed   " yank to the system register (*) by default
-set showmatch       " Cursor shows matching ) and }
-set showmode        " Show current mode
-set wildchar=<TAB>  " start wild expansion in the command line using <TAB>
-set wildmenu            " wild char completion menu
+" Dont save options to session file
+set sessionoptions-=options
 
-" ignore these files while expanding wild chars
-set wildignore=*.o,*.class,*.pyc
+" Split at right and below
+set splitright
+set splitbelow
 
-set autoindent      " auto indentation
-set incsearch       " incremental search
-set nobackup        " no *~ backup files
-set copyindent      " copy the previous indentation on autoindenting
-set ignorecase      " ignore case when searching
-set smartcase       " ignore case if search pattern is all lowercase,case-sensitive otherwise
-set smarttab        " insert tabs on the start of a line according to context
+"--------------------------------------------------------------------------- 
+" Plugin Settings
+"--------------------------------------------------------------------------- 
 
-" disable sound on errors
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
+" NERDTree
+let g:NERDTreeQuitOnOpen = 1
 
-" TAB setting{
-   set expandtab        "replace <TAB> with spaces
+" Air-line
+set laststatus=2 " Always show status line
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 
-   au FileType Makefile set noexpandtab
-"}                                  
+" vim-gitgutter
+let g:gitgutter_map_keys = 0
+let g:gitgutter_enabled = 0
 
-" status line {
-set laststatus=2
-set statusline=\ %{HasPaste()}%<%-15.25(%f%)%m%r%h\ %w\ \ 
-set statusline+=\ \ \ [%{&ff}/%Y] 
-set statusline+=\ \ \ %<%20.30(%{hostname()}:%{CurDir()}%)\ 
-set statusline+=%=%-10.(%l,%c%V%)\ %p%%/%L
+" vim-session
+let g:session_directory = expand(getcwd() . '/.vim-sessions')
+let g:session_default_name = hostname()
+let g:session_autosave = 'no'
+let g:session_lock_enabled = 0
 
-function! CurDir()
-    let curdir = substitute(getcwd(), $HOME, "~", "")
-    return curdir
+" vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+
+"--------------------------------------------------------------------------- 
+" Functions
+"---------------------------------------------------------------------------
+
+" Actions
+
+function! s:get_visual_selection()
+  " Why is this not a built-in Vim script function?!
+  let [lnum1, col1] = getpos("'<")[1:2]
+  let [lnum2, col2] = getpos("'>")[1:2]
+  let lines = getline(lnum1, lnum2)
+  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
+  let lines[0] = lines[0][col1 - 1:]
+  return join(lines, "\n")
 endfunction
 
-function! HasPaste()
-    if &paste
-        return '[PASTE]'
-    else
-        return ''
-    endif
-endfunction
+fun! ReplaceOnNormalMode()
+  let word = input("Replace A with B, A: ") 
+  let replacement = input("Replace A with B, B: ") 
+  exe 'bufdo! %sno/' . word . '/' . replacement . '/gc' 
+endfun
 
-"}
+fun! ReplaceOnVisualMode()
+  let word = s:get_visual_selection()
+  let replacement = input("Replace '" . word . "' with: ") 
+  exe 'bufdo! %sno/' . word . '/' . replacement . '/gc' 
+endfun
 
+fun! ToggleLineNumber()
+  :GitGutterToggle
+  set nu!
+endfun
 
-" C/C++ specific settings
-autocmd FileType c,cpp,cc  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
+fun! MyVimEnterTasks()
+  if exists(":NERDTree") &&
+    \ (
+      \ argc() == 0 && !exists("s:std_in") &&
+      \ !filereadable(expand(g:session_directory . '/' . g:session_default_name . g:session_extension))
+    \ )
+    NERDTree
+  endif
+  
+  if isdirectory(g:session_directory) && empty(globpath(g:session_directory, '*'))
+    exe ':silent !rmdir ' . g:session_directory
+  endif
+endfun
 
-"Restore cursor to file position in previous editing session
-set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+fun! MySaveSessionOnQuit()
+  if exists(":SaveSession") && 
+    \ (
+      \ !empty(xolox#session#find_current_session()) ||
+      \ isdirectory(expand(getcwd() . "/.git")) ||
+      \ (len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) > 1 && input("Save session? ('y' or just press enter) ") == 'y')
+    \ )
+    SaveSession
+  endif
+endfun
+
+" Processors
+
+fun! Linend_DosToUnix()
+  :update
+  :e ++ff=dos
+  :setlocal ff=unix
+  :echo "use :w to save"
+endfun
+
+fun! Linend_UnixToDos()
+  :update
+  :e ++ff=dos
+  :echo "use :w to save"
+endfun
+
+fun! ConvertIndentTabsToSpace()
+  let new_tabstop = input("Convert tabs to spaces, how many spaces per tab?\n (press enter to use current tabstop = " . &tabstop . ") ")
+  set expandtab
+  if !empty(new_tabstop)
+    exe 'set tabstop=' . new_tabstop
+  endif
+  retab
+  echo "\n > Done. use :w to save"
+endfun
+
+fun! ConvertIndentSpaceToTabs()
+  set sts=&ts noet
+  retab!
+  echo "Convert space indent to spaces done. use :w to save"
+endfun
 
 "--------------------------------------------------------------------------- 
-" Tip #382: Search for <cword> and replace with input() in all open buffers 
+" autocmds
 "--------------------------------------------------------------------------- 
-fun! Replace() 
-    let s:word = input("Replace " . expand('<cword>') . " with:") 
-    :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge' 
-    :unlet! s:word 
-endfun 
+" open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * call MyVimEnterTasks()
 
+" leave vim if :q on last buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" save session when leaving vim with more than one buffer
+"autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
+autocmd VimLeavePre * call MySaveSessionOnQuit()
 
 "--------------------------------------------------------------------------- 
-" USEFUL SHORTCUTS
+" Key mappings
 "--------------------------------------------------------------------------- 
-" set leader to ,
-let mapleader=","
-let g:mapleader=","
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
 
-"replace the current word in all opened buffers
-map <leader>r :call Replace()<CR>
+" Don't use Ex mode, use Q for formatting
+map Q gq
 
-" open the error console
-map <leader>cc :botright cope<CR> 
-" move to next error
-map <leader>] :cn<CR>
-" move to the prev error
-map <leader>[ :cp<CR>
+" set leader to t key
+let mapleader='t'
+let g:mapleader='t'
 
-" --- move around splits {
-" move to and maximize the below split 
-map <C-J> <C-W>j<C-W>_
-" move to and maximize the above split 
-map <C-K> <C-W>k<C-W>_
-" move to and maximize the left split 
-nmap <c-h> <c-w>h<c-w><bar>
-" move to and maximize the right split  
-nmap <c-l> <c-w>l<c-w><bar>
-set wmw=0                     " set the min width of a window to 0 so we can maximize others 
-set wmh=0                     " set the min height of a window to 0 so we can maximize others
-" }
+" Copy to system clipboard
+vnoremap Y "*y 
+nnoremap YY V"*y
 
-" move around tabs. conflict with the original screen top/bottom
-" comment them out if you want the original H/L
-" go to prev tab 
-map <S-H> gT
-" go to next tab
-map <S-L> gt
+" Search for selected text, forwards or backwards.
+" From http://vim.wikia.com/wiki/Search_for_visually_selected_text
+vnoremap <silent> / :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> ? :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" new tab
-map <C-t><C-t> :tabnew<CR>
-" close tab
-map <C-t><C-w> :tabclose<CR> 
+" Replace
+nnoremap <leader>r :call ReplaceOnNormalMode()<CR>
+vnoremap <leader>r :call ReplaceOnVisualMode()<CR>
 
-" ,/ turn off search highlighting
-nmap <leader>/ :nohl<CR>
+" Paste from system clipboard
+nnoremap P "*p
+nnoremap <leader>P P
 
-" Bash like keys for the command line
-cnoremap <C-A>      <Home>
-cnoremap <C-E>      <End>
-cnoremap <C-K>      <C-U>
-
-" ,p toggles paste mode
+" <leader>p toggles paste mode
 nmap <leader>p :set paste!<BAR>set paste?<CR>
 
 " allow multiple indentation/deindentation in visual mode
 vnoremap < <gv
 vnoremap > >gv
 
-" :cd. change working directory to that of the current file
-cmap cd. lcd %:p:h
+" New tab and split
+nnoremap <leader>n :tabnew<CR>
+nnoremap <leader>s :vnew<CR>
+autocmd VimEnter * nunmap <leader>ig
+nnoremap <leader>i :new<CR>
 
-" Writing Restructured Text (Sphinx Documentation) {
-   " Ctrl-u 1:    underline Parts w/ #'s
-   noremap  <C-u>1 yyPVr#yyjp
-   inoremap <C-u>1 <esc>yyPVr#yyjpA
-   " Ctrl-u 2:    underline Chapters w/ *'s
-   noremap  <C-u>2 yyPVr*yyjp
-   inoremap <C-u>2 <esc>yyPVr*yyjpA
-   " Ctrl-u 3:    underline Section Level 1 w/ ='s
-   noremap  <C-u>3 yypVr=
-   inoremap <C-u>3 <esc>yypVr=A
-   " Ctrl-u 4:    underline Section Level 2 w/ -'s
-   noremap  <C-u>4 yypVr-
-   inoremap <C-u>4 <esc>yypVr-A
-   " Ctrl-u 5:    underline Section Level 3 w/ ^'s
-   noremap  <C-u>5 yypVr^
-   inoremap <C-u>5 <esc>yypVr^A
-"}
+" Navigation before tabs
+nnoremap <leader>h :tabprevious<CR>
+nnoremap <leader>l :tabnext<CR>
+
+" Navigation between splits
+nnoremap <leader>j <C-W>w
+nnoremap <leader>k <C-W>W
+
+" Move split line
+nnoremap <S-J> :resize +1<CR>
+nnoremap <S-K> :resize -1<CR>
+nnoremap <S-L> :vertical resize +2<CR>
+nnoremap <S-H> :vertical resize -2<CR>
+
+" Move tabs around
+nnoremap <leader>. :tabmove +<CR>
+nnoremap <leader>, :tabmove -<CR>
+
+" Toggle line numbers
+nnoremap <leader>N :call ToggleLineNumber()<CR>
+
+" NERDTree
+nnoremap <leader>t :NERDTreeFocus<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
+nnoremap <leader>q :NERDTreeClose<CR>
+
+" NERDCommenter
+vnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
+nnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
+
+" Emmet
+nnoremap <leader>e :Emmet<space>
+
+" Tabular
+nnoremap <leader>= :Tabularize<space>/
+vnoremap <leader>= :Tabularize<space>/
 
 "--------------------------------------------------------------------------- 
-" PROGRAMMING SHORTCUTS
+" Commands and Actions
 "--------------------------------------------------------------------------- 
 
-" Ctrl-[ jump out of the tag stack (undo Ctrl-])
-map <C-[> <ESC>:po<CR>
+" ConvertIndentTabsToSpace & ConvertIndentSpaceToTabs 
+command! ConvertIndent2Spaces call ConvertIndentTabsToSpace()
+command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
 
-" ,g generates the header guard
-map <leader>g :call IncludeGuard()<CR>
-fun! IncludeGuard()
-   let basename = substitute(bufname(""), '.*/', '', '')
-   let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
-   call append(0, "#ifndef " . guard)
-   call append(1, "#define " . guard)
-   call append( line("$"), "#endif // for #ifndef " . guard)
-endfunction
+" Linend_DosToUnix & Linend_UnixToDos
+command! Linend2Unix call Linend_DosToUnix()
+command! Linend2Dos call Linend_UnixToDos()
 
-" Enable omni completion. (Ctrl-X Ctrl-O)
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType java set omnifunc=javacomplete#Complete
+"--------------------------------------------------------------------------- 
+" Theme
+"--------------------------------------------------------------------------- 
+if s:bad_term == 0
+  set background=dark
+  let g:lucius_no_term_bg=1
+  colorscheme lucius
 
-" use syntax complete if nothing else available
-if has("autocmd") && exists("+omnifunc")
-  autocmd Filetype *
-              \ if &omnifunc == "" |
-              \     setlocal omnifunc=syntaxcomplete#Complete |
-              \ endif
+  " Overwrite some settings
+  hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822
+  hi Cursor ctermfg=NONE ctermbg=NONE guifg=#272822 guibg=#e5e5e5
+  hi iCursor ctermfg=NONE ctermbg=8 guifg=#272822 guibg=#717171
+  hi Visual ctermfg=0 ctermbg=10 guifg=#272822 guibg=#4dff70
+
+  let g:indent_guides_auto_colors = 0
+  hi IndentGuidesEven guibg=#36382f ctermbg=236
 endif
 
-set cot-=preview "disable doc preview in omnicomplete
-
-" make CSS omnicompletion work for SASS and SCSS
-autocmd BufNewFile,BufRead *.scss             set ft=scss.css
-autocmd BufNewFile,BufRead *.sass             set ft=sass.css
-
 "--------------------------------------------------------------------------- 
-" ENCODING SETTINGS
+" Keeping Some unknown settings by generators
 "--------------------------------------------------------------------------- 
-set encoding=utf-8                                  
-set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
 
-fun! ViewUTF8()
-    set encoding=utf-8                                  
-    set termencoding=big5
-endfun
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+        \ | wincmd p | diffthis
+endif
 
-fun! UTF8()
-    set encoding=utf-8                                  
-    set termencoding=big5
-    set fileencoding=utf-8
-    set fileencodings=ucs-bom,big5,utf-8,latin1
-endfun
-
-fun! Big5()
-    set encoding=big5
-    set fileencoding=big5
-endfun
-
-
-" ================= pastleo's vimrc ================= "
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+" ================================================
+" End
