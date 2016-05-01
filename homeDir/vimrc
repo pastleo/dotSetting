@@ -195,6 +195,9 @@ set sessionoptions-=options
 set splitright
 set splitbelow
 
+" stop from creating undo file
+set noundofile
+
 "--------------------------------------------------------------------------- 
 " Plugin Settings
 "--------------------------------------------------------------------------- 
@@ -280,6 +283,9 @@ fun! MySaveSessionOnQuit()
       \ isdirectory(expand(getcwd() . "/.git")) ||
       \ (len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) > 1 && input("Save session? ('y' or just press enter) ") == 'y')
     \ )
+    if !isdirectory(g:session_directory)
+      call mkdir(g:session_directory, "p")
+    endif
     SaveSession
   endif
 endfun
