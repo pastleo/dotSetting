@@ -133,6 +133,11 @@ Plug 'xolox/vim-misc'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
 
+" Theme
+Plug 'jonathanfilip/vim-lucius'
+Plug 'jnurmine/Zenburn'
+Plug 'vim-airline/vim-airline-themes'
+
 " Load only when being called
 Plug 'mattn/emmet-vim', {'on': 'Emmet'}
 Plug 'godlygeek/tabular', {'on': 'Tabularize'}
@@ -143,8 +148,11 @@ Plug 'slim-template/vim-slim', {'for': 'slim'}
 Plug 'tpope/vim-rails', {'for': 'ruby'}
 Plug 'tpope/vim-markdown', {'for': 'markdown'}
 Plug 'pprovost/vim-ps1', {'for': 'ps1'}
-Plug 'pangloss/vim-javascript', {'for': 'javascript'}
 Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+Plug 'posva/vim-vue', {'for': 'vue'}
+
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx', {'for': 'jsx'}
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -207,14 +215,9 @@ let g:NERDTreeQuitOnOpen = 1
 
 " Air-line
 set laststatus=2 " Always show status line
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#right_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline#extensions#tabline#right_alt_sep = ''
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
+let g:airline_theme='bubblegum'
 
 " vim-gitgutter
 let g:gitgutter_map_keys = 0
@@ -349,8 +352,16 @@ map Q gq
 let mapleader='t'
 let g:mapleader='t'
 
+" Block Visual
+nnoremap <leader>v <C-v>
+
 " Copy to system clipboard
-vnoremap Y "*y 
+if has("x11")
+  vnoremap Y "+y 
+else
+  vnoremap Y "*y 
+endif
+
 nnoremap YY V"*y
 
 " Search for selected text, forwards or backwards.
@@ -442,7 +453,8 @@ command! Linend2Dos call Linend_UnixToDos()
 if s:bad_term == 0
   set background=dark
   let g:lucius_no_term_bg=1
-  colorscheme lucius
+  "colorscheme lucius
+  colorscheme zenburn
 
   " Overwrite some settings
   hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822
@@ -450,8 +462,12 @@ if s:bad_term == 0
   hi iCursor ctermfg=NONE ctermbg=8 guifg=#272822 guibg=#717171
   hi Visual ctermfg=0 ctermbg=10 guifg=#272822 guibg=#4dff70
 
+  hi TabLine      ctermfg=Black  ctermbg=242
+  hi TabLineFill  ctermfg=Black  ctermbg=239
+  hi TabLineSel   ctermfg=White  ctermbg=2
+
   let g:indent_guides_auto_colors = 0
-  hi IndentGuidesEven guibg=#36382f ctermbg=236
+  hi IndentGuidesEven guibg=#36382f ctermbg=235
 endif
 
 "--------------------------------------------------------------------------- 
@@ -468,5 +484,5 @@ if !exists(":DiffOrig")
         \ | wincmd p | diffthis
 endif
 
-" ================================================
+"================================================
 " End
