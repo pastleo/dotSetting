@@ -1,4 +1,0 @@
-#!/bin/bash
-
-export disable_fish="1"
-bash --login

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+using_sys_path ls -l
+

@@ -224,8 +224,8 @@ let g:gitgutter_map_keys = 0
 let g:gitgutter_enabled = 0
 
 " vim-session
-let g:session_directory = expand(getcwd() . '/.vim-sessions')
-let g:session_default_name = hostname()
+let g:session_directory = expand('~/.vim/sessions')
+let g:session_default_name = substitute(substitute(getcwd(), '^/', '', ''), '\([^/]\)[^/]*/', '\1-', 'g')
 let g:session_autosave = 'no'
 let g:session_lock_enabled = 0
 
@@ -273,25 +273,15 @@ fun! MyVimEnterTasks()
     \ )
     NERDTree
   endif
-  
-  if isdirectory(g:session_directory) && empty(globpath(g:session_directory, '*'))
-    exe ':silent !rmdir ' . g:session_directory
-  endif
 endfun
 
-fun! MySaveSessionOnQuit()
-  if exists(":SaveSession") && 
-    \ (
-      \ !empty(xolox#session#find_current_session()) ||
-      \ isdirectory(expand(getcwd() . "/.git")) ||
-      \ (len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) > 1 && input("Save session? ('y' or just press enter) ") == 'y')
-    \ )
-    if !isdirectory(g:session_directory)
-      call mkdir(g:session_directory, "p")
-    endif
+fun! SaveSessionAndQuit()
+  if exists(":SaveSession")
     SaveSession
   endif
+  :qa
 endfun
+:command! Q :call SaveSessionAndQuit()
 
 " Processors
 
@@ -336,7 +326,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " save session when leaving vim with more than one buffer
 "autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
-autocmd VimLeavePre * call MySaveSessionOnQuit()
+"autocmd VimLeavePre * call MySaveSessionOnQuit()
 
 "--------------------------------------------------------------------------- 
 " Key mappings
