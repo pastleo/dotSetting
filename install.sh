@@ -1,10 +1,25 @@
 #!/bin/bash
 
-# Run this by path/to/this/repo/install.sh or
-# curl -sSL ... | bash
+# ## How to install
 
-# bootstrap script to install Homeshick and you preferred castles to a new
-# system.
+# Using curl:
+
+# ```
+# bash <(curl -s https://raw.githubusercontent.com/pastleo/dotSetting/master/install.sh)
+# ```
+
+# Or from local disk (this will make a link pointing existing repo)
+
+# ```
+# bash path/to/repo/install.sh
+# ```
+
+# =============================================================================
+# bootstrap script to install Homeshick, pastleo/dotSetting and castles you
+# preferred to a new system.
+# 
+# This file is copied and modified from
+# https://github.com/andsens/homeshick/wiki/Simplistic-bootstraping-script
 
 if [[ ! -f $HOME/.homesick/repos/homeshick/homeshick.sh ]]; then
   git clone git://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
@@ -47,8 +62,6 @@ cat <<'EOF' > $tmpfile
 #tmux-plugins/tpm
 
 # Private castles (commented by default)
-#sukima/muttrc
-#secret@example.org:securerc.git
 EOF
 
 ${VISUAL:-vi} $tmpfile
