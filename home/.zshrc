@@ -17,6 +17,10 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "hchbaw/auto-fu.zsh"
 zplug "mollifier/cd-gitroot"
 
+if [ -f ~/.homesick/repos/homeshick/homeshick.sh ]; then
+    source ~/.homesick/repos/homeshick/homeshick.sh
+fi
+
 # Set the priority when loading
 # e.g., zsh-syntax-highlighting must be loaded
 # after executing compinit command and sourcing other plugins
@@ -36,4 +40,8 @@ fi
 
 # Then, source plugins and add commands to $PATH
 zplug load # --verbose
+
+# General settings
+
+CASE_SENSITIVE="true"
 

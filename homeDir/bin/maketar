@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# Creates an archive (*.tar.gz) from given directory.
-tar cvzf "${1%%/}.tar.gz"  "${1%%/}/";

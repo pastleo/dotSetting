@@ -1,8 +1,0 @@
-
-package extract
-package jump
-package rvm
-package ssh
-package tmux
-package z
-theme pastfish

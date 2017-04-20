@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# Make your directories and files access rights sane.
-chmod -R u=rwX,g=rX,o= "$@" ;

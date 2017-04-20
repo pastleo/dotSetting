@@ -119,43 +119,69 @@ endif
 " vim-plug
 "--------------------------------------------------------------------------- 
 
-call plug#begin('~/.vim/plugged')
+if filereadable(glob("~/.vim/autoload/plug.vim"))
+  let s:has_plug=1
+else
+  if executable('curl')
+    echo 'vim-plug (https://github.com/junegunn/vim-plug) not installed,'
+    if confirm("Install vim-plug?", "&Yes", 0)
+      !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      source %
+    else
+      let s:has_plug=0
+    endif
+  else
+    echo 'curl not found in this system'
+    let s:has_plug=0
+  endif
+endif
 
-" Command packages
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-surround'
-Plug 'ervandew/supertab'
-Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
-Plug 'xolox/vim-session'
-Plug 'xolox/vim-misc'
-Plug 'tpope/vim-sleuth'
-Plug 'nathanaelkane/vim-indent-guides'
+if s:has_plug
+  call plug#begin('~/.vim/plugged')
 
-" Theme
-Plug 'jonathanfilip/vim-lucius'
-Plug 'jnurmine/Zenburn'
-Plug 'vim-airline/vim-airline-themes'
+  " Command packages
+  Plug 'scrooloose/nerdtree'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'tpope/vim-surround'
+  Plug 'ervandew/supertab'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'vim-airline/vim-airline'
+  Plug 'xolox/vim-session'
+  Plug 'xolox/vim-misc'
+  Plug 'tpope/vim-sleuth'
+  Plug 'nathanaelkane/vim-indent-guides'
 
-" Load only when being called
-Plug 'mattn/emmet-vim', {'on': 'Emmet'}
-Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+  " Theme
+  Plug 'jnurmine/Zenburn'
+  Plug 'vim-airline/vim-airline-themes'
 
-" Languages
-Plug 'digitaltoad/vim-pug', {'for': 'pug'}
-Plug 'slim-template/vim-slim', {'for': 'slim'}
-Plug 'tpope/vim-rails', {'for': 'ruby'}
-Plug 'tpope/vim-markdown', {'for': 'markdown'}
-Plug 'pprovost/vim-ps1', {'for': 'ps1'}
-Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
-Plug 'posva/vim-vue', {'for': 'vue'}
+  " Load only when being called
+  Plug 'mattn/emmet-vim', {'on': 'Emmet'}
+  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx', {'for': 'jsx'}
+  " Languages
+  Plug 'digitaltoad/vim-pug', {'for': 'pug'}
+  Plug 'slim-template/vim-slim', {'for': 'slim'}
+  Plug 'tpope/vim-rails', {'for': 'ruby'}
+  Plug 'tpope/vim-markdown', {'for': 'markdown'}
+  Plug 'pprovost/vim-ps1', {'for': 'ps1'}
+  Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+  Plug 'posva/vim-vue', {'for': 'vue'}
 
-" Add plugins to &runtimepath
-call plug#end()
+  Plug 'pangloss/vim-javascript'
+  Plug 'mxw/vim-jsx', {'for': 'jsx'}
+
+  " Add plugins to &runtimepath
+  call plug#end()
+  
+  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+    if confirm("Plugins seem not installed, install them and quit?", "&Yes", 0)
+      PlugInstall --sync | qa
+    endif
+  endif
+else
+  echo "plugin-related funcion disabled"
+endif
 
 "--------------------------------------------------------------------------- 
 " General Settings
@@ -442,8 +468,6 @@ command! Linend2Dos call Linend_UnixToDos()
 "--------------------------------------------------------------------------- 
 if s:bad_term == 0
   set background=dark
-  let g:lucius_no_term_bg=1
-  "colorscheme lucius
   colorscheme zenburn
 
   " Overwrite some settings

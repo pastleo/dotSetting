@@ -1,8 +1,0 @@
-#!/bin/bash
-
-docker_active_machine=$(docker-active-machine)
-
-if [ -n "$docker_active_machine" ]; then
-    echo ${docker_active_machine}.${machine_hostname_postfix}
-fi
-

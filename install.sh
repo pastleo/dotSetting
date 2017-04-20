@@ -1,109 +1,80 @@
 #!/bin/bash
-# auto_install_setting
-# Author: PastLeo
-# Date: 20141115
-# ==========================
 
-oriPwd="$PWD"
+# Run this by path/to/this/repo/install.sh or
+# curl -sSL ... | bash
 
-exeDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# bootstrap script to install Homeshick and you preferred castles to a new
+# system.
 
-function ask()
-{
-        echo "Do you want to $1?"
-        echo ' Your choise: [y/n] ' ; read ans
-        case "$ans" in
-            y*|Y*) shift; $@ ;;
-        esac
-}
-
-function remove_after_confirm()
-{
-    if ! [[ -a $1 ]]; then
-        return
-    fi
-    if [[ -d $1 ]]; then
-        ask "remove $1" rm -Rvf $1
-    fi
-}
-
-if [ ! $1 ]; then
-    echo "dotSetting installer"
-    echo "=========================="
-    echo "Usage:"
-    echo "    sh $0 [folder_1 [folder_2 ...]]"
-    echo ""
-
-    src_folders="homeDir custom"
-else
-    src_folders=$@
+if [[ ! -f $HOME/.homesick/repos/homeshick/homeshick.sh ]]; then
+  git clone git://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
 fi
 
-# Update all submodules
-cd $exeDIR
+source $HOME/.homesick/repos/homeshick/homeshick.sh
 
-for src in $src_folders; do
-    echo "====================================================="
-    echo "Processing all files under"
-    echo "$exeDIR/$src"
+if [ -x $0 ]; then
+  # executed from local repo
+  repo_path="$(cd "$(dirname "$0")"; pwd)"
+  repo_name="$(basename $repo_path)"
+  ln -s $repo_path "$HOME/.homesick/repos/$repo_name"
+  homeshick link $repo_name
+else
+  # executed from curl or wget
+  homeshick clone https://github.com/pastleo/dotSetting.git
+fi
 
-    cd "$exeDIR/$src" &> /dev/null;
+tmpfilename="/tmp/${0##*/}.XXXXX"
 
-    if [[ ! "$?" -eq "0" ]]; then
-        echo "The $src folder does not exists!"
-        echo "You can specify your own setting under the folder"
-        echo "====================================================="
-        echo ""
-        continue
-    fi
-    echo "====================================================="
+if type mktemp >/dev/null; then
+  tmpfile=$(mktemp $tmpfilename)
+else
+  tmpfile=$(echo $tmpfilename | sed "s/XX*/$RANDOM/")
+fi
 
-    for f in *
-    do
-        if [[ -d "$exeDIR/$src/$f" ]]; then
-            echo "rsync -av $exeDIR/$src/$f/ $HOME/.$f"
-            rsync -av "$exeDIR/$src/$f/" "$HOME/.$f"
-        else
-            case $f in
-            README*)
-                ;;
-            *.sh)
-                ;;
-            *)
-                echo "rsync -av $exeDIR/$src/$f $HOME/.$f"
-                rsync -av "$exeDIR/$src/$f" "$HOME/.$f"
-                ;;
-            esac
-        fi
-    done
-    echo ""
+trap 'rm -f "$tmpfile"' EXIT
+
+cat <<'EOF' > $tmpfile
+# Which Homeshick castles do you want to install?
+#
+# Each line is passed as the argument(s) to `homeshick clone`.
+# Lines starting with '#' will be ignored.
+#
+# If you remove or comment a line that castle will NOT be installed.
+# However, if you remove or comment everything, the script will be aborted.
+
+# Plugin management
+#gmarik/Vundle.vim
+#tmux-plugins/tpm
+
+# Private castles (commented by default)
+#sukima/muttrc
+#secret@example.org:securerc.git
+EOF
+
+${VISUAL:-vi} $tmpfile
+
+code=$?
+
+if [[ $code -ne 0 ]]; then
+  echo "Editor returned ${code}." 1>&2
+  exit 1
+fi
+
+castles=()
+
+while read line; do
+  castle=$(echo "$line" | sed '/^[ \t]*#/d;s/^[ \t]*\(.*\)[ \t]*$/\1/')
+  if [[ -n $castle ]]; then
+    castles+=("$castle")
+  fi
+done <$tmpfile
+
+if [[ ${#castles[@]} -eq 0 ]]; then
+  echo "No other castles to install. Aborting."
+  exit 0
+fi
+
+for castle in "${castles[@]}"; do
+  homeshick clone "$castle"
 done
 
-# Specify some other fix here
-# Mostly are permission fix
-
-if [[ -f "$HOME/.ssh/authorized_keys" ]]; then
-    chmod 700 "$HOME/.ssh"
-    chmod 600 "$HOME/.ssh/authorized_keys"
-    echo "~/.ssh/authorized_keys permission set!"
-fi
-
-chmod -R u+x "$HOME/.bin/"
-
-echo "$HOME/.bin/ exec permission added!"
-
-cd $oriPwd
-
-remove_after_confirm $HOME/.oh-my-fish
-remove_after_confirm $HOME/.local/share/omf
-
-plug_vim_dir=$HOME/.vim/autoload
-mkdir -p $plug_vim_dir
-cd $plug_vim_dir
-curl -fLo plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-ask "install vim plugins" vim +PlugInstall +qall 
-# ask "install vim plugins" vim +PluginInstall +qall
-
-echo "============= dotSetting auto installation completed! ============="
-echo " >> You need to restart the session to apply the config!"

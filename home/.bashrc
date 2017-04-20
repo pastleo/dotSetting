@@ -133,10 +133,6 @@ if [[ -f "$HOME/.welcomeMsg" ]]; then
     cat ~/.welcomeMsg
 fi
 
-if [ -x /usr/games/fortune ]; then
-    /usr/games/fortune -s     # Makes our day a bit more fun.... :-)
-fi
-
 function _exit()              # Function to run upon exit of shell.
 {
     cecho "BRed" "Hasta la vista, baby"
@@ -164,31 +160,6 @@ add_path "$HOME/.bin"
 add_path "$HOME/.rvm/bin"
 
 # ================================================
-# Boot2Docker / Docker-machine & Docker client
-# ================================================
-
-export machine_hostname_postfix="docker-machine.foo"
-if [ $(which docker-machine 2> /dev/null) ]; then
-    docker_running_machine=$(docker-machine ls | grep Running | head -n1 | cut -d " " -f1) # Get first running machine
-    if [ -n "$docker_running_machine" ]; then
-        echo "You have a docker-machine '$docker_running_machine' running, setting the env"
-        eval "$(docker-machine env --shell bash $docker_running_machine)"
-        host.set ${docker_running_machine}.$machine_hostname_postfix $(docker-machine ip $docker_running_machine) >> /dev/null
-        if ! [ $? ]; then
-            echo "hostname '${docker_running_machine}.$machine_hostname_postfix' for the machine is set!"
-        fi
-    fi
-elif [ $(which boot2docker 2> /dev/null) ]; then
-    case $(boot2docker status 2> /dev/null || echo "error") in
-    "running")
-        echo "You have a boot2docker running, setting the variables and host ip 'boot2docker.$machine_hostname_postfix'"
-        $(boot2docker shellinit 2> /dev/null)
-        host.set boot2docker.$machine_hostname_postfix $(docker-machine ip $docker_running_machine) >> /dev/null
-        ;;
-    esac
-fi
-
-# ================================================
 # Personal Environment
 # ================================================
 
@@ -200,11 +171,6 @@ fi
 # If there is more thing to add for both fish and bash
 # put them down below before fish starts
 # #####################################################
-
-# Get JAVA HOME for OSX
-if [ -f /usr/libexec/java_home ]; then
-    export JAVA_HOME=$(/usr/libexec/java_home)
-fi
 
 export GOPATH="~/.golang/"
 export PAGER=less
