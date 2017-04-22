@@ -17,6 +17,14 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "hchbaw/auto-fu.zsh"
 zplug "mollifier/cd-gitroot"
 
+if [ -d ~/.rvm ]; then
+    zplug "johnhamelink/rvm-zsh"
+fi
+
+if [ -s /usr/local/opt/nvm/nvm.sh ]; then
+    zplug "lukechilds/zsh-nvm"
+fi
+
 if [ -f ~/.homesick/repos/homeshick/homeshick.sh ]; then
     source ~/.homesick/repos/homeshick/homeshick.sh
 fi
@@ -43,5 +51,5 @@ zplug load # --verbose
 
 # General settings
 
-CASE_SENSITIVE="true"
+CASE_SENSITIVE="false"
 

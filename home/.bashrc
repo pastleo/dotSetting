@@ -157,7 +157,6 @@ add_path "/usr/local/sbin"
 export path_sys=$PATH
 
 add_path "$HOME/.bin"
-add_path "$HOME/.rvm/bin"
 
 # ================================================
 # Personal Environment
@@ -174,6 +173,15 @@ fi
 
 export GOPATH="~/.golang/"
 export PAGER=less
+
+# ================================================
+# my ls by $LS_PARAM
+# ================================================
+if ls --help 2>&1 | grep -q -- --color; then
+    export LS_PARAM='--color -hF'
+else
+    export LS_PARAM='-Gh'
+fi
 
 # ================================================
 # Start from out side term workdir by env
@@ -194,9 +202,7 @@ if [ ! $disable_advance_shell ]; then
     fi
 fi
 
-# ================================================
 # If no advance shell, continue the bash setting...
-# ================================================
 
 #-------------------------------------------------------------
 # Some settings
@@ -280,8 +286,7 @@ PS1.PastLeoDynamicPrompt()
         # promptTmp=$promptTmp"$(c bPurple) \H "
         promptTmp=$promptTmp"\[\033[1;30m\]\[\033[45m\] \H "
         color="Purple"
-    fi
-
+    fi 
     case $color in
         Red)
         promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
@@ -309,4 +314,27 @@ PS1.PastLeoDynamicPrompt()
 PS1.PastLeoDynamicPrompt
 # =============================================================
 
-# End:
+# =============================================================
+# 3rd party components Settings
+# =============================================================
+
+# ruby version manager, rvm
+# https://rvm.io/
+if [[ -s ~/.rvm/scripts/rvm ]]; then
+    source ~/.rvm/scripts/rvm
+    add_path "$HOME/.rvm/bin"
+fi
+
+# node version manager, nvm
+# https://github.com/creationix/nvm
+export NVM_DIR="$HOME/.nvm"
+if [[ -s /usr/local/opt/nvm/nvm.sh ]]; then
+    . /usr/local/opt/nvm/nvm.sh
+fi
+
+# homeshick: git dotfiles synchronizer written in bash
+# https://github.com/andsens/homeshick
+if [ -f ~/.homesick/repos/homeshick/homeshick.sh ]; then
+    source ~/.homesick/repos/homeshick/homeshick.sh
+fi
+

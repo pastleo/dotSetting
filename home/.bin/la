@@ -1,4 +1,4 @@
 #!/bin/sh
 
-using_sys_path ls -al
+using_sys_path ls $LS_PARAM -alSr $@
 

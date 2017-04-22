@@ -167,8 +167,9 @@ if s:has_plug
   Plug 'pprovost/vim-ps1', {'for': 'ps1'}
   Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
   Plug 'posva/vim-vue', {'for': 'vue'}
+  Plug 'elixir-lang/vim-elixir'
 
-  Plug 'pangloss/vim-javascript'
+  Plug 'isRuslan/vim-es6'
   Plug 'mxw/vim-jsx', {'for': 'jsx'}
 
   " Add plugins to &runtimepath
@@ -231,6 +232,9 @@ set splitbelow
 
 " stop from creating undo file
 set noundofile
+
+" smartcase
+set smartcase
 
 "--------------------------------------------------------------------------- 
 " Plugin Settings
@@ -408,11 +412,16 @@ nmap <leader>p :set paste!<BAR>set paste?<CR>
 vnoremap < <gv
 vnoremap > >gv
 
+" fussy search and Open (edit) file
+nnoremap <leader>o :e **/*
+
 " New tab and split
 nnoremap <leader>n :tabnew<CR>
 nnoremap <leader>s :vnew<CR>
 autocmd VimEnter * nunmap <leader>ig
 nnoremap <leader>i :new<CR>
+nnoremap <leader>I :split<CR>
+nnoremap <leader>S :vsplit<CR>
 
 " Navigation before tabs
 nnoremap <leader>h :tabprevious<CR>
@@ -439,6 +448,8 @@ nnoremap <leader>N :call ToggleLineNumber()<CR>
 nnoremap <leader>t :NERDTreeFocus<CR>
 nnoremap <leader>f :NERDTreeFind<CR>
 nnoremap <leader>q :NERDTreeClose<CR>
+let g:NERDTreeDirArrowExpandable = '>'
+let g:NERDTreeDirArrowCollapsible = '+'
 
 " NERDCommenter
 vnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
