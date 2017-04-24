@@ -118,7 +118,6 @@ endif
 "--------------------------------------------------------------------------- 
 " vim-plug
 "--------------------------------------------------------------------------- 
-
 if filereadable(glob("~/.vim/autoload/plug.vim"))
   let s:has_plug=1
 else
@@ -175,11 +174,7 @@ if s:has_plug
   " Add plugins to &runtimepath
   call plug#end()
   
-  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-    if confirm("Plugins seem not installed, install them and quit?", "&Yes", 0)
-      PlugInstall --sync | qa
-    endif
-  endif
+  let s:plug_not_installed=len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 else
   echo "plugin-related funcion disabled"
 endif
@@ -296,6 +291,10 @@ fun! ToggleLineNumber()
 endfun
 
 fun! MyVimEnterTasks()
+  if s:plug_not_installed && confirm("Plugins seem not installed, install them and quit?", "&Yes", 0)
+    PlugInstall --sync
+  endif
+  
   if exists(":NERDTree") &&
     \ (
       \ argc() == 0 && !exists("s:std_in") &&
