@@ -292,7 +292,7 @@ endfun
 
 fun! MyVimEnterTasks()
   if s:plug_not_installed && confirm("Plugins seem not installed, install them and quit?", "&Yes", 0)
-    PlugInstall --sync
+    PlugInstall --sync | qa
   endif
   
   if exists(":NERDTree") &&
@@ -478,7 +478,10 @@ command! Linend2Dos call Linend_UnixToDos()
 "--------------------------------------------------------------------------- 
 if s:bad_term == 0
   set background=dark
-  colorscheme zenburn
+
+  if !s:plug_not_installed
+    colorscheme zenburn
+  endif
 
   " Overwrite some settings
   hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822
