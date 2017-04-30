@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+    using_sys_path sudo -E bash
+else
+    using_sys_path sudo -E $@
+fi
+
