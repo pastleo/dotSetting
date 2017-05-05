@@ -276,13 +276,13 @@ endfunction
 fun! ReplaceOnNormalMode()
   let word = input("Replace A with B, A: ") 
   let replacement = input("Replace A with B, B: ") 
-  exe 'bufdo! %sno/' . word . '/' . replacement . '/gc' 
+  exe '%sno/' . word . '/' . replacement . '/gc' 
 endfun
 
 fun! ReplaceOnVisualMode()
   let word = s:get_visual_selection()
   let replacement = input("Replace '" . word . "' with: ") 
-  exe 'bufdo! %sno/' . word . '/' . replacement . '/gc' 
+  exe '%sno/' . word . '/' . replacement . '/gc' 
 endfun
 
 fun! ToggleLineNumber()
