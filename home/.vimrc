@@ -167,6 +167,7 @@ if s:has_plug
   Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
   Plug 'posva/vim-vue', {'for': 'vue'}
   Plug 'elixir-lang/vim-elixir'
+  Plug 'isobit/vim-caddyfile'
 
   Plug 'isRuslan/vim-es6'
   Plug 'mxw/vim-jsx', {'for': 'jsx'}
