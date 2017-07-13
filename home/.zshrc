@@ -4,7 +4,11 @@
 #-------------------------------------------------------------
 
 if ! [ -f ~/.zplug/init.zsh ]; then
-    curl -sL zplug.sh/installer | zsh
+    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+    if ! [ -f ~/.zplug/init.zsh ]; then
+        echo "zplug install failed, aborting"
+        return
+    fi
 fi
 source ~/.zplug/init.zsh
 
