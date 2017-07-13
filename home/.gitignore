@@ -6,5 +6,6 @@ Icon?
 .tags1
 .*.swp
 .*.swo
+.swp
 .vim-sessions
 .sync_rule

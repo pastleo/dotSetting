@@ -180,7 +180,6 @@ fi
 # #####################################################
 
 export GOPATH="~/.golang/"
-export PAGER=less
 
 # ================================================
 # my ls by $LS_PARAM
@@ -189,6 +188,23 @@ if ls --help 2>&1 | grep -q -- --color; then
     export LS_PARAM='--color -hF'
 else
     export LS_PARAM='-Gh'
+fi
+
+# ================================================
+# less
+# ================================================
+
+if [[ "$(which less)" ]]; then
+    export PAGER=less
+    LESSPIPE=`which src-hilite-lesspipe.sh`
+    if [[ "$LESSPIPE" ]]; then
+        export LESSOPEN="| ${LESSPIPE} %s"
+        if [[ "$OSTYPE" == "linux-gnu" ]]; then
+            export LESS=' -R '
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            export LESS=' -R -X -F '
+        fi
+    fi
 fi
 
 # ================================================

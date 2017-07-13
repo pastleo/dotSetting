@@ -16,6 +16,7 @@
     rebase = true
 [alias]
     s = status
+    h = rev-parse HEAD
     ci = commit
     br = branch
     co = checkout
