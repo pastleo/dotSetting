@@ -196,7 +196,7 @@ fi
 
 if [[ "$(which less)" ]]; then
     export PAGER=less
-    LESSPIPE=`which src-hilite-lesspipe.sh`
+    LESSPIPE=`which src-hilite-lesspipe.sh 2> /dev/null`
     if [[ "$LESSPIPE" ]]; then
         export LESSOPEN="| ${LESSPIPE} %s"
         if [[ "$OSTYPE" == "linux-gnu" ]]; then
