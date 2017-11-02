@@ -25,5 +25,5 @@
     logg = log --graph --oneline --decorate --all
     logn = log --stat --graph --oneline --decorate --all
     logl = log --pretty=short -u -L
-    diffn = diff --name-only
+    diffn = diff --name-status
 

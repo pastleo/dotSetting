@@ -168,9 +168,7 @@ if s:has_plug
   Plug 'posva/vim-vue', {'for': 'vue'}
   Plug 'elixir-lang/vim-elixir'
   Plug 'isobit/vim-caddyfile'
-
-  Plug 'isRuslan/vim-es6'
-  Plug 'mxw/vim-jsx', {'for': 'jsx'}
+  Plug 'pangloss/vim-javascript', {'for': ['js', 'mjs'] }
 
   " Add plugins to &runtimepath
   call plug#end()
@@ -357,6 +355,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " save session when leaving vim with more than one buffer
 "autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
 "autocmd VimLeavePre * call MySaveSessionOnQuit()
+
+" file types
+autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
 
 "--------------------------------------------------------------------------- 
 " Key mappings
