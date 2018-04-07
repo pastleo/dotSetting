@@ -2,7 +2,7 @@
 " ================================================
 
 "--------------------------------------------------------------------------- 
-" Some Basic config before vim-plug
+" Some basic checkings and settings
 "--------------------------------------------------------------------------- 
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
@@ -51,7 +51,7 @@ else
 endif " has("autocmd")
 
 "--------------------------------------------------------------------------- 
-" Terminal and platform specific settings
+" Terminal and platform settings
 "--------------------------------------------------------------------------- 
 let s:bad_term=0
 
@@ -103,7 +103,7 @@ if has('win32')
 endif
 
 "--------------------------------------------------------------------------- 
-" ENCODING SETTINGS
+" Encoding settings
 "--------------------------------------------------------------------------- 
 if has("multi_byte") && s:bad_term == 0
   if &termencoding == ""
@@ -116,70 +116,7 @@ if has("multi_byte") && s:bad_term == 0
 endif
 
 "--------------------------------------------------------------------------- 
-" vim-plug
-"--------------------------------------------------------------------------- 
-if filereadable(glob("~/.vim/autoload/plug.vim"))
-  let s:has_plug=1
-else
-  if executable('curl')
-    echo 'vim-plug (https://github.com/junegunn/vim-plug) not installed,'
-    if confirm("Install vim-plug?", "&Yes", 0)
-      !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-      source %
-    else
-      let s:has_plug=0
-    endif
-  else
-    echo 'curl not found in this system'
-    let s:has_plug=0
-  endif
-endif
-
-if s:has_plug
-  call plug#begin('~/.vim/plugged')
-
-  " Command packages
-  Plug 'scrooloose/nerdtree'
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'tpope/vim-surround'
-  Plug 'ervandew/supertab'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'vim-airline/vim-airline'
-  Plug 'xolox/vim-session'
-  Plug 'xolox/vim-misc'
-  Plug 'tpope/vim-sleuth'
-  Plug 'nathanaelkane/vim-indent-guides'
-
-  " Theme
-  Plug 'jnurmine/Zenburn'
-  Plug 'vim-airline/vim-airline-themes'
-
-  " Load only when being called
-  Plug 'mattn/emmet-vim', {'on': 'Emmet'}
-  Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-
-  " Languages
-  Plug 'digitaltoad/vim-pug', {'for': 'pug'}
-  Plug 'slim-template/vim-slim', {'for': 'slim'}
-  Plug 'tpope/vim-rails', {'for': 'ruby'}
-  Plug 'tpope/vim-markdown', {'for': 'markdown'}
-  Plug 'pprovost/vim-ps1', {'for': 'ps1'}
-  Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
-  Plug 'posva/vim-vue', {'for': 'vue'}
-  Plug 'elixir-lang/vim-elixir'
-  Plug 'isobit/vim-caddyfile'
-  Plug 'pangloss/vim-javascript', {'for': ['js', 'mjs'] }
-
-  " Add plugins to &runtimepath
-  call plug#end()
-  
-  let s:plug_not_installed=len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-else
-  echo "plugin-related funcion disabled"
-endif
-
-"--------------------------------------------------------------------------- 
-" General Settings
+" General settings
 "--------------------------------------------------------------------------- 
 
 " auto read when file is changed from outside
@@ -231,33 +168,7 @@ set noundofile
 set smartcase
 
 "--------------------------------------------------------------------------- 
-" Plugin Settings
-"--------------------------------------------------------------------------- 
-
-" NERDTree
-let g:NERDTreeQuitOnOpen = 1
-
-" Air-line
-set laststatus=2 " Always show status line
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_theme='bubblegum'
-
-" vim-gitgutter
-let g:gitgutter_map_keys = 0
-let g:gitgutter_enabled = 0
-
-" vim-session
-let g:session_directory = expand('~/.vim/sessions')
-let g:session_default_name = substitute(substitute(getcwd(), '^/', '', ''), '\([^/]\)[^/]*/', '\1-', 'g')
-let g:session_autosave = 'no'
-let g:session_lock_enabled = 0
-
-" vim-indent-guides
-let g:indent_guides_enable_on_vim_startup = 1
-
-"--------------------------------------------------------------------------- 
-" Functions
+" Functions and commands
 "---------------------------------------------------------------------------
 
 " Actions
@@ -284,14 +195,9 @@ fun! ReplaceOnVisualMode()
   exe '%sno/' . word . '/' . replacement . '/gc' 
 endfun
 
-fun! ToggleLineNumber()
-  :GitGutterToggle
-  set nu!
-endfun
-
-fun! MyVimEnterTasks()
-  if s:plug_not_installed && confirm("Plugins seem not installed, install them and quit?", "&Yes", 0)
-    PlugInstall --sync | qa
+fun! EnterTasks()
+  if s:plug_not_ready
+    echom " [ plug(s) not ready ] :PlugS to sync"
   endif
   
   if exists(":NERDTree") &&
@@ -303,13 +209,23 @@ fun! MyVimEnterTasks()
   endif
 endfun
 
-fun! SaveSessionAndQuit()
-  if exists(":SaveSession")
-    SaveSession
-  endif
-  :qa
-endfun
-:command! Q :call SaveSessionAndQuit()
+if !exists(":PlugS")
+  fun! PlugS()
+    if s:plug_not_ready == 1
+      if executable('curl')
+        !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      else
+        echo 'curl not found in this system'
+      endif
+      :source ~/.vimrc
+    endif
+    if s:plug_not_ready != 1
+      PlugInstall --sync
+      :source ~/.vimrc
+    endif
+  endfun
+  command! PlugS call PlugS()
+endif
 
 " Processors
 
@@ -319,12 +235,14 @@ fun! Linend_DosToUnix()
   :setlocal ff=unix
   :echo "use :w to save"
 endfun
+command! Linend2Unix call Linend_DosToUnix()
 
 fun! Linend_UnixToDos()
   :update
   :e ++ff=dos
   :echo "use :w to save"
 endfun
+command! Linend2Dos call Linend_UnixToDos()
 
 fun! ConvertIndentTabsToSpace()
   let new_tabstop = input("Convert tabs to spaces, how many spaces per tab?\n (press enter to use current tabstop = " . &tabstop . ") ")
@@ -335,29 +253,14 @@ fun! ConvertIndentTabsToSpace()
   retab
   echo "\n > Done. use :w to save"
 endfun
+command! ConvertIndent2Spaces call ConvertIndentTabsToSpace()
 
 fun! ConvertIndentSpaceToTabs()
   set sts=&ts noet
   retab!
   echo "Convert space indent to spaces done. use :w to save"
 endfun
-
-"--------------------------------------------------------------------------- 
-" autocmds
-"--------------------------------------------------------------------------- 
-" open a NERDTree automatically when vim starts up if no files were specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * call MyVimEnterTasks()
-
-" leave vim if :q on last buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" save session when leaving vim with more than one buffer
-"autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
-"autocmd VimLeavePre * call MySaveSessionOnQuit()
-
-" file types
-autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
+command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
 
 "--------------------------------------------------------------------------- 
 " Key mappings
@@ -419,7 +322,6 @@ nnoremap <leader>o :e **/*
 " New tab and split
 nnoremap <leader>n :tabnew<CR>
 nnoremap <leader>s :vnew<CR>
-autocmd VimEnter * nunmap <leader>ig
 nnoremap <leader>i :new<CR>
 nnoremap <leader>I :split<CR>
 nnoremap <leader>S :vsplit<CR>
@@ -441,6 +343,130 @@ nnoremap <S-H> :vertical resize -2<CR>
 " Move tabs around
 nnoremap <leader>. :tabmove +<CR>
 nnoremap <leader>, :tabmove -<CR>
+
+"--------------------------------------------------------------------------- 
+" Autocmds
+"--------------------------------------------------------------------------- 
+" open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * call EnterTasks()
+
+" file types
+autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
+
+"--------------------------------------------------------------------------- 
+" Plugins : vim-plug
+"--------------------------------------------------------------------------- 
+
+if !filereadable(glob("~/.vim/autoload/plug.vim"))
+  let s:plug_not_ready=1
+  finish
+endif
+
+call plug#begin('~/.vim/plugged')
+
+" Common packages
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
+Plug 'ervandew/supertab'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-airline/vim-airline'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
+Plug 'tpope/vim-sleuth'
+Plug 'nathanaelkane/vim-indent-guides'
+
+" Theme
+Plug 'jnurmine/Zenburn'
+Plug 'vim-airline/vim-airline-themes'
+
+" Load only when being called
+Plug 'mattn/emmet-vim', {'on': 'Emmet'}
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+" Languages
+Plug 'digitaltoad/vim-pug', {'for': 'pug'}
+Plug 'slim-template/vim-slim', {'for': 'slim'}
+Plug 'tpope/vim-rails', {'for': 'ruby'}
+Plug 'tpope/vim-markdown', {'for': 'markdown'}
+Plug 'pprovost/vim-ps1', {'for': 'ps1'}
+Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+Plug 'posva/vim-vue', {'for': 'vue'}
+Plug 'elixir-lang/vim-elixir'
+Plug 'isobit/vim-caddyfile'
+Plug 'pangloss/vim-javascript', {'for': ['js', 'mjs'] }
+
+" Add plugins to &runtimepath
+call plug#end()
+
+if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  let s:plug_not_ready=2
+  finish
+else
+  let s:plug_not_ready=0
+endif
+
+"--------------------------------------------------------------------------- 
+" Plugin settings
+"--------------------------------------------------------------------------- 
+
+" NERDTree
+let g:NERDTreeQuitOnOpen = 1
+
+" Air-line
+set laststatus=2 " Always show status line
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_theme='bubblegum'
+
+" vim-gitgutter
+let g:gitgutter_map_keys = 0
+let g:gitgutter_enabled = 0
+
+" vim-session
+let g:session_directory = expand('~/.vim/sessions')
+let g:session_default_name = substitute(substitute(getcwd(), '^/', '', ''), '\([^/]\)[^/]*/', '\1-', 'g')
+let g:session_autosave = 'no'
+let g:session_lock_enabled = 0
+
+" vim-indent-guides
+let g:indent_guides_enable_on_vim_startup = 1
+
+"--------------------------------------------------------------------------- 
+" Functions with plugins
+"---------------------------------------------------------------------------
+
+" Actions
+
+fun! ToggleLineNumber()
+  :GitGutterToggle
+  set nu!
+endfun
+
+fun! SaveSessionAndQuit()
+  if exists(":SaveSession")
+    SaveSession
+  endif
+  :qa
+endfun
+:command! Q :call SaveSessionAndQuit()
+
+"--------------------------------------------------------------------------- 
+" Autocmds with plugins
+"--------------------------------------------------------------------------- 
+" leave vim if :q on last buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+autocmd VimEnter * nunmap <leader>ig
+
+" save session when leaving vim with more than one buffer
+"autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
+"autocmd VimLeavePre * call MySaveSessionOnQuit()
+
+"--------------------------------------------------------------------------- 
+" Key mappings with Plugins
+"--------------------------------------------------------------------------- 
 
 " Toggle line numbers
 nnoremap <leader>N :call ToggleLineNumber()<CR>
@@ -464,26 +490,12 @@ nnoremap <leader>= :Tabularize<space>/
 vnoremap <leader>= :Tabularize<space>/
 
 "--------------------------------------------------------------------------- 
-" Commands and Actions
-"--------------------------------------------------------------------------- 
-
-" ConvertIndentTabsToSpace & ConvertIndentSpaceToTabs 
-command! ConvertIndent2Spaces call ConvertIndentTabsToSpace()
-command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
-
-" Linend_DosToUnix & Linend_UnixToDos
-command! Linend2Unix call Linend_DosToUnix()
-command! Linend2Dos call Linend_UnixToDos()
-
-"--------------------------------------------------------------------------- 
 " Theme
 "--------------------------------------------------------------------------- 
 if s:bad_term == 0
   set background=dark
 
-  if !s:plug_not_installed
-    colorscheme zenburn
-  endif
+  colorscheme zenburn
 
   " Overwrite some settings
   hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822
@@ -500,7 +512,7 @@ if s:bad_term == 0
 endif
 
 "--------------------------------------------------------------------------- 
-" Keeping Some unknown settings by generators
+" Keeping other unknown settings by generators
 "--------------------------------------------------------------------------- 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -513,5 +525,3 @@ if !exists(":DiffOrig")
         \ | wincmd p | diffthis
 endif
 
-"================================================
-" End

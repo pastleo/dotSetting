@@ -339,26 +339,7 @@ PS1.PastLeoDynamicPrompt
 # =============================================================
 
 # =============================================================
-# 3rd party components Settings
+# Shared settings between bash and zsh
 # =============================================================
-
-# ruby version manager, rvm
-# https://rvm.io/
-if [[ -s ~/.rvm/scripts/rvm ]]; then
-    source ~/.rvm/scripts/rvm
-    add_path "$HOME/.rvm/bin"
-fi
-
-# node version manager, nvm
-# https://github.com/creationix/nvm
-export NVM_DIR="$HOME/.nvm"
-if [[ -s /usr/local/opt/nvm/nvm.sh ]]; then
-    . /usr/local/opt/nvm/nvm.sh
-fi
-
-# homeshick: git dotfiles synchronizer written in bash
-# https://github.com/andsens/homeshick
-if [ -f ~/.homesick/repos/homeshick/homeshick.sh ]; then
-    source ~/.homesick/repos/homeshick/homeshick.sh
-fi
+. $HOME/.zbashrc
 
