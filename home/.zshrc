@@ -21,6 +21,10 @@ zplug "zsh-users/zsh-autosuggestions"
 zplug "hchbaw/auto-fu.zsh"
 zplug "mollifier/cd-gitroot"
 
+if type fzf > /dev/null; then
+    zplug "junegunn/fzf", dir:"~/.fzf", use:"shell/*.zsh"
+fi
+
 if [ -d ~/.rvm ]; then
     echo "use asdf instead of rvm: https://github.com/asdf-vm/asdf, remove rvm if asdf works after 2018/5/1"
     zplug "johnhamelink/rvm-zsh"

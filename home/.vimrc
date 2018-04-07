@@ -376,6 +376,13 @@ Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'editorconfig/editorconfig-vim'
+
+if executable('fzf')
+  " Please install fzf and ag (the_silver_searcher) manually
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
+  Plug 'junegunn/fzf.vim'
+endif
 
 " Theme
 Plug 'jnurmine/Zenburn'
@@ -434,7 +441,7 @@ let g:session_lock_enabled = 0
 let g:indent_guides_enable_on_vim_startup = 1
 
 "--------------------------------------------------------------------------- 
-" Functions with plugins
+" Functions and commands with plugins
 "---------------------------------------------------------------------------
 
 " Actions
@@ -451,6 +458,9 @@ fun! SaveSessionAndQuit()
   :qa
 endfun
 :command! Q :call SaveSessionAndQuit()
+
+" Fzf
+cnoreabbrev E Files
 
 "--------------------------------------------------------------------------- 
 " Autocmds with plugins
