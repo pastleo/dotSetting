@@ -207,6 +207,10 @@ fun! EnterTasks()
     \ )
     NERDTree
   endif
+
+  if exists('$COLOR_PRESENTATION')
+    call PresentationMode()
+  endif
 endfun
 
 if !exists(":PlugS")
@@ -261,6 +265,13 @@ fun! ConvertIndentSpaceToTabs()
   echo "Convert space indent to spaces done. use :w to save"
 endfun
 command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
+
+fun! PresentationMode()
+  colorscheme default
+  set background=light
+  hi IndentGuidesEven guibg=NONE ctermbg=NONE
+endfun
+command! PresentationMode call PresentationMode()
 
 "--------------------------------------------------------------------------- 
 " Key mappings
