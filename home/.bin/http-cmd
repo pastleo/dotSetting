@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'rack'
+rescue LoadError
+  STDERR.puts 'please install rack by `gem install rack`'
+  exit 1
+end
+
+require 'uri'
+
+root = Dir.pwd
+
+def blank?(v)
+  v.nil? or v.empty?
+end
+
+if ARGV[0]
+  match_data = ARGV[0].match /([^:\/]*)(:(\d*))?(\/.*)?/
+  host = blank?(match_data[1]) ? '127.0.0.1' : match_data[1]
+  port = blank?(match_data[3]) ? (8000 + rand(12000)) : match_data[3]
+  hideout = blank?(match_data[4]) ? ('/' + (0...8).map { (65 + rand(26)).chr }.join) : match_data[4]
+else
+  host = '127.0.0.1'
+  port = 8000 + rand(12000)
+  hideout = '/' + (0...8).map { (65 + rand(26)).chr }.join
+end
+
+puts <<START_MSG
+root: #{root}
+import using:
+(() => {
+window.cmdBaseUrl = 'http://#{host}:#{port}#{hideout}';
+window.cmdGenUrl = c => window.cmdBaseUrl + '/c?' + encodeURIComponent(c);
+window.cmd = c => fetch(window.cmdGenUrl(c), { mode: 'no-cors' });
+})()
+START_MSG
+
+hideout = '' if hideout == '/'
+
+app = Proc.new do |env|
+  path = env['PATH_INFO']
+  if not path.start_with? hideout
+    puts "wrong hideout!!!\npath: #{path}"
+    exit! 255
+  end
+  path.sub!(/^#{hideout}/, '')
+
+  if File.exists?(File.join(root, path))
+    Rack::Directory.new(root).call(env)
+  else
+    case path
+    when '/c'
+      cmd = URI.decode(env['QUERY_STRING'])
+      puts "run: #{cmd}"
+      Process.detach(spawn(cmd))
+      ['200', {'Content-Type' => 'text/html'}, ['ok']]
+    else
+      ['404', {'Content-Type' => 'text/html'}, ['not found']]
+    end
+  end
+end
+
+Rack::Handler.default.run app, :Port => port, :Host => host
