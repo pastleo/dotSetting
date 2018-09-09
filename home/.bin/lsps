@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+    using_sys_path ps -aef --forest | less
+else
+    using_sys_path ps -aef --forest | less -p "$1"
+fi

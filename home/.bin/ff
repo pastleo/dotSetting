@@ -1,4 +1,8 @@
 #!/bin/bash
 
-# Find a file with a pattern in name
-find . -type f -iname '*'"$*"'*' -ls ;
+if [[ -z $1 ]]; then
+    echo "find a file with a pattern in name"
+    echo "usage: $0 pattern"
+else
+    using_sys_path find . -type f -iname '*'"$*"'*' -ls ;
+fi
