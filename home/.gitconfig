@@ -26,4 +26,4 @@
     logn = log --stat --graph --oneline --decorate --all
     logl = log --pretty=short -u -L
     diffn = diff --name-status
-
+    diffs = diff --staged

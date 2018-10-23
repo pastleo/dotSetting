@@ -404,16 +404,12 @@ Plug 'mattn/emmet-vim', {'on': 'Emmet'}
 Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 
 " Languages
-Plug 'digitaltoad/vim-pug', {'for': 'pug'}
-Plug 'slim-template/vim-slim', {'for': 'slim'}
-Plug 'tpope/vim-rails', {'for': 'ruby'}
-Plug 'tpope/vim-markdown', {'for': 'markdown'}
-Plug 'pprovost/vim-ps1', {'for': 'ps1'}
+Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
+Plug 'leafgarland/typescript-vim', {'for': 'ts'}
 Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
 Plug 'posva/vim-vue', {'for': 'vue'}
-Plug 'elixir-lang/vim-elixir'
-Plug 'isobit/vim-caddyfile'
-Plug 'pangloss/vim-javascript', {'for': ['js', 'mjs'] }
+Plug 'slim-template/vim-slim', {'for': 'slim'}
+Plug 'pprovost/vim-ps1', {'for': 'ps1'}
 
 " Add plugins to &runtimepath
 call plug#end()

@@ -7,6 +7,7 @@ When the time to migrate at a new machine, it might be somehow troubling. So I u
 ## Requirement
 
  * bash
+   * zsh for advance shell
  * git
  * curl
  * rsync (if wanting to use `rsync.sh`)
@@ -32,4 +33,3 @@ WARNING: This will overwrite existing files!
 ```
 path/to/repo/rsync.sh
 ```
-

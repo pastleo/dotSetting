@@ -170,8 +170,8 @@ add_path "$HOME/.bin"
 # Personal Environment
 # ================================================
 
-if [ -f ~/.per_env ]; then
-    source ~/.per_env
+if [ -f ~/.local-env ]; then
+    source ~/.local-env
 fi
 
 # #####################################################
@@ -179,7 +179,8 @@ fi
 # put them down below before fish starts
 # #####################################################
 
-export GOPATH="~/.golang/"
+export GOPATH="$HOME/.golang/"
+export ANDROID_HOME="$HOME/.android-sdk/"
 
 # ================================================
 # my ls by $LS_PARAM
@@ -213,6 +214,20 @@ fi
 
 if [ -d "$_START_WD" ]; then
     cd "$_START_WD"
+fi
+
+# ================================================
+# start ssh agent for forwarding
+# ================================================
+# add:
+#   export SSH_AGENT_ENABLED=true
+# to ~/.local-env
+
+if [ "$SSH_AGENT_ENABLED" ]; then
+    if [ -z "$SSH_AUTH_SOCK" ]; then
+        eval $(ssh-agent)
+        ssh-add
+    fi
 fi
 
 # ================================================
