@@ -332,9 +332,10 @@ nnoremap <leader>o :e **/*
 
 " New tab and split
 nnoremap <leader>n :tabnew<CR>
-nnoremap <leader>s :vnew<CR>
+nnoremap <leader>N :tab split<CR>
 nnoremap <leader>i :new<CR>
 nnoremap <leader>I :split<CR>
+nnoremap <leader>s :vnew<CR>
 nnoremap <leader>S :vsplit<CR>
 
 " Navigation before tabs
@@ -388,6 +389,11 @@ Plug 'xolox/vim-misc'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 if executable('fzf')
   " Please install fzf and ag (the_silver_searcher) manually
@@ -447,6 +453,45 @@ let g:session_lock_enabled = 0
 " vim-indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
 
+" autozimu/LanguageClient-neovim
+" server installations:
+"   https://md.pastleo.me/language-servers
+let g:LanguageClient_serverCommands = {
+	\ 'cpp': ['clangd'],
+	\ 'c': ['clangd'],
+	\ 'rust': ['rustup', 'run', 'stable', 'rls'],
+	\ 'ruby': ['solargraph', 'stdio'],
+	\ 'javascript': ['javascript-typescript-stdio'],
+	\ 'javascript.jsx': ['javascript-typescript-stdio'],
+	\ }
+
+let g:LanguageClient_diagnosticsDisplay = {
+	\ 1: {
+	\     "name": "Error",
+	\     "texthl": "ALEError",
+	\     "signText": "x",
+	\     "signTexthl": "ALEErrorSign",
+	\ },
+	\ 2: {
+	\     "name": "Warning",
+	\     "texthl": "ALEWarning",
+	\     "signText": "w",
+	\     "signTexthl": "ALEWarningSign",
+	\ },
+	\ 3: {
+	\     "name": "Information",
+	\     "texthl": "ALEInfo",
+	\     "signText": "i",
+	\     "signTexthl": "ALEInfoSign",
+	\ },
+	\ 4: {
+	\     "name": "Hint",
+	\     "texthl": "ALEInfo",
+	\     "signText": ">",
+	\     "signTexthl": "ALEInfoSign",
+	\ },
+	\ }
+
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
 "---------------------------------------------------------------------------
@@ -486,7 +531,7 @@ autocmd VimEnter * nunmap <leader>ig
 "--------------------------------------------------------------------------- 
 
 " Toggle line numbers
-nnoremap <leader>N :call ToggleLineNumber()<CR>
+nnoremap <leader>sn :call ToggleLineNumber()<CR>
 
 " NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>
@@ -505,6 +550,15 @@ nnoremap <leader>e :Emmet<space>
 " Tabular
 nnoremap <leader>= :Tabularize<space>/
 vnoremap <leader>= :Tabularize<space>/
+
+" autozimu/LanguageClient-neovim
+nnoremap <silent> <leader>: :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> <leader>dr :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> <leader>dn :tab split<CR>:call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>di :split<CR>:call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>ds :vsplit<CR>:call LanguageClient_textDocument_definition()<CR>
+
+nnoremap <silent> <leader>R :call LanguageClient#textDocument_rename()<CR>
 
 "--------------------------------------------------------------------------- 
 " Theme

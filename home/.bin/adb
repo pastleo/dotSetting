@@ -7,6 +7,7 @@ fi
 if ! [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
   echo "$ANDROID_HOME/platform-tools/adb not found"
   echo "please install android-sdk to '$ANDROID_HOME'"
+  exit 255
 fi
 
 "$ANDROID_HOME/platform-tools/adb" $@
