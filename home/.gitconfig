@@ -27,3 +27,4 @@
     logl = log --pretty=short -u -L
     diffn = diff --name-status
     diffs = diff --staged
+    stashd = stash show -p ; get diff of the latest stash
