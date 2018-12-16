@@ -167,6 +167,9 @@ set noundofile
 " smartcase
 set smartcase
 
+" enable per project setting
+set exrc
+
 "--------------------------------------------------------------------------- 
 " Functions and commands
 "---------------------------------------------------------------------------
@@ -456,14 +459,15 @@ let g:indent_guides_enable_on_vim_startup = 1
 " autozimu/LanguageClient-neovim
 " server installations:
 "   https://md.pastleo.me/language-servers
-let g:LanguageClient_serverCommands = {
-	\ 'cpp': ['clangd'],
-	\ 'c': ['clangd'],
-	\ 'rust': ['rustup', 'run', 'stable', 'rls'],
-	\ 'ruby': ['solargraph', 'stdio'],
-	\ 'javascript': ['javascript-typescript-stdio'],
-	\ 'javascript.jsx': ['javascript-typescript-stdio'],
-	\ }
+" this is an example, please set this in per project .vimrc
+"let g:LanguageClient_serverCommands = {
+	"\ 'cpp': ['clangd'],
+	"\ 'c': ['clangd'],
+	"\ 'rust': ['rustup', 'run', 'stable', 'rls'],
+	"\ 'ruby': ['solargraph', 'stdio'],
+	"\ 'javascript': ['javascript-typescript-stdio'],
+	"\ 'javascript.jsx': ['javascript-typescript-stdio'],
+	"\ }
 
 let g:LanguageClient_diagnosticsDisplay = {
 	\ 1: {
@@ -596,3 +600,5 @@ if !exists(":DiffOrig")
         \ | wincmd p | diffthis
 endif
 
+" prevent unsafe command from per project vimrc
+set secure
