@@ -170,6 +170,9 @@ set smartcase
 " enable per project setting
 set exrc
 
+" don't pre-select any completion automatically
+set completeopt+=noselect
+
 "--------------------------------------------------------------------------- 
 " Functions and commands
 "---------------------------------------------------------------------------
@@ -185,18 +188,6 @@ function! s:get_visual_selection()
   let lines[0] = lines[0][col1 - 1:]
   return join(lines, "\n")
 endfunction
-
-fun! ReplaceOnNormalMode()
-  let word = input("Replace A with B, A: ") 
-  let replacement = input("Replace A with B, B: ") 
-  exe '%sno/' . word . '/' . replacement . '/gc' 
-endfun
-
-fun! ReplaceOnVisualMode()
-  let word = s:get_visual_selection()
-  let replacement = input("Replace '" . word . "' with: ") 
-  exe '%sno/' . word . '/' . replacement . '/gc' 
-endfun
 
 fun! EnterTasks()
   if s:plug_not_ready
@@ -290,49 +281,6 @@ map Q gq
 let mapleader='t'
 let g:mapleader='t'
 
-" Block Visual
-nnoremap <leader>v <C-v>
-
-" Copy to system clipboard
-if has("x11")
-  vnoremap Y "+y 
-else
-  vnoremap Y "*y 
-endif
-
-nnoremap YY V"*y
-
-" Search for selected text, forwards or backwards.
-" From http://vim.wikia.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> / :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> ? :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-
-" Replace
-nnoremap <leader>r :call ReplaceOnNormalMode()<CR>
-vnoremap <leader>r :call ReplaceOnVisualMode()<CR>
-
-" Paste from system clipboard
-nnoremap P "*p
-nnoremap <leader>P P
-
-" <leader>p toggles paste mode
-nmap <leader>p :set paste!<BAR>set paste?<CR>
-
-" allow multiple indentation/deindentation in visual mode
-vnoremap < <gv
-vnoremap > >gv
-
-" fussy search and Open (edit) file
-nnoremap <leader>o :e **/*
-
 " New tab and split
 nnoremap <leader>n :tabnew<CR>
 nnoremap <leader>N :tab split<CR>
@@ -358,6 +306,44 @@ nnoremap <S-H> :vertical resize -2<CR>
 " Move tabs around
 nnoremap <leader>. :tabmove +<CR>
 nnoremap <leader>, :tabmove -<CR>
+
+" Block Visual
+nnoremap <leader>v <C-v>
+
+" Search for selected text forward
+" From http://vim.wikia.com/wiki/Search_for_visually_selected_text
+vnoremap <silent> / :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+" Replace
+nnoremap <leader>r :%s/
+
+" Search and replace for selected text
+vnoremap <leader>r :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+  \:%s//
+
+" <leader>p toggles paste mode
+nmap <leader>p :set paste!<BAR>set paste?<CR>
+
+" allow multiple indentation/deindentation in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" fussy search and Open (edit) file
+nnoremap <leader>o :e **/*
+
+" help vertically
+nnoremap <leader>H :vert help<space>
+
+" Toggle line numbers
+nnoremap <leader>L :set nu!<CR>
 
 "--------------------------------------------------------------------------- 
 " Autocmds
@@ -387,8 +373,8 @@ Plug 'tpope/vim-surround'
 Plug 'ervandew/supertab'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
-Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
@@ -443,9 +429,16 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_theme='bubblegum'
 
+" supertab
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+let g:SuperTabContextDiscoverDiscovery =
+            \ ["&completefunc:<c-p>", "&omnifunc:<c-x><c-o>"]
+let g:SuperTabClosePreviewOnPopupClose = 1
+
 " vim-gitgutter
 let g:gitgutter_map_keys = 0
-let g:gitgutter_enabled = 0
 
 " vim-session
 let g:session_directory = expand('~/.vim/sessions')
@@ -502,11 +495,6 @@ let g:LanguageClient_diagnosticsDisplay = {
 
 " Actions
 
-fun! ToggleLineNumber()
-  :GitGutterToggle
-  set nu!
-endfun
-
 fun! SaveSessionAndQuit()
   if exists(":SaveSession")
     SaveSession
@@ -534,8 +522,8 @@ autocmd VimEnter * nunmap <leader>ig
 " Key mappings with Plugins
 "--------------------------------------------------------------------------- 
 
-" Toggle line numbers
-nnoremap <leader>sn :call ToggleLineNumber()<CR>
+" gitgutter
+nnoremap <leader>G :GitGutterToggle<CR>
 
 " NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>
@@ -556,13 +544,12 @@ nnoremap <leader>= :Tabularize<space>/
 vnoremap <leader>= :Tabularize<space>/
 
 " autozimu/LanguageClient-neovim
-nnoremap <silent> <leader>: :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> <leader>dr :call LanguageClient_textDocument_references()<CR>
-nnoremap <silent> <leader>dn :tab split<CR>:call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <leader>di :split<CR>:call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <leader>ds :vsplit<CR>:call LanguageClient_textDocument_definition()<CR>
-
-nnoremap <silent> <leader>R :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent> <leader>w :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> <leader>wlr :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> <leader>wn :tab split<CR>:call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>wi :split<CR>:call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>ws :vsplit<CR>:call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <leader>wr :call LanguageClient#textDocument_rename()<CR>
 
 "--------------------------------------------------------------------------- 
 " Theme
