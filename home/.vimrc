@@ -171,7 +171,9 @@ set smartcase
 set exrc
 
 " don't pre-select any completion automatically
-set completeopt+=noselect
+set completeopt=menuone,noselect
+set omnifunc=syntaxcomplete#Complete
+set completefunc=syntaxcomplete#Complete
 
 "--------------------------------------------------------------------------- 
 " Functions and commands
