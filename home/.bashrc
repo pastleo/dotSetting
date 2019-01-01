@@ -11,12 +11,19 @@ if [ -f /etc/bashrc ]; then
       . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
-# ================================================
-# autostart x at login
-# ================================================
+# check UTF-8 locale
+if (locale | grep -e 'utf7' -e 'UTF-8') >/dev/null 2>&1; then
+    export UTF8_READY=1
+else
+    export UTF8_READY=0
+fi
 
-if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] && hash startx; then
-    exec startx 
+# check TMUX
+if [ "$TMUX" != "$OUTER_TMUX" ]; then
+    export OUTER_TMUX="$TMUX"
+    export TMUX_STACK="$((TMUX_STACK + 1))"
+elif [ -z "$TMUX_STACK" ]; then
+    export TMUX_STACK=0
 fi
 
 #--------------------------------------------------------------
@@ -234,11 +241,16 @@ fi
 # Start advance shell if this machine has
 # ================================================
 
-if [ ! $disable_advance_shell ]; then
+if [ -z "$ADVANCE_SHELL_STACK" ]; then
     if hash zsh 2>/dev/null; then
-        zsh
-        exit
+        export ADVANCE_SHELL_STACK=0
     fi
+fi
+
+if [ -n "$ADVANCE_SHELL_STACK" ] && [ "$UTF8_READY" -gt 0 ] && [ "$ADVANCE_SHELL_STACK" -lt "$((TMUX_STACK + 1))" ]; then
+    printf "  > starting zsh...\n\033[1A"
+    export ADVANCE_SHELL_STACK=$((ADVANCE_SHELL_STACK + 1))
+    zsh && exit
 fi
 
 # If no advance shell, continue the bash setting...

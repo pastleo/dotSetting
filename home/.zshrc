@@ -2,15 +2,16 @@
 #-------------------------------------------------------------
 # ZPlug: https://zplug.sh
 #-------------------------------------------------------------
-
-if ! [ -f ~/.zplug/init.zsh ]; then
-    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-    if ! [ -f ~/.zplug/init.zsh ]; then
-        echo "zplug install failed, aborting"
-        return
+export ZPLUG_HOME="$HOME/.zplug"
+if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
+    git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
+    if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
+        echo "zplug not installed successfully, please visit https://github.com/zplug/zplug"
+        echo "aborting zsh..."
+        exit 255
     fi
 fi
-source ~/.zplug/init.zsh
+source "$ZPLUG_HOME/init.zsh"
 
 # About zplug syntax, visit:
 # https://github.com/zplug/zplug#example
@@ -46,10 +47,7 @@ zplug 'pastleo/zsh-theme-past', as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+    zplug install
 fi
 
 # Then, source plugins and add commands to $PATH
