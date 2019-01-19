@@ -8,7 +8,7 @@ if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
     if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
         echo "zplug not installed successfully, please visit https://github.com/zplug/zplug"
         echo "aborting zsh..."
-        exit 255
+        exit 251 # special exit code 251 for zsh init failure
     fi
 fi
 source "$ZPLUG_HOME/init.zsh"

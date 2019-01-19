@@ -250,7 +250,12 @@ fi
 if [ -n "$ADVANCE_SHELL_STACK" ] && [ "$UTF8_READY" -gt 0 ] && [ "$ADVANCE_SHELL_STACK" -lt "$((TMUX_STACK + 1))" ]; then
     printf "  > starting zsh...\n\033[1A"
     export ADVANCE_SHELL_STACK=$((ADVANCE_SHELL_STACK + 1))
-    zsh && exit
+    zsh
+
+    # special exit code 251 for zsh init failure
+    if ! [ "$?" -eq 251 ]; then
+        exit
+    fi
 fi
 
 # If no advance shell, continue the bash setting...
