@@ -380,6 +380,7 @@ Plug 'xolox/vim-session'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'luochen1990/rainbow'
 
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -424,6 +425,8 @@ endif
 
 " NERDTree
 let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeDirArrowExpandable = '>'
+let g:NERDTreeDirArrowCollapsible = '+'
 
 " Air-line
 set laststatus=2 " Always show status line
@@ -491,6 +494,17 @@ let g:LanguageClient_diagnosticsDisplay = {
 	\ },
 	\ }
 
+" Rainbow Parentheses Improved
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+\	'separately': {
+\		'html': {
+\			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+\		},
+\		'css': 0,
+\	}
+\}
+
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
 "---------------------------------------------------------------------------
@@ -531,8 +545,6 @@ nnoremap <leader>G :GitGutterToggle<CR>
 nnoremap <leader>t :NERDTreeFocus<CR>
 nnoremap <leader>f :NERDTreeFind<CR>
 nnoremap <leader>q :NERDTreeClose<CR>
-let g:NERDTreeDirArrowExpandable = '>'
-let g:NERDTreeDirArrowCollapsible = '+'
 
 " NERDCommenter
 vnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
