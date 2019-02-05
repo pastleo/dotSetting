@@ -18,6 +18,7 @@
     s = status
     h = rev-parse HEAD
     ci = commit
+    cis = commit -S
     br = branch
     co = checkout
     aa = add --all
