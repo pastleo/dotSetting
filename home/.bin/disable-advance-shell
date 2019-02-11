@@ -1,4 +1,0 @@
-#!/bin/bash
-
-export disable_advance_shell="1"
-bash --login

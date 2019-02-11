@@ -258,6 +258,11 @@ if [ -n "$ADVANCE_SHELL_STACK" ] && [ "$UTF8_READY" -gt 0 ] && [ "$ADVANCE_SHELL
     fi
 fi
 
+# to disable zsh (advance shell) inside session:
+# just call `bash` or `sh`
+# to disable zsh (advance shell) totally:
+# set ADVANCE_SHELL_STACK=1 in ~/.local-env
+
 # If no advance shell, continue the bash setting...
 
 #-------------------------------------------------------------
