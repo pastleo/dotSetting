@@ -203,10 +203,6 @@ fun! EnterTasks()
     \ )
     NERDTree
   endif
-
-  if exists('$COLOR_PRESENTATION')
-    call PresentationMode()
-  endif
 endfun
 
 if !exists(":PlugS")
@@ -263,6 +259,10 @@ endfun
 command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
 
 fun! PresentationMode()
+  call PresentationTheme()
+  :RainbowToggleOff
+endfun
+fun! PresentationTheme()
   colorscheme default
   set background=light
   hi IndentGuidesEven guibg=NONE ctermbg=NONE
@@ -408,6 +408,7 @@ Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
 Plug 'posva/vim-vue', {'for': 'vue'}
 Plug 'slim-template/vim-slim', {'for': 'slim'}
 Plug 'pprovost/vim-ps1', {'for': 'ps1'}
+Plug 'cespare/vim-toml', {'for': 'toml'}
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -495,7 +496,10 @@ let g:LanguageClient_diagnosticsDisplay = {
 	\ }
 
 " Rainbow Parentheses Improved
-let g:rainbow_active = 1
+if !exists('$COLOR_PRESENTATION')
+  let g:rainbow_active = 1
+endif
+
 let g:rainbow_conf = {
 \	'separately': {
 \		'html': {
@@ -569,9 +573,13 @@ nnoremap <silent> <leader>wr :call LanguageClient#textDocument_rename()<CR>
 " Theme
 "--------------------------------------------------------------------------- 
 if s:bad_term == 0
-  set background=dark
-
-  colorscheme zenburn
+  if exists('$COLOR_PRESENTATION')
+    call PresentationTheme()
+  else
+    set background=dark
+    colorscheme zenburn
+    hi IndentGuidesEven guibg=#36382f ctermbg=235
+  endif
 
   " Overwrite some settings
   hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822
@@ -584,7 +592,6 @@ if s:bad_term == 0
   hi TabLineSel   ctermfg=White  ctermbg=2
 
   let g:indent_guides_auto_colors = 0
-  hi IndentGuidesEven guibg=#36382f ctermbg=235
 endif
 
 "--------------------------------------------------------------------------- 
