@@ -172,8 +172,6 @@ set exrc
 
 " don't pre-select any completion automatically
 set completeopt=menuone,noselect
-set omnifunc=syntaxcomplete#Complete
-set completefunc=syntaxcomplete#Complete
 
 "--------------------------------------------------------------------------- 
 " Functions and commands
@@ -382,10 +380,7 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'luochen1990/rainbow'
 
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+Plug 'w0rp/ale'
 
 if executable('fzf')
   " Please install fzf and ag (the_silver_searcher) manually
@@ -437,11 +432,6 @@ let g:airline_theme='bubblegum'
 
 " supertab
 let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-let g:SuperTabContextDiscoverDiscovery =
-            \ ["&completefunc:<c-p>", "&omnifunc:<c-x><c-o>"]
-let g:SuperTabClosePreviewOnPopupClose = 1
 
 " vim-gitgutter
 let g:gitgutter_map_keys = 0
@@ -454,46 +444,6 @@ let g:session_lock_enabled = 0
 
 " vim-indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
-
-" autozimu/LanguageClient-neovim
-" server installations:
-"   https://md.pastleo.me/language-servers
-" this is an example, please set this in per project .vimrc
-"let g:LanguageClient_serverCommands = {
-	"\ 'cpp': ['clangd'],
-	"\ 'c': ['clangd'],
-	"\ 'rust': ['rustup', 'run', 'stable', 'rls'],
-	"\ 'ruby': ['solargraph', 'stdio'],
-	"\ 'javascript': ['javascript-typescript-stdio'],
-	"\ 'javascript.jsx': ['javascript-typescript-stdio'],
-	"\ }
-
-let g:LanguageClient_diagnosticsDisplay = {
-	\ 1: {
-	\     "name": "Error",
-	\     "texthl": "ALEError",
-	\     "signText": "x",
-	\     "signTexthl": "ALEErrorSign",
-	\ },
-	\ 2: {
-	\     "name": "Warning",
-	\     "texthl": "ALEWarning",
-	\     "signText": "w",
-	\     "signTexthl": "ALEWarningSign",
-	\ },
-	\ 3: {
-	\     "name": "Information",
-	\     "texthl": "ALEInfo",
-	\     "signText": "i",
-	\     "signTexthl": "ALEInfoSign",
-	\ },
-	\ 4: {
-	\     "name": "Hint",
-	\     "texthl": "ALEInfo",
-	\     "signText": ">",
-	\     "signTexthl": "ALEInfoSign",
-	\ },
-	\ }
 
 " Rainbow Parentheses Improved
 if !exists('$COLOR_PRESENTATION')
@@ -508,6 +458,14 @@ let g:rainbow_conf = {
 \		'css': 0,
 \	}
 \}
+
+" ale
+let g:ale_completion_enabled = 1
+let g:ale_sign_error = 'x'
+let g:ale_sign_warning = 'w'
+
+" ale with airline
+let g:airline#extensions#ale#enabled = 1
 
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
@@ -560,14 +518,6 @@ nnoremap <leader>e :Emmet<space>
 " Tabular
 nnoremap <leader>= :Tabularize<space>/
 vnoremap <leader>= :Tabularize<space>/
-
-" autozimu/LanguageClient-neovim
-nnoremap <silent> <leader>w :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> <leader>wlr :call LanguageClient_textDocument_references()<CR>
-nnoremap <silent> <leader>wn :tab split<CR>:call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <leader>wi :split<CR>:call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <leader>ws :vsplit<CR>:call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <leader>wr :call LanguageClient#textDocument_rename()<CR>
 
 "--------------------------------------------------------------------------- 
 " Theme
