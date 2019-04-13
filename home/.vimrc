@@ -464,6 +464,12 @@ let g:ale_completion_enabled = 1
 let g:ale_sign_error = 'x'
 let g:ale_sign_warning = 'w'
 
+let g:ale_linters_explicit = 1
+" to enable linter, add this to project's .vimrc:
+" let g:ale_linters = {
+" \   'javascript': ['eslint'],
+" \}
+
 " ale with airline
 let g:airline#extensions#ale#enabled = 1
 
