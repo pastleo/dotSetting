@@ -466,8 +466,9 @@ let g:ale_sign_warning = 'w'
 
 let g:ale_linters_explicit = 1
 " to enable linter, add this to project's .vimrc:
+" " install by: npm install -g typescript
 " let g:ale_linters = {
-" \   'javascript': ['eslint'],
+" \   'javascript': ['tsserver'],
 " \}
 
 " ale with airline
