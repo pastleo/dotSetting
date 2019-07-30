@@ -289,6 +289,9 @@ nnoremap <leader>I :split<CR>
 nnoremap <leader>s :vnew<CR>
 nnoremap <leader>S :vsplit<CR>
 
+" split vertically and diff with a file
+nnoremap <leader>d :vert diffsplit<SPACE>
+
 " Navigation before tabs
 nnoremap <leader>h :tabprevious<CR>
 nnoremap <leader>l :tabnext<CR>
