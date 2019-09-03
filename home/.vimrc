@@ -146,9 +146,6 @@ set showcmd
 " do incremental searching
 set incsearch
 
-" auto reload vimrc when editing it
-autocmd! bufwritepost .vimrc source ~/.vimrc
-
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
   set mouse=a
@@ -373,7 +370,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
-Plug 'ervandew/supertab'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'xolox/vim-misc'
@@ -383,7 +379,7 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'luochen1990/rainbow'
 
-Plug 'w0rp/ale'
+Plug 'zxqfl/tabnine-vim'
 
 if executable('fzf')
   " Please install fzf and ag (the_silver_searcher) manually
@@ -433,9 +429,6 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_theme='bubblegum'
 
-" supertab
-let g:SuperTabDefaultCompletionType = "context"
-
 " vim-gitgutter
 let g:gitgutter_map_keys = 0
 
@@ -462,21 +455,6 @@ let g:rainbow_conf = {
 \	}
 \}
 
-" ale
-let g:ale_completion_enabled = 1
-let g:ale_sign_error = 'x'
-let g:ale_sign_warning = 'w'
-
-let g:ale_linters_explicit = 1
-" to enable linter, add this to project's .vimrc:
-" " install by: npm install -g typescript
-" let g:ale_linters = {
-" \   'javascript': ['tsserver'],
-" \}
-
-" ale with airline
-let g:airline#extensions#ale#enabled = 1
-
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
 "---------------------------------------------------------------------------
@@ -501,10 +479,6 @@ cnoreabbrev E Files
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 autocmd VimEnter * nunmap <leader>ig
-
-" save session when leaving vim with more than one buffer
-"autocmd VimLeavePre * AskToSaveSessionIfMoreThanOneBuffer() | endif
-"autocmd VimLeavePre * call MySaveSessionOnQuit()
 
 "--------------------------------------------------------------------------- 
 " Key mappings with Plugins
