@@ -192,6 +192,11 @@ export ANDROID_HOME="$HOME/.android-sdk/"
 # opam configuration
 test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
+# nix
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
 # ================================================
 # my ls by $LS_PARAM
 # ================================================

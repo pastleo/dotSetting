@@ -304,8 +304,8 @@ nnoremap <S-L> :vertical resize +2<CR>
 nnoremap <S-H> :vertical resize -2<CR>
 
 " Move tabs around
-nnoremap <leader>. :tabmove +<CR>
-nnoremap <leader>, :tabmove -<CR>
+nnoremap <leader>L :tabmove +<CR>
+nnoremap <leader>H :tabmove -<CR>
 
 " Block Visual
 nnoremap <leader>v <C-v>
@@ -340,10 +340,10 @@ vnoremap > >gv
 nnoremap <leader>o :e **/*
 
 " help vertically
-nnoremap <leader>H :vert help<space>
+nnoremap <leader>gh :vert help<space>
 
 " Toggle line numbers
-nnoremap <leader>L :set nu!<CR>
+nnoremap <leader>gl :set nu!<CR>
 
 "--------------------------------------------------------------------------- 
 " Autocmds
@@ -419,7 +419,6 @@ endif
 "--------------------------------------------------------------------------- 
 
 " NERDTree
-let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeDirArrowExpandable = '>'
 let g:NERDTreeDirArrowCollapsible = '+'
 
