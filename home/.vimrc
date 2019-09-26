@@ -354,6 +354,7 @@ autocmd VimEnter * call EnterTasks()
 
 " file types
 autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript
 
 "--------------------------------------------------------------------------- 
 " Plugins : vim-plug
@@ -397,7 +398,8 @@ Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 
 " Languages
 Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
-Plug 'leafgarland/typescript-vim', {'for': 'ts'}
+Plug 'leafgarland/typescript-vim', {'for': ['ts', 'tsx']}
+Plug 'MaxMEllon/vim-jsx-pretty', {'for': ['js', 'jsx', 'tsx']}
 Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
 Plug 'posva/vim-vue', {'for': 'vue'}
 Plug 'slim-template/vim-slim', {'for': 'slim'}
