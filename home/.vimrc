@@ -353,8 +353,8 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * call EnterTasks()
 
 " file types
-autocmd BufNewFile,BufRead *.jbuilder set filetype=ruby
-autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+autocmd BufNewFile,BufRead,BufWritePost *.jbuilder set filetype=ruby
+autocmd BufNewFile,BufRead,BufWritePost *.tsx set filetype=typescript
 
 "--------------------------------------------------------------------------- 
 " Plugins : vim-plug
