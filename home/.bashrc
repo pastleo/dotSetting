@@ -35,7 +35,13 @@ fi
 #+ of cases.
 #--------------------------------------------------------------
 
-hostname &> /dev/null && export HOSTNAME=$(hostname)
+if [ -z "$HOSTNAME" ]; then
+  if [ "$(which hostname 2> /dev/null)" ]; then
+    export HOSTNAME=$(hostname)
+  else
+    export HOSTNAME="(hostname unknown)"
+  fi
+fi
 
 function get_xserver ()
 {
@@ -56,7 +62,7 @@ function get_xserver ()
 
 if [ -z ${DISPLAY:=""} ]; then
     get_xserver
-    if [[ -z ${XSERVER}  || ${XSERVER} == $(hostname) ||
+    if [[ -z ${XSERVER}  || ${XSERVER} == ${HOSTNAME} ||
        ${XSERVER} == "unix" ]]; then
           DISPLAY=":0.0"          # Display on local host.
     else
@@ -141,7 +147,7 @@ cecho()
 # Greeting, motd etc. ...
 #-------------------------------------------------------------
 
-echo -e "Greetings, $(cprintf Green $USER). This is $(cprintf BBlue $(hostname) ) display on [$( cprintf 'BCyan' $DISPLAY )] at $(cprintf Purple "$(date '+%Y/%m/%d %A %H:%M')")"
+echo -e "Greetings, $(cprintf Green $USER). This is $(cprintf BBlue ${HOSTNAME}) display on [$( cprintf 'BCyan' $DISPLAY )] at $(cprintf Purple "$(date '+%Y/%m/%d %A %H:%M')")"
 
 # You can specify your own greeting message!
 if [[ -f "$HOME/.welcomeMsg" ]]; then
@@ -210,7 +216,7 @@ fi
 # less
 # ================================================
 
-if [[ "$(which less)" ]]; then
+if [[ "$(which less 2> /dev/null)" ]]; then
     export PAGER=less
     LESSPIPE=`which src-hilite-lesspipe.sh 2> /dev/null`
     if [[ "$LESSPIPE" ]]; then
