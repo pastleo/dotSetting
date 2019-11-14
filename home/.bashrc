@@ -164,9 +164,6 @@ trap _exit EXIT
 # path variable
 # ================================================
 
-if [[ "$path_sys" ]]; then
-    export PATH=$path_sys
-fi
 add_path()
 {
     tmp="$1:${PATH//$1/}"
@@ -175,7 +172,9 @@ add_path()
 add_path "/usr/local/bin"
 add_path "/usr/local/sbin"
 
-export path_sys=$PATH
+if [ -z "$path_sys" ]; then
+    export path_sys=$PATH
+fi
 
 add_path "$HOME/.bin"
 
@@ -194,6 +193,7 @@ fi
 
 export GOPATH="$HOME/.golang/"
 export ANDROID_HOME="$HOME/.android-sdk/"
+export EMSDK="$HOME/.emsdk/"
 
 # opam configuration
 test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
