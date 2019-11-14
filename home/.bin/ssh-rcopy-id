@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "usage:" 2>&1
+  echo "  $0 user@from-host" 2>&1
+  echo "  # append from user@from-host:~/.ssh/id_rsa.pub to ~/.ssh/authorized_keys" 2>&1
+  echo "" 2>&1
+  echo "  $0 user@from-host user@to-host" 2>&1
+  echo "  # append from user@from-host:~/.ssh/id_rsa.pub to user@to-host:~/.ssh/authorized_keys" 2>&1
+  echo "" 2>&1
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  ssh "$1" 'cat ~/.ssh/id_rsa.pub' >> ~/.ssh/authorized_keys
+else
+  ssh "$1" 'cat ~/.ssh/id_rsa.pub' | ssh "$2" 'cat >> ~/.ssh/authorized_keys'
+fi
+
+echo "Done"
