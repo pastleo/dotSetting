@@ -1,6 +1,5 @@
-# ===============================================================
-# PERSONAL $HOME/.bashrc FILE for bash-3.0 (or later)
-# By PastLeo
+# PastLeo TUI settings for bash 3.0 or later
+# with prograssive enhancement toward zsh
 # ===============================================================
 
 # If not running interactively, don't do anything
@@ -201,6 +200,11 @@ test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> 
 # nix
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
   . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+# rootless docker
+if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
+  export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
 fi
 
 # ================================================

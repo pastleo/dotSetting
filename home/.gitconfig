@@ -26,6 +26,6 @@
     logg = log --graph --oneline --decorate --all
     logn = log --stat --graph --oneline --decorate --all
     logl = log --pretty=short -u -L
-    diffn = diff --name-status
+    diffn = diff --stat
     diffs = diff --staged
     stashd = stash show -p ; get diff of the latest stash
