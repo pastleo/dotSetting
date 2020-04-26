@@ -356,6 +356,7 @@ autocmd VimEnter * call EnterTasks()
 autocmd BufNewFile,BufRead,BufWritePost *.jbuilder set filetype=ruby
 autocmd BufNewFile,BufRead,BufWritePost *.tsx set filetype=typescript
 autocmd BufNewFile,BufRead,BufWritePost *.cjs set filetype=javascript
+autocmd BufNewFile,BufRead,BufWritePost *.mdx set filetype=markdown
 
 "--------------------------------------------------------------------------- 
 " Plugins : vim-plug
@@ -381,7 +382,14 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'luochen1990/rainbow'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if $VIM_ENABLE_COC
+  " https://github.com/neoclide/coc.nvim
+  " add this line to ~/.local-env and restart session to enable COC:
+  "   export VIM_ENABLE_COC=true
+  "
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " :CocInstall coc-tsserver
+endif
 
 if executable('fzf')
   " Please install fzf and ag (the_silver_searcher) manually
