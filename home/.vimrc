@@ -382,7 +382,7 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'luochen1990/rainbow'
 
-if $VIM_ENABLE_COC
+if !empty($VIM_ENABLE_COC)
   " https://github.com/neoclide/coc.nvim
   " add this line to ~/.local-env and restart session to enable COC:
   "   export VIM_ENABLE_COC=true
