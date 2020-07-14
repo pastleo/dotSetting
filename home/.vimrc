@@ -491,7 +491,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 autocmd VimEnter * nunmap <leader>ig
 
 " coc.vim
-autocmd CursorHold * silent call CocActionAsync('highlight')
+if !empty($VIM_ENABLE_COC)
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+endif
 
 "--------------------------------------------------------------------------- 
 " Key mappings with Plugins

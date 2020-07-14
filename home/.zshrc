@@ -26,16 +26,6 @@ if type fzf > /dev/null; then
     zplug "junegunn/fzf", dir:"~/.fzf", use:"shell/*.zsh"
 fi
 
-if [ -d ~/.rvm ]; then
-    echo "use asdf instead of rvm: https://github.com/asdf-vm/asdf, remove rvm if asdf works after 2018/5/1"
-    zplug "johnhamelink/rvm-zsh"
-fi
-
-if [ -s /usr/local/opt/nvm/nvm.sh ]; then
-    echo "use asdf instead of nvm: https://github.com/asdf-vm/asdf, remove nvm if asdf works after 2018/5/1"
-    zplug "lukechilds/zsh-nvm"
-fi
-
 # Set the priority when loading
 # e.g., zsh-syntax-highlighting must be loaded
 # after executing compinit command and sourcing other plugins
