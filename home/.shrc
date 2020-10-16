@@ -1,0 +1,142 @@
+# vim: set ft=sh:
+# PastLeo's shared rc for bash/zsh
+
+# -----------------------------
+# Required by each session
+# -----------------------------
+
+# asdf-vm
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+  . "$HOME/.asdf/asdf.sh"
+fi
+
+# homeshick
+if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
+  source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+fi
+
+# -----------------------------
+# Session startup & report
+# -----------------------------
+
+shrc_session_start_report() {
+  if [ -n "$HOST" ]; then
+    hostname_info="\033[1;34m$HOST\033[0m"
+  else
+    hostname_info="\033[1;31m(unknown)\033[0m"
+  fi
+
+  echo -e "PID: \033[1;32m$$\033[0m | HOST: $hostname_info | \033[1;36m$(date '+%Y/%m/%d %A %H:%M %Z (%z)')\033[0m"
+}
+
+# NOTICE ====
+# each session source until here, as environment will be inherited
+# a restart of whole tmux (closing all tmux session) is needed to reset
+# ===========
+if [ -n "$SHRC_SOURCED" ]; then
+  return
+fi
+export SHRC_SOURCED=true
+
+# -----------------------------
+# Welcome message
+# -----------------------------
+
+if [ -f "$HOME/.welcomeMsg" ]; then
+  cat "$HOME/.welcomeMsg"
+fi
+
+# -----------------------------
+# Environment variables
+# -----------------------------
+
+# HOST env
+if [ -z "$HOST" ]; then
+  if [ "$(which hostname 2> /dev/null)" ]; then
+    export HOST=$(hostname)
+  elif [ -e /proc/sys/kernel/hostname ]; then
+    export HOST=$(cat /proc/sys/kernel/hostname)
+  fi
+fi
+
+# EDITOR env
+if [ -z "$EDITOR" ]; then
+  if [ "$(which vim 2> /dev/null)" ]; then
+    export EDITOR=vim
+  fi
+fi
+
+# PATH env
+add_path()
+{
+  tmp="$1:${PATH//$1/}"
+  export PATH="${tmp//::/:}"
+}
+add_path "/usr/local/bin"
+add_path "/usr/local/sbin"
+
+if [ -z "$PATH_SYS" ]; then
+  export PATH_SYS=$PATH
+fi
+add_path "$HOME/.bin"
+
+# ls
+if ls --help 2>&1 | grep -q -- --color; then
+  export LS_PARAM='--color -hF'
+else
+  export LS_PARAM='-Gh'
+fi
+
+# ssh agent
+if [ -z "$SSH_AGENT_ENABLED" ] && [ -z "$SSH_AUTH_SOCK" ] && [ "$(which ssh-agent 2> /dev/null)" ]; then
+  # to enable, export SSH_AGENT_ENABLED=true in $HOME/.shrc.local
+  eval $(ssh-agent)
+  ssh-add
+fi
+
+# rootless docker
+if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
+  export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
+fi
+
+# SDK envs
+export GOPATH="$HOME/.golang/"
+export ANDROID_HOME="$HOME/.android-sdk/"
+
+# check UTF-8 locale
+if (locale | grep -e 'utf7' -e 'UTF-8') >/dev/null 2>&1; then
+  export UTF8_READY=true
+fi
+
+# -----------------------------
+# Host's specific rc
+# -----------------------------
+
+# NOTICE: only environment variables will be kept
+if [ -f "$HOME/.shrc.local" ]; then
+  source "$HOME/.shrc.local"
+fi
+
+# -----------------------------
+# Terminal startup report
+# -----------------------------
+
+if [ -n "$SSH_CLIENT" ]; then
+  from_info="\033[1;37m$SSH_CLIENT\033[0m"
+elif [ -n "$DISPLAY" ]; then
+  from_info="\033[1;34mDISPLAY $DISPLAY\033[0m"
+else
+  from_info="\033[1;35m$(tty)\033[0m"
+fi
+if [ -n "$LANG" ]; then
+  lang_info="\033[1;34m$LANG\033[0m"
+else
+  lang_info="\033[1;31m(not set)\033[0m"
+fi
+if [ -n "$EDITOR" ]; then
+  editor_info="\033[1;34m$EDITOR\033[0m"
+else
+  editor_info="\033[1;31m(not set)\033[0m"
+fi
+echo -e "FROM: $from_info | LANG: $lang_info | EDITOR: $editor_info"
+

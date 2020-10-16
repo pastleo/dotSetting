@@ -1,15 +1,37 @@
+# PastLeo's ~/.zshrc
 
-#-------------------------------------------------------------
+printf "  > starting zsh...\n\033[1A"
+
+# -----------------------------
+# Shared rc for bash/zsh
+# -----------------------------
+
+if [ -f "$HOME/.shrc" ]; then
+  source "$HOME/.shrc"
+fi
+
+# -----------------------------
+# General settings
+# -----------------------------
+
+CASE_SENSITIVE="false"
+
+# -----------------------------
+# set to zsh for tmux
+# -----------------------------
+
+export TMUX_DEFAULT_SHELL="$(which zsh)"
+
+# -----------------------------
 # ZPlug: https://zplug.sh
-#-------------------------------------------------------------
+# -----------------------------
+
 export ZPLUG_HOME="$HOME/.zplug"
 if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
-    git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
-    if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
-        echo "zplug not installed successfully, please visit https://github.com/zplug/zplug"
-        echo "aborting zsh..."
-        exit 251 # special exit code 251 for zsh init failure
-    fi
+  echo "zplug not installed, run this to clone zplug:"
+  echo "  git clone https://github.com/zplug/zplug \"$ZPLUG_HOME\""
+  echo "for more info: https://github.com/zplug/zplug"
+  return
 fi
 source "$ZPLUG_HOME/init.zsh"
 
@@ -23,7 +45,7 @@ zplug "hchbaw/auto-fu.zsh"
 zplug "mollifier/cd-gitroot"
 
 if type fzf > /dev/null; then
-    zplug "junegunn/fzf", dir:"~/.fzf", use:"shell/*.zsh"
+  zplug "junegunn/fzf", dir:"~/.fzf", use:"shell/*.zsh"
 fi
 
 # Set the priority when loading
@@ -37,16 +59,10 @@ zplug 'pastleo/zsh-theme-past', as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check; then
-    zplug install
+  zplug install
 fi
 
 # Then, source plugins and add commands to $PATH
 zplug load # --verbose
 
-# General and other settings
-
-CASE_SENSITIVE="false"
-
-# Shared settings between bash and zsh
-. $HOME/.zbashrc
-
+type shrc_session_start_report > /dev/null 2>&1 && shrc_session_start_report

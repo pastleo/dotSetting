@@ -1,400 +1,108 @@
-# PastLeo TUI settings for bash 3.0 or later
-# with prograssive enhancement toward zsh
-# ===============================================================
+# vim: set ft=sh:
+# PastLeo's ~/.bashrc
 
-# If not running interactively, don't do anything
+printf "  > starting bash...\n\033[1A"
+
+# -----------------------------
+# Pre-check and host bashrc
+# -----------------------------
+
+# if not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# Source global definitions (if any)
+# source global definitions (if any)
 if [ -f /etc/bashrc ]; then
-      . /etc/bashrc   # --> Read /etc/bashrc, if present.
+  . /etc/bashrc
 fi
 
-# check UTF-8 locale
-if (locale | grep -e 'utf7' -e 'UTF-8') >/dev/null 2>&1; then
-    export UTF8_READY=1
-else
-    export UTF8_READY=0
+# -----------------------------
+# Shared rc for bash/zsh
+# -----------------------------
+
+if [ -f "$HOME/.shrc" ]; then
+  source "$HOME/.shrc"
 fi
 
-# check TMUX
-if [ "$TMUX" != "$OUTER_TMUX" ]; then
-    export OUTER_TMUX="$TMUX"
-    export TMUX_STACK="$((TMUX_STACK + 1))"
-elif [ -z "$TMUX_STACK" ]; then
-    export TMUX_STACK=0
-fi
+# -----------------------------
+# Start zsh from bash
+# -----------------------------
 
-#--------------------------------------------------------------
-#  Automatic setting of $DISPLAY (if not set already).
-#  This works for me - your mileage may vary. . . .
-#  The problem is that different types of terminals give
-#+ different answers to 'who am i' (rxvt in particular can be
-#+ troublesome) - however this code seems to work in a majority
-#+ of cases.
-#--------------------------------------------------------------
-
-if [ -z "$HOSTNAME" ]; then
-  if [ "$(which hostname 2> /dev/null)" ]; then
-    export HOSTNAME=$(hostname)
-  else
-    export HOSTNAME="(hostname unknown)"
+if [ -z "$ZSH_STACK" ]; then
+  if hash zsh 2>/dev/null; then
+    export ZSH_STACK=0
   fi
 fi
-
-function get_xserver ()
-{
-    case $TERM in
-        xterm )
-            XSERVER=$(who am i | awk '{print $NF}' | tr -d ')''(' )
-            # Ane-Pieter Wieringa suggests the following alternative:
-            #  I_AM=$(who am i)
-            #  SERVER=${I_AM#*(}
-            #  SERVER=${SERVER%*)}
-            XSERVER=${XSERVER%%:*}
-            ;;
-            aterm | rxvt)
-            # Find some code that works here. ...
-            ;;
-    esac
-}
-
-if [ -z ${DISPLAY:=""} ]; then
-    get_xserver
-    if [[ -z ${XSERVER}  || ${XSERVER} == ${HOSTNAME} ||
-       ${XSERVER} == "unix" ]]; then
-          DISPLAY=":0.0"          # Display on local host.
-    else
-       DISPLAY=${XSERVER}:0.0     # Display on remote host.
-    fi
-fi
-
-export DISPLAY
-
-# ================================================
-# terminal bash color codes:
-# ================================================
-# color control unit: "\[\033["+color_code+"m\]"
-#
-# Color codes:
-
-# Normal Colors (Foreground)
-Foregrounds="Black Red Green Yellow Blue Purple Cyan White"
-
-Black="0;30"
-Red="0;31"
-Green="0;32"
-Yellow="0;33"
-Blue="0;34"
-Purple="0;35"
-Cyan="0;36"
-White="0;37"
-
-# Bright & Bold (Foreground)
-Bolds="BBlack BRed BGreen BYellow BBlue BPurple BCyan BWhite"
-
-BBlack="1;30"
-BRed="1;31"
-BGreen="1;32"
-BYellow="1;33"
-BBlue="1;34"
-BPurple="1;35"
-BCyan="1;36"
-BWhite="1;37"
-
-
-# Background
-Backgrounds="bBlack bRed bGreen bYellow bBlue bPurple bCyan bWhite"
-
-bBlack="40"
-bRed="41"
-bGreen="42"
-bYellow="43"
-bBlue="44"
-bPurple="45"
-bCyan="46"
-bWhite="47"
-
-_c()
-{
-    if [[ "$#" -ge 1 ]]; then
-        for codes in $@; do
-            printf "\033[%sm" "$( eval echo \$$codes )"
-        done
-    else
-        printf "\033[0m"
-    fi
-}
-
-cprintf()
-{
-    _c "$1"
-    shift
-    printf "$@"
-    _c
-}
-
-cecho()
-{
-    _c "$1"
-    printf "$2"
-    _c
-    printf "\n"
-}
-
-#-------------------------------------------------------------
-# Greeting, motd etc. ...
-#-------------------------------------------------------------
-
-echo -e "Greetings, $(cprintf Green $USER). This is $(cprintf BBlue ${HOSTNAME}) display on [$( cprintf 'BCyan' $DISPLAY )] at $(cprintf Purple "$(date '+%Y/%m/%d %A %H:%M')")"
-
-# You can specify your own greeting message!
-if [[ -f "$HOME/.welcomeMsg" ]]; then
-    cat ~/.welcomeMsg
-fi
-
-function _exit()              # Function to run upon exit of shell.
-{
-    cecho "BRed" "Hasta la vista, baby"
-}
-trap _exit EXIT
-
-# ================================================
-# path variable
-# ================================================
-
-add_path()
-{
-    tmp="$1:${PATH//$1/}"
-    export PATH="${tmp//::/:}"
-}
-add_path "/usr/local/bin"
-add_path "/usr/local/sbin"
-
-if [ -z "$path_sys" ]; then
-    export path_sys=$PATH
-fi
-
-add_path "$HOME/.bin"
-
-# ================================================
-# Personal Environment
-# ================================================
-
-if [ -f ~/.local-env ]; then
-    source ~/.local-env
-fi
-
-# #####################################################
-# If there is more thing to add for both fish and bash
-# put them down below before fish starts
-# #####################################################
-
-export GOPATH="$HOME/.golang/"
-export ANDROID_HOME="$HOME/.android-sdk/"
-export EMSDK="$HOME/.emsdk/"
-
-# opam configuration
-test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
-
-# nix
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
-  . ~/.nix-profile/etc/profile.d/nix.sh
-fi
-
-# rootless docker
-if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
-  export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
-fi
-
-# ================================================
-# my ls by $LS_PARAM
-# ================================================
-if ls --help 2>&1 | grep -q -- --color; then
-    export LS_PARAM='--color -hF'
+if [ -n "$TMUX" ]; then
+  zsh_starting_stack=2
 else
-    export LS_PARAM='-Gh'
+  zsh_starting_stack=1
+fi
+if [ -n "$ZSH_STACK" ] && [ -n "$UTF8_READY" ] && [ "$ZSH_STACK" -lt "$zsh_starting_stack" ]; then
+  export ZSH_STACK=$((ZSH_STACK + 1))
+  zsh
+  exit
 fi
 
-# ================================================
-# less
-# ================================================
+# To disable zsh inside session:
+#   just call `bash` or `sh`
+# To disable zsh completely:
+#   export ZSH_STACK=2 in $HOME/.shrc.local
 
-if [[ "$(which less 2> /dev/null)" ]]; then
-    export PAGER=less
-    LESSPIPE=`which src-hilite-lesspipe.sh 2> /dev/null`
-    if [[ "$LESSPIPE" ]]; then
-        export LESSOPEN="| ${LESSPIPE} %s"
-        if [[ "$OSTYPE" == "linux-gnu" ]]; then
-            export LESS=' -R '
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-            export LESS=' -R -X -F '
-        fi
-    fi
-fi
-
-# ================================================
-# Start from out side term workdir by env
-# ================================================
-
-if [ -d "$_START_WD" ]; then
-    cd "$_START_WD"
-fi
-
-# ================================================
-# start ssh agent for forwarding
-# ================================================
-# add:
-#   export SSH_AGENT_ENABLED=true
-# to ~/.local-env
-
-if [ "$SSH_AGENT_ENABLED" ]; then
-    if [ -z "$SSH_AUTH_SOCK" ]; then
-        eval $(ssh-agent)
-        ssh-add
-    fi
-fi
-
-# ================================================
-# Start advance shell if this machine has
-# ================================================
-
-if [ -z "$ADVANCE_SHELL_STACK" ]; then
-    if hash zsh 2>/dev/null; then
-        export ADVANCE_SHELL_STACK=0
-    fi
-fi
-
-if [ -n "$ADVANCE_SHELL_STACK" ] && [ "$UTF8_READY" -gt 0 ] && [ "$ADVANCE_SHELL_STACK" -lt "$((TMUX_STACK + 1))" ]; then
-    printf "  > starting zsh...\n\033[1A"
-    export ADVANCE_SHELL_STACK=$((ADVANCE_SHELL_STACK + 1))
-    zsh
-
-    # special exit code 251 for zsh init failure
-    if ! [ "$?" -eq 251 ]; then
-        exit
-    fi
-fi
-
-# to disable zsh (advance shell) inside session:
-# just call `bash` or `sh`
-# to disable zsh (advance shell) totally:
-# set ADVANCE_SHELL_STACK=1 in ~/.local-env
-
-# If no advance shell, continue the bash setting...
-
-#-------------------------------------------------------------
-# Some settings
-#-------------------------------------------------------------
-
-# Case insensitive
-bind "set completion-ignore-case on"
-
-# ================================================
-# PastLeo custome static terminal prompt theme:
-# (use PS1.* to choose one)
-# ================================================
-
-alias PS1.no-color='export PS1="\u | \W $ "'
-
-alias PS1.lagacy='export PS1="\[\e[0;32m\]\u\[\e[0;37m\] | \[\e[0;36m\]\W \[\e[0m\]"$'
-
-alias PS1.hostname_on-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[44m\]◤ \[\033[1;30m\]\H\[\033[1;34m\]\[\033[40m\]◤ \[\033[1;36m\]\W\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
-alias PS1.hostname_off-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[40m\]◤ \W\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
-alias PS1.fullpath-fancy='export PS1="\[\033[42m\]\[\033[1;30m\]\u\[\033[1;32m\]\[\033[40m\]◤ \w\[\033[0m\]\[\033[1;30m\]◤ \[\033[0m\]"'
-
-alias PS1.hostname_off='export PS1="\[\033[42m\]\[\033[1;30m\]\u \[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"'
-alias PS1.hostname_on='export PS1="\[\033[42m\]\[\033[1;30m\]\u \[\033[1;30m\]\[\033[44m\] \H \[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"'
-
-# =============================================================
-# PastLeo Dynamic Shell Prompt (Not Support when ssh or su!)
-# Only detect if is remote...
-# =============================================================
-#
-# Format:
-#    User  Host  PWD  >
-#    [   ][    ][   ][ ]
-#
-# USER:
-#    Green     == normal user
-#    Yellow    == SU to user
-#    Red       == root
-# HOST:
-#    Hidden    == local session
-#    Blue      == secured remote connection (via ssh)
-#    Red       == unsecured remote connection
-# PWD:
-#    Black
-# >:
-#    Black
-#
-#    Command is added to the history file each time you hit enter,
-#    so it's available to all shells (using 'history -a').
+# -----------------------------
+# Bash prompt (PS1)
+# -----------------------------
 
 PS1.PastLeoDynamicPrompt()
 {
-    local promptTmp
-    local color
+  local promptTmp
+  local color
 
-    # promptTmp="$(c BBlack)"
+  # user type:
+  if [[ ${USER} == "root" ]]; then
+    # user is root:
+    promptTmp="\[\033[41m\]\[\033[1;30m\]\u "
+    color="Red"
+  elif [[ ${USER} != $(logname) ]]; then
+    # user is not login user:
+    promptTmp="\[\033[43m\]\[\033[1;30m\]\u "
+    color="Yellow"
+  else
+    # user is normally same as login user:
+    promptTmp="\[\033[42m\]\[\033[1;30m\]\u "
+    color="Green"
+  fi
 
-    # Test user type:
-    if [[ ${USER} == "root" ]]; then
-        # User is root.
-        promptTmp="\[\033[41m\]\[\033[1;30m\]\u "
-        color="Red"
-    elif [[ ${USER} != $(logname) ]]; then
-        # User is not login user.
-        promptTmp="\[\033[43m\]\[\033[1;30m\]\u "
-        color="Yellow"
-    else
-        # User is normal (well ... most of us are).
-        promptTmp="\[\033[42m\]\[\033[1;30m\]\u "
-        color="Green"
-    fi
-    # promptTmp=$promptTmp"$(c b$color)\u "
+  # shell start from:
+  if [ -n "${SSH_CONNECTION}" ]; then
+    # via ssh:
+    promptTmp=$promptTmp"\[\033[1;30m\]\[\033[44m\] \H "
+    color="Blue"
+  elif [[ "${DISPLAY%%:0*}" != "" ]]; then
+    # not via ssh:
+    promptTmp=$promptTmp"\[\033[1;30m\]\[\033[45m\] \H "
+    color="Purple"
+  fi 
+  case $color in
+    Red)
+      promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      ;;
+    Yellow)
+      promptTmp=$promptTmp"\[\033[1;33m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      ;;
+    Green)
+      promptTmp=$promptTmp"\[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      ;;
+    Blue)
+      promptTmp=$promptTmp"\[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      ;;
+    Purple)
+      promptTmp=$promptTmp"\[\033[1;35m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      ;;
+  esac
 
-    # Test connection type:
-    if [ -n "${SSH_CONNECTION}" ]; then
-        # Connected on remote machine, via ssh (good).
-        # promptTmp=$promptTmp"$(c bBlue) \H "
-        promptTmp=$promptTmp"\[\033[1;30m\]\[\033[44m\] \H "
-        color="Blue"
-    elif [[ "${DISPLAY%%:0*}" != "" ]]; then
-        # Connected on remote machine, not via ssh (bad).
-        # promptTmp=$promptTmp"$(c bPurple) \H "
-        promptTmp=$promptTmp"\[\033[1;30m\]\[\033[45m\] \H "
-        color="Purple"
-    fi 
-    case $color in
-        Red)
-        promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-            ;;
-        Yellow)
-        promptTmp=$promptTmp"\[\033[1;33m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-            ;;
-        Green)
-        promptTmp=$promptTmp"\[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-            ;;
-        Blue)
-        promptTmp=$promptTmp"\[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-            ;;
-        Purple)
-        promptTmp=$promptTmp"\[\033[1;35m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-            ;;
-    esac
-    # promptTmp=$promptTmp"$(c B$color bBlack) \W $(c Black) > $(c)"
-
-    export PS1=$promptTmp
+  export PS1=$promptTmp
 }
 
-# =============================================================
-# Default PS1:
 PS1.PastLeoDynamicPrompt
-# =============================================================
 
-# =============================================================
-# Shared settings between bash and zsh
-# =============================================================
-. $HOME/.zbashrc
-
+type shrc_session_start_report > /dev/null 2>&1 && shrc_session_start_report
