@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [ $(using_sys_path which sl) ]; then
-    using_sys_path sl -$( (( $RANDOM % 2 )) || echo a)$( (( $RANDOM % 2 )) || echo l)$( (( $RANDOM % 2 )) || echo F)$( (( $RANDOM % 2 )) || echo c)
-    echo "Now using the command you may originally wanted ..."
+  using_sys_path sl -$( (( $RANDOM % 2 )) || echo a)$( (( $RANDOM % 2 )) || echo l)$( (( $RANDOM % 2 )) || echo F)$( (( $RANDOM % 2 )) || echo c)
+  echo "Now using the command you may originally wanted ..."
 else
-    echo "You dont have sl from the system, so just ls instead QAQ"
+  echo "You dont have sl from the system, so just ls instead QAQ"
 fi
 
-ls $@
+ls $LS_PARAM $@
 

@@ -47,6 +47,15 @@ if [ -f "$HOME/.welcomeMsg" ]; then
 fi
 
 # -----------------------------
+# Host's specific rc
+# -----------------------------
+
+# NOTICE: only environment variables will be kept
+if [ -f "$HOME/.shrc.local" ]; then
+  source "$HOME/.shrc.local"
+fi
+
+# -----------------------------
 # Environment variables
 # -----------------------------
 
@@ -88,7 +97,7 @@ else
 fi
 
 # ssh agent
-if [ -z "$SSH_AGENT_ENABLED" ] && [ -z "$SSH_AUTH_SOCK" ] && [ "$(which ssh-agent 2> /dev/null)" ]; then
+if [ -n "$SSH_AGENT_ENABLED" ] && [ -z "$SSH_AUTH_SOCK" ] && [ "$(which ssh-agent 2> /dev/null)" ]; then
   # to enable, export SSH_AGENT_ENABLED=true in $HOME/.shrc.local
   eval $(ssh-agent)
   ssh-add
@@ -103,18 +112,23 @@ fi
 export GOPATH="$HOME/.golang/"
 export ANDROID_HOME="$HOME/.android-sdk/"
 
-# check UTF-8 locale
-if (locale | grep -e 'utf7' -e 'UTF-8') >/dev/null 2>&1; then
+# UTF-8 locale
+if (locale | grep -i 'utf.*8') >/dev/null 2>&1; then
   export UTF8_READY=true
-fi
+else
+  utf8_locales=$(locale -a | grep -i 'utf.*8')
+  en_us_utf8_locale=$(echo $utf8_locales | grep -i '^en.*us')
+  first_utf8_locale=$(echo $utf8_locales | head -1)
 
-# -----------------------------
-# Host's specific rc
-# -----------------------------
-
-# NOTICE: only environment variables will be kept
-if [ -f "$HOME/.shrc.local" ]; then
-  source "$HOME/.shrc.local"
+  if [ -n "$en_us_utf8_locale" ]; then
+    export LC_ALL="$en_us_utf8_locale"
+    export LANG="$en_us_utf8_locale"
+    export UTF8_READY=true
+  elif [ -n "$first_utf8_locale" ]; then
+    export LC_ALL="$first_utf8_locale"
+    export LANG="$first_utf8_locale"
+    export UTF8_READY=true
+  fi
 fi
 
 # -----------------------------

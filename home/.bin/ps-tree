@@ -1,7 +1,12 @@
 #!/bin/bash
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "This does not support macOS, please use pstree instead" >&2
+  exit 127
+fi
+
 if [[ -z $1 ]]; then
-    using_sys_path ps -aef --forest | less
+  using_sys_path ps -aef --forest | less
 else
-    using_sys_path ps -aef --forest | less -p "$1"
+  using_sys_path ps -aef --forest | less -p "$1"
 fi
