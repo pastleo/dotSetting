@@ -15,6 +15,7 @@ fi
 # -----------------------------
 
 CASE_SENSITIVE="false"
+set -o emacs
 
 # -----------------------------
 # set to zsh for tmux

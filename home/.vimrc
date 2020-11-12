@@ -378,8 +378,8 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 Plug 'tpope/vim-sleuth'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'luochen1990/rainbow'
+Plug 'pbrisbin/vim-mkdir'
 
 if !empty($VIM_ENABLE_COC)
   " https://github.com/neoclide/coc.nvim
