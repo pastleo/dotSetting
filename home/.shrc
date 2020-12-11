@@ -20,8 +20,8 @@ fi
 # -----------------------------
 
 shrc_session_start_report() {
-  if [ -n "$HOST" ]; then
-    hostname_info="\033[1;34m$HOST\033[0m"
+  if [ -n "$_HOST" ]; then
+    hostname_info="\033[1;34m$_HOST\033[0m"
   else
     hostname_info="\033[1;31m(unknown)\033[0m"
   fi
@@ -59,12 +59,12 @@ fi
 # Environment variables
 # -----------------------------
 
-# HOST env
-if [ -z "$HOST" ]; then
+# _HOST env
+if [ -z "$_HOST" ]; then
   if [ "$(which hostname 2> /dev/null)" ]; then
-    export HOST=$(hostname)
+    export _HOST=$(hostname)
   elif [ -e /proc/sys/kernel/hostname ]; then
-    export HOST=$(cat /proc/sys/kernel/hostname)
+    export _HOST=$(cat /proc/sys/kernel/hostname)
   fi
 fi
 
