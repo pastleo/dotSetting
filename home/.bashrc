@@ -24,7 +24,7 @@ if [ -f "$HOME/.shrc" ]; then
 fi
 
 # -----------------------------
-# Start zsh from bash
+# Start zsh from bash according to ZSH_STACK
 # -----------------------------
 
 if [ -z "$ZSH_STACK" ]; then
@@ -33,20 +33,20 @@ if [ -z "$ZSH_STACK" ]; then
   fi
 fi
 if [ -n "$TMUX" ]; then
-  zsh_starting_stack=2
+  zsh_stack_should_below=2
 else
-  zsh_starting_stack=1
+  zsh_stack_should_below=1
 fi
-if [ -n "$ZSH_STACK" ] && [ -n "$UTF8_READY" ] && [ "$ZSH_STACK" -lt "$zsh_starting_stack" ]; then
-  export ZSH_STACK=$((ZSH_STACK + 1))
+if [ -n "$ZSH_STACK" ] && [ -n "$UTF8_READY" ] && [ "$ZSH_STACK" -lt "$zsh_stack_should_below" ]; then
   zsh
   exit
 fi
 
-# To disable zsh inside session:
+# To disable zsh inside session / prevent launching zsh from bash:
 #   just call `bash` or `sh`
 # To disable zsh completely:
 #   export ZSH_STACK=2 in $HOME/.shrc.local
+# Search ZSH_STACK in .zshrc for more detail
 
 # -----------------------------
 # Bash prompt (PS1)
@@ -62,12 +62,7 @@ PS1.PastLeoDynamicPrompt()
     # user is root:
     promptTmp="\[\033[41m\]\[\033[1;30m\]\u "
     color="Red"
-  elif [[ ${USER} != $(logname) ]]; then
-    # user is not login user:
-    promptTmp="\[\033[43m\]\[\033[1;30m\]\u "
-    color="Yellow"
   else
-    # user is normally same as login user:
     promptTmp="\[\033[42m\]\[\033[1;30m\]\u "
     color="Green"
   fi

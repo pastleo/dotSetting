@@ -24,6 +24,21 @@ set -o emacs
 export TMUX_DEFAULT_SHELL="$(which zsh)"
 
 # -----------------------------
+# ZSH_STACK
+# -----------------------------
+
+if [ -z "$ZSH_STACK" ]; then
+  export ZSH_STACK=0
+fi
+export ZSH_STACK=$((ZSH_STACK + 1))
+
+# To disable zsh inside session / prevent launching zsh from bash:
+#   just call `bash` or `sh`
+# To disable zsh completely:
+#   export ZSH_STACK=2 in $HOME/.shrc.local
+# Search ZSH_STACK in .bashrc for more detail
+
+# -----------------------------
 # ZPlug: https://zplug.sh
 # -----------------------------
 
