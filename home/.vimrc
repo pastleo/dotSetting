@@ -175,14 +175,15 @@ set completeopt=menuone,noselect
 
 " Actions
 
-function! s:get_visual_selection()
-  " Why is this not a built-in Vim script function?!
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  return join(lines, "\n")
+" https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
+function! s:getSelectedText()
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  norm gvy
+  let l:ret = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  exe "norm \<Esc>"
+  return l:ret
 endfunction
 
 fun! EnterTasks()
@@ -309,13 +310,14 @@ nnoremap <leader>H :tabmove -<CR>
 " Block Visual
 nnoremap <leader>v <C-v>
 
-" Search for selected text forward
-" From http://vim.wikia.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> / :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+" for current visual/selected text, search without moving
+" https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
+" https://vim.fandom.com/wiki/Highlight_all_search_pattern_matches#Highlight_matches_without_moving
+vnoremap <silent> / :call setreg("/",
+    \ substitute(<SID>getSelectedText(),
+    \ '\_s\+',
+    \ '\\_s\\+', 'g')
+    \ )<CR>:set hlsearch<CR>
 
 " Replace
 nnoremap <leader>r :%s/
