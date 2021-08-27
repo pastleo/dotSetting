@@ -385,7 +385,7 @@ Plug 'pbrisbin/vim-mkdir'
 
 if !empty($VIM_ENABLE_COC)
   " https://github.com/neoclide/coc.nvim
-  " add this line to ~/.local-env and restart session to enable COC:
+  " add this line to ~/.shrc.local and restart session to enable COC:
   "   export VIM_ENABLE_COC=true
   "
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
