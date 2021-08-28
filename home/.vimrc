@@ -509,8 +509,7 @@ nnoremap <leader>f :NERDTreeFind<CR>
 nnoremap <leader>q :NERDTreeClose<CR>
 
 " NERDCommenter
-vnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
-nnoremap <leader>/ :call NERDComment(0, "toggle")<CR>
+map <leader>/ <plug>NERDCommenterToggle
 
 " Emmet
 nnoremap <leader>e :Emmet<space>
