@@ -355,8 +355,6 @@ autocmd VimEnter * call EnterTasks()
 
 " file types
 autocmd BufNewFile,BufRead,BufWritePost *.jbuilder set filetype=ruby
-autocmd BufNewFile,BufRead,BufWritePost *.tsx set filetype=typescript
-autocmd BufNewFile,BufRead,BufWritePost *.cjs set filetype=javascript
 autocmd BufNewFile,BufRead,BufWritePost *.mdx set filetype=markdown
 
 "--------------------------------------------------------------------------- 
