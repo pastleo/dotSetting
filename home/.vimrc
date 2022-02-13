@@ -385,9 +385,12 @@ if !empty($VIM_ENABLE_COC)
   " https://github.com/neoclide/coc.nvim
   " add this line to ~/.shrc.local and restart session to enable COC:
   "   export VIM_ENABLE_COC=true
-  "
+
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " :CocInstall coc-tsserver
+  " To verify installation, run: :CocInfo
+  " To install language bridge/server, see g:coc_global_extensions below
+
+  Plug 'OmniSharp/omnisharp-vim'
 endif
 
 if executable('fzf')
@@ -409,6 +412,7 @@ Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
 Plug 'leafgarland/typescript-vim', {'for': ['ts', 'tsx']}
 Plug 'MaxMEllon/vim-jsx-pretty', {'for': ['js', 'jsx', 'tsx']}
 Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+Plug 'tomlion/vim-solidity', {'for': 'sol'}
 Plug 'posva/vim-vue', {'for': 'vue'}
 Plug 'slim-template/vim-slim', {'for': 'slim'}
 Plug 'pprovost/vim-ps1', {'for': 'ps1'}
@@ -463,6 +467,9 @@ let g:rainbow_conf = {
 \		'css': 0,
 \	}
 \}
+
+" coc.vim
+let g:coc_global_extensions = ['coc-tsserver']
 
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
