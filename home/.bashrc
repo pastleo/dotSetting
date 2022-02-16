@@ -60,38 +60,35 @@ PS1.PastLeoDynamicPrompt()
   # user type:
   if [[ ${USER} == "root" ]]; then
     # user is root:
-    promptTmp="\[\033[41m\]\[\033[1;30m\]\u "
+    promptTmp="\[\033[41m\]\[\033[30m\]\u "
     color="Red"
   else
-    promptTmp="\[\033[42m\]\[\033[1;30m\]\u "
+    promptTmp="\[\033[42m\]\[\033[30m\]\u "
     color="Green"
   fi
 
   # shell start from:
   if [ -n "${SSH_CONNECTION}" ]; then
     # via ssh:
-    promptTmp=$promptTmp"\[\033[1;30m\]\[\033[44m\] \H "
+    promptTmp=$promptTmp"\[\033[30m\]\[\033[44m\] \H "
     color="Blue"
   elif [[ "${DISPLAY%%:0*}" != "" ]]; then
     # not via ssh:
-    promptTmp=$promptTmp"\[\033[1;30m\]\[\033[45m\] \H "
+    promptTmp=$promptTmp"\[\033[30m\]\[\033[45m\] \H "
     color="Purple"
   fi 
   case $color in
     Red)
-      promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
-      ;;
-    Yellow)
-      promptTmp=$promptTmp"\[\033[1;33m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      promptTmp=$promptTmp"\[\033[1;31m\]\[\033[40m\] \W \[\033[0m\]\[\033[30m\] > \[\033[0m\]"
       ;;
     Green)
-      promptTmp=$promptTmp"\[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      promptTmp=$promptTmp"\[\033[1;32m\]\[\033[40m\] \W \[\033[0m\]\[\033[30m\] > \[\033[0m\]"
       ;;
     Blue)
-      promptTmp=$promptTmp"\[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      promptTmp=$promptTmp"\[\033[1;34m\]\[\033[40m\] \W \[\033[0m\]\[\033[30m\] > \[\033[0m\]"
       ;;
     Purple)
-      promptTmp=$promptTmp"\[\033[1;35m\]\[\033[40m\] \W \[\033[0m\]\[\033[1;30m\] > \[\033[0m\]"
+      promptTmp=$promptTmp"\[\033[1;35m\]\[\033[40m\] \W \[\033[0m\]\[\033[30m\] > \[\033[0m\]"
       ;;
   esac
 
