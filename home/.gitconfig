@@ -1,9 +1,3 @@
-;[user]
-;   name =
-;   email =
-; Use `include.path` [~/.gituser] file to store user settings for git 1.7.10+
-[include]
-    path = .gituser
 [core]
     excludesfile = ~/.gitignore
     fileMode = false
@@ -29,3 +23,16 @@
     diffn = diff --stat
     diffs = diff --staged
     stashd = stash show -p ; get diff of the latest stash
+[user]
+    name = PastLeo
+    email = chgu82837@gmail.com
+    signingkey = PastLeo <chgu82837@gmail.com>
+[include]
+    path = .gitconfig.local
+; to overwrite config per machine, create ~/.gitconfig.local with:
+; [user]
+;     name = ...
+;     email = ...
+;     signingkey = ...
+; [commit]
+;     gpgsign = true

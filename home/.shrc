@@ -108,6 +108,11 @@ if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
   export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
 fi
 
+# homebrew
+if [ -e "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # SDK envs
 export GOPATH="$HOME/.golang/"
 export ANDROID_HOME="$HOME/.android-sdk/"
