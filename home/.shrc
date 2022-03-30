@@ -15,6 +15,10 @@ if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
   source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fi
 
+if [ "$SHRC_LOCAL_EACH" ]; then
+  . "$HOME/.shrc.local.each"
+fi
+
 # -----------------------------
 # Session startup & report
 # -----------------------------
@@ -44,15 +48,6 @@ export SHRC_SOURCED=true
 
 if [ -f "$HOME/.welcomeMsg" ]; then
   cat "$HOME/.welcomeMsg"
-fi
-
-# -----------------------------
-# Host's specific rc
-# -----------------------------
-
-# NOTICE: only environment variables will be kept
-if [ -f "$HOME/.shrc.local" ]; then
-  source "$HOME/.shrc.local"
 fi
 
 # -----------------------------
@@ -96,13 +91,6 @@ else
   export LS_PARAM='-Gh'
 fi
 
-# ssh agent
-if [ -n "$SSH_AGENT_ENABLED" ] && [ -z "$SSH_AUTH_SOCK" ] && [ "$(which ssh-agent 2> /dev/null)" ]; then
-  # to enable, export SSH_AGENT_ENABLED=true in $HOME/.shrc.local
-  eval $(ssh-agent)
-  ssh-add
-fi
-
 # rootless docker
 if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
   export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
@@ -134,6 +122,26 @@ else
     export LANG="$first_utf8_locale"
     export UTF8_READY=true
   fi
+fi
+
+# -----------------------------
+# Host's specific rc
+# -----------------------------
+
+# NOTICE: only environment variables will be kept
+if [ -f "$HOME/.shrc.local" ]; then
+  source "$HOME/.shrc.local"
+fi
+
+# example of ~/.shrc.local, for ssh-agent:
+# !/bin/sh
+# eval $(ssh-agent)
+# ssh-add
+
+# for each session
+if [ -f "$HOME/.shrc.local.each" ]; then
+  . "$HOME/.shrc.local.each"
+  export SHRC_LOCAL_EACH=true
 fi
 
 # -----------------------------
