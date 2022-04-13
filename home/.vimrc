@@ -393,8 +393,8 @@ if !empty($VIM_ENABLE_COC)
   Plug 'OmniSharp/omnisharp-vim'
 endif
 
+" install fzf on system to enable fzf.vim
 if executable('fzf')
-  " Please install fzf and ag (the_silver_searcher) manually
   Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
   Plug 'junegunn/fzf.vim'
 endif
@@ -470,6 +470,7 @@ let g:rainbow_conf = {
 
 " coc.vim
 let g:coc_global_extensions = ['coc-tsserver']
+let g:coc_disable_transparent_cursor = 1
 
 "--------------------------------------------------------------------------- 
 " Functions and commands with plugins
@@ -485,7 +486,9 @@ fun! SaveSessionAndQuit()
 endfun
 :command! Q :call SaveSessionAndQuit()
 
-" Fzf
+" fzf
+" enter :E => :Files, then input path prefix
+" hit enter to start fzf's main feature: file name fuzzy searcher
 cnoreabbrev E Files
 
 "--------------------------------------------------------------------------- 
@@ -524,26 +527,36 @@ nnoremap <leader>= :Tabularize<space>/
 vnoremap <leader>= :Tabularize<space>/
 
 " coc.vim
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+if !empty($VIM_ENABLE_COC)
+  " Use tab for trigger completion with characters ahead and navigate.
+  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+  " other plugin before putting this into your config.
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
 
-" coc.vim actions
-nmap <silent> <leader>gd <Plug>(coc-definition)
-nmap <silent> <leader>gr <Plug>(coc-references)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gy <Plug>(coc-type-definition)
-nmap <silent> <leader>gR <Plug>(coc-rename)
+  " coc.vim actions
+  nmap <silent> <Leader>gd <Plug>(coc-definition)
+  nmap <silent> <Leader>gr <Plug>(coc-references)
+  nmap <silent> <Leader>gi <Plug>(coc-implementation)
+  nmap <silent> <Leader>gD <Plug>(coc-type-definition)
+  nmap <silent> <Leader>gR <Plug>(coc-rename)
+endif
+
+" fzf.vim
+nnoremap <silent> <Leader>gf :Files<CR>
+nnoremap <silent> <Leader>gg :GFiles<CR>
+nnoremap <silent> <Leader>gl :Lines<CR>
+" ag (The Silver Searcher) needs to be installed manually
+" https://github.com/ggreer/the_silver_searcher
+nnoremap <silent> <Leader>ga :Ag<CR>
 
 "--------------------------------------------------------------------------- 
 " Theme
