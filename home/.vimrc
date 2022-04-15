@@ -331,7 +331,7 @@ vnoremap <leader>r :<C-U>
   \:%s//
 
 " <leader>p toggles paste mode
-nmap <leader>p :set paste!<BAR>set paste?<CR>
+nnoremap <leader>p :set paste!<BAR>set paste?<CR>
 
 " allow multiple indentation/deindentation in visual mode
 vnoremap < <gv
@@ -340,11 +340,9 @@ vnoremap > >gv
 " fussy search and Open (edit) file
 nnoremap <leader>o :e **/*
 
-" help vertically
-nnoremap <leader>gh :vert help<space>
-
 " Toggle line numbers
-nnoremap <leader>gl :set nu!<CR>
+nnoremap <leader>U :set nu!<CR>
+nnoremap <leader>R :set rnu!<CR>
 
 "--------------------------------------------------------------------------- 
 " Autocmds
@@ -373,6 +371,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
@@ -510,10 +509,15 @@ endif
 
 " gitgutter
 nnoremap <leader>G :GitGutterToggle<CR>
+nmap <leader>gh <Plug>(GitGutterStageHunk)
+
+" vim-fugitive
+nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <silent> <leader>gs :Gdiffsplit<CR>
 
 " NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>
-nnoremap <leader>f :NERDTreeFind<CR>
+nnoremap <leader>w :NERDTreeFind<CR>
 nnoremap <leader>q :NERDTreeClose<CR>
 
 " NERDCommenter
@@ -543,20 +547,20 @@ if !empty($VIM_ENABLE_COC)
   endfunction
 
   " coc.vim actions
-  nmap <silent> <Leader>gd <Plug>(coc-definition)
-  nmap <silent> <Leader>gr <Plug>(coc-references)
-  nmap <silent> <Leader>gi <Plug>(coc-implementation)
-  nmap <silent> <Leader>gD <Plug>(coc-type-definition)
-  nmap <silent> <Leader>gR <Plug>(coc-rename)
+  nmap <silent> <leader>cd <Plug>(coc-definition)
+  nmap <silent> <leader>cr <Plug>(coc-references)
+  nmap <silent> <leader>ci <Plug>(coc-implementation)
+  nmap <silent> <leader>cD <Plug>(coc-type-definition)
+  nmap <silent> <leader>cR <Plug>(coc-rename)
 endif
 
 " fzf.vim
-nnoremap <silent> <Leader>gf :Files<CR>
-nnoremap <silent> <Leader>gg :GFiles<CR>
-nnoremap <silent> <Leader>gl :Lines<CR>
+nnoremap <silent> <leader>ff :Files<CR>
+nnoremap <silent> <leader>fl :Lines<CR>
+nnoremap <silent> <leader>gf :GFiles<CR>
 " ag (The Silver Searcher) needs to be installed manually
 " https://github.com/ggreer/the_silver_searcher
-nnoremap <silent> <Leader>ga :Ag<CR>
+nnoremap <silent> <leader>fa :Ag<CR>
 
 "--------------------------------------------------------------------------- 
 " Theme
