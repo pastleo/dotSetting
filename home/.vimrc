@@ -368,7 +368,7 @@ call plug#begin('~/.vim/plugged')
 
 " Common packages
 Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -404,16 +404,12 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Load only when being called
 Plug 'mattn/emmet-vim', {'on': 'Emmet'}
-Plug 'godlygeek/tabular', {'on': 'Tabularize'}
 
 " Languages
-Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
-Plug 'leafgarland/typescript-vim', {'for': ['ts', 'tsx']}
 Plug 'MaxMEllon/vim-jsx-pretty', {'for': ['js', 'jsx', 'tsx']}
-Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
-Plug 'tomlion/vim-solidity', {'for': 'sol'}
 Plug 'posva/vim-vue', {'for': 'vue'}
-Plug 'slim-template/vim-slim', {'for': 'slim'}
+Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
+Plug 'tomlion/vim-solidity', {'for': 'sol'}
 Plug 'pprovost/vim-ps1', {'for': 'ps1'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 
@@ -521,15 +517,13 @@ nnoremap <leader>t :NERDTreeFocus<CR>
 nnoremap <leader>w :NERDTreeFind<CR>
 nnoremap <leader>q :NERDTreeClose<CR>
 
-" NERDCommenter
-map <leader>/ <plug>NERDCommenterToggle
+" Commentary
+xmap <leader>/  <Plug>Commentary
+nmap <leader>/ <Plug>CommentaryLine
+omap <leader>/  <Plug>Commentary
 
 " Emmet
 nnoremap <leader>e :Emmet<space>
-
-" Tabular
-nnoremap <leader>= :Tabularize<space>/
-vnoremap <leader>= :Tabularize<space>/
 
 " coc.vim
 if !empty($VIM_ENABLE_COC)

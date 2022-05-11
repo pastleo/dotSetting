@@ -2,6 +2,16 @@
 # PastLeo's shared rc for bash/zsh
 
 # -----------------------------
+# Restore PATH if TMUX_PATH
+# to prevent tmux or system shell reset PATH
+# see TMUX_PATH in .tmux.conf
+# -----------------------------
+
+if [ "$TMUX_PATH" ]; then
+  export PATH=$TMUX_PATH
+fi
+
+# -----------------------------
 # Required by each session
 # -----------------------------
 
@@ -106,16 +116,19 @@ export GOPATH="$HOME/.golang/"
 export ANDROID_HOME="$HOME/.android-sdk/"
 
 # UTF-8 locale
-if (locale | grep -i 'utf.*8') >/dev/null 2>&1; then
-  export UTF8_READY=true
-else
-  utf8_locales=$(locale -a | grep -i 'utf.*8')
-  en_us_utf8_locale=$(echo $utf8_locales | grep -i '^en.*us')
-  first_utf8_locale=$(echo $utf8_locales | head -1)
+if hash locale 2> /dev/null; then
+  utf8_locales=$(locale -a | grep -i 'utf.*8') # UTF-8 only
+  en_us_utf8_locale=$(echo "$utf8_locales" | grep -i '^en.*us')
+  zh_tw_utf8_locale=$(echo "$utf8_locales" | grep -i '^zh.*tw')
+  first_utf8_locale=$(echo "$utf8_locales" | head -1)
 
-  if [ -n "$en_us_utf8_locale" ]; then
+  if [ -n "$en_us_utf8_locale" ]; then # prefer en_US.utf8
     export LC_ALL="$en_us_utf8_locale"
     export LANG="$en_us_utf8_locale"
+    export UTF8_READY=true
+  elif [ -n "$zh_tw_utf8_locale" ]; then # then prefer zh_TW.utf8
+    export LC_ALL="$zh_tw_utf8_locale"
+    export LANG="$zh_tw_utf8_locale"
     export UTF8_READY=true
   elif [ -n "$first_utf8_locale" ]; then
     export LC_ALL="$first_utf8_locale"

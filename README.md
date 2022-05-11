@@ -2,19 +2,20 @@ dotSetting
 ==========
 
 After few years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...  
-When the time to migrate at a new machine, it might be somehow troubling. So I use [homeshick](https://github.com/andsens/homeshick)
+[Homeshick](https://github.com/andsens/homeshick) is used to manage my dotSetting
 
-## Requirement
+## Software
 
- * bash
-   * zsh for advance shell
- * git
- * curl
- * rsync (if wanting to use `rsync.sh`)
+* `bash`
+  * `zsh` for advance shell
+* `git`
+* `vim`
+
+> on mac, it is recommanded to install and use `git`, `vim`, `zsh` from [`brew`](https://brew.sh/)
 
 ## How to install
 
-Using curl:
+Using `curl`:
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/pastleo/dotSetting/master/install.sh)
@@ -27,6 +28,8 @@ bash path/to/repo/install.sh
 ```
 
 ## Use real file instead of symlink
+
+> `rsync` is required for this
 
 WARNING: This will overwrite existing files!
 
