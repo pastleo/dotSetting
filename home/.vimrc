@@ -407,6 +407,7 @@ Plug 'mattn/emmet-vim', {'on': 'Emmet'}
 
 " Languages
 Plug 'MaxMEllon/vim-jsx-pretty', {'for': ['js', 'jsx', 'tsx']}
+Plug 'jparise/vim-graphql', {'for': ['graphql', 'graphqls', 'gql', 'js', 'jsx', 'ts', 'tsx']}
 Plug 'posva/vim-vue', {'for': 'vue'}
 Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
 Plug 'tomlion/vim-solidity', {'for': 'sol'}

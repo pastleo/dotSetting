@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$#" -lt 1 ]; then
+  echo "usage: $0 [<commit_a>] <commit_b>"
+  echo ""
+  echo "  preview changes (diff) on <commit_a> if <commit_b> merge to <commit_a>"
+  echo "  - if <commit_a> is not supplied, <commit_a> is current HEAD"
+  echo "    like previewing changes (diff) that will apply after git merge <commit_b>"
+  echo ""
+  exit 1
+fi
+
+if [ "$#" -lt 2 ]; then
+  commit_a=HEAD
+  commit_b="$1"
+else
+  commit_a="$1"
+  commit_b="$2"
+fi
+
+git merge-tree $(git merge-base "$commit_a" "$commit_b") "$commit_a" "$commit_b"
+

@@ -3,6 +3,8 @@
     fileMode = false
     autocrlf = input
     editor = vim
+[fetch]
+    prune = true
 [push]
     default = upstream
 [pull]
