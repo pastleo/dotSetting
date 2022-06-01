@@ -174,6 +174,20 @@ set completeopt=menuone,noselect
 "---------------------------------------------------------------------------
 
 " Actions
+function! ShowCurrentFilePaths()
+  call input("Showing current file (buffer) paths, press enter to continue:\n" . expand('%:p') . "\n" . @% . "\n")
+endfunction
+
+fun! PresentationMode()
+  call PresentationTheme()
+  :RainbowToggleOff
+endfun
+fun! PresentationTheme()
+  colorscheme default
+  set background=light
+  hi IndentGuidesEven guibg=NONE ctermbg=NONE
+endfun
+command! PresentationMode call PresentationMode()
 
 " https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
 function! s:getSelectedText()
@@ -253,17 +267,6 @@ fun! ConvertIndentSpaceToTabs()
 endfun
 command! ConvertIndent2Tabs call ConvertIndentSpaceToTabs()
 
-fun! PresentationMode()
-  call PresentationTheme()
-  :RainbowToggleOff
-endfun
-fun! PresentationTheme()
-  colorscheme default
-  set background=light
-  hi IndentGuidesEven guibg=NONE ctermbg=NONE
-endfun
-command! PresentationMode call PresentationMode()
-
 "---------------------------------------------------------------------------
 " Key mappings
 "---------------------------------------------------------------------------
@@ -306,6 +309,9 @@ nnoremap <S-H> :vertical resize -2<CR>
 " Move tabs around
 nnoremap <leader>L :tabmove +<CR>
 nnoremap <leader>H :tabmove -<CR>
+
+" Show current file (buffer) full path
+nnoremap <leader>W :call ShowCurrentFilePaths()<CR>
 
 " Block Visual
 nnoremap <leader>v <C-v>
