@@ -554,6 +554,19 @@ if !empty($VIM_ENABLE_COC)
   nmap <silent> <leader>ci <Plug>(coc-implementation)
   nmap <silent> <leader>cD <Plug>(coc-type-definition)
   nmap <silent> <leader>cR <Plug>(coc-rename)
+
+  nnoremap <silent> <leader>cc :call ShowDocumentation()<CR>
+
+  xmap <leader>ca  <Plug>(coc-codeaction-selected)
+  nmap <leader>ca  <Plug>(coc-codeaction-selected)
+
+  function! ShowDocumentation()
+    if CocAction('hasProvider', 'hover')
+      call CocActionAsync('doHover')
+    else
+      call feedkeys('K', 'in')
+    endif
+  endfunction
 endif
 
 " fzf.vim
