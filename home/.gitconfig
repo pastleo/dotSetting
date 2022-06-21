@@ -22,6 +22,7 @@
     logg = log --graph --oneline --decorate --all
     logn = log --stat --graph --oneline --decorate --all
     logl = log --pretty=short -u -L
+    tags = for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags
     diffn = diff --stat
     diffs = diff --staged
     stashd = stash show -p ; get diff of the latest stash
