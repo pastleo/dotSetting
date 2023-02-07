@@ -11,10 +11,18 @@ if [ "$TMUX_PATH" ]; then
   export PATH=$TMUX_PATH
 fi
 
+# NOTICE ====
+# each session source until here, as environment will be inherited
+# a restart of whole tmux (closing all tmux session) is needed to reset
+# ===========
+if [ -z "$SHRC_SOURCED" ]; then
+  source "$HOME/.shrc.once"
+fi
+export SHRC_SOURCED=true
+
 # -----------------------------
 # Required by each session
 # -----------------------------
-
 # asdf-vm
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   . "$HOME/.asdf/asdf.sh"
@@ -42,141 +50,3 @@ shrc_session_start_report() {
 
   echo -e "PID: \033[1;32m$$\033[0m | HOST: $hostname_info | \033[1;36m$(date '+%Y/%m/%d %A %H:%M %Z (%z)')\033[0m"
 }
-
-# NOTICE ====
-# each session source until here, as environment will be inherited
-# a restart of whole tmux (closing all tmux session) is needed to reset
-# ===========
-if [ -n "$SHRC_SOURCED" ]; then
-  return
-fi
-export SHRC_SOURCED=true
-
-# -----------------------------
-# Welcome message
-# -----------------------------
-
-if [ -f "$HOME/.welcomeMsg" ]; then
-  cat "$HOME/.welcomeMsg"
-fi
-
-# -----------------------------
-# Environment variables
-# -----------------------------
-
-# _HOST env
-if [ -z "$_HOST" ]; then
-  if [ "$(which hostname 2> /dev/null)" ]; then
-    export _HOST=$(hostname)
-  elif [ -e /proc/sys/kernel/hostname ]; then
-    export _HOST=$(cat /proc/sys/kernel/hostname)
-  fi
-fi
-
-# EDITOR env
-if [ -z "$EDITOR" ]; then
-  if [ "$(which vim 2> /dev/null)" ]; then
-    export EDITOR=vim
-  fi
-fi
-
-# PATH env
-add_path()
-{
-  tmp="$1:${PATH//$1/}"
-  export PATH="${tmp//::/:}"
-}
-add_path "/usr/local/bin"
-add_path "/usr/local/sbin"
-
-if [ -z "$PATH_SYS" ]; then
-  export PATH_SYS=$PATH
-fi
-add_path "$HOME/.bin"
-
-# ls
-if ls --help 2>&1 | grep -q -- --color; then
-  export LS_PARAM='--color -hF'
-else
-  export LS_PARAM='-Gh'
-fi
-
-# rootless docker
-if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
-  export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
-fi
-
-# homebrew
-if [ -e "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-# SDK envs
-export GOPATH="$HOME/.golang/"
-export ANDROID_HOME="$HOME/.android-sdk/"
-
-# UTF-8 locale
-if hash locale 2> /dev/null; then
-  utf8_locales=$(locale -a | grep -i 'utf.*8') # UTF-8 only
-  en_us_utf8_locale=$(echo "$utf8_locales" | grep -i '^en.*us')
-  zh_tw_utf8_locale=$(echo "$utf8_locales" | grep -i '^zh.*tw')
-  first_utf8_locale=$(echo "$utf8_locales" | head -1)
-
-  if [ -n "$en_us_utf8_locale" ]; then # prefer en_US.utf8
-    export LC_ALL="$en_us_utf8_locale"
-    export LANG="$en_us_utf8_locale"
-    export UTF8_READY=true
-  elif [ -n "$zh_tw_utf8_locale" ]; then # then prefer zh_TW.utf8
-    export LC_ALL="$zh_tw_utf8_locale"
-    export LANG="$zh_tw_utf8_locale"
-    export UTF8_READY=true
-  elif [ -n "$first_utf8_locale" ]; then
-    export LC_ALL="$first_utf8_locale"
-    export LANG="$first_utf8_locale"
-    export UTF8_READY=true
-  fi
-fi
-
-# -----------------------------
-# Host's specific rc
-# -----------------------------
-
-# NOTICE: only environment variables will be kept
-if [ -f "$HOME/.shrc.local" ]; then
-  source "$HOME/.shrc.local"
-fi
-
-# example of ~/.shrc.local, for ssh-agent:
-# !/bin/sh
-# eval $(ssh-agent)
-# ssh-add
-
-# for each session
-if [ -f "$HOME/.shrc.local.each" ]; then
-  . "$HOME/.shrc.local.each"
-  export SHRC_LOCAL_EACH=true
-fi
-
-# -----------------------------
-# Terminal startup report
-# -----------------------------
-
-if [ -n "$SSH_CLIENT" ]; then
-  from_info="\033[1;37m$SSH_CLIENT\033[0m"
-elif [ -n "$DISPLAY" ]; then
-  from_info="\033[1;34mDISPLAY $DISPLAY\033[0m"
-else
-  from_info="\033[1;35m$(tty)\033[0m"
-fi
-if [ -n "$LANG" ]; then
-  lang_info="\033[1;34m$LANG\033[0m"
-else
-  lang_info="\033[1;31m(not set)\033[0m"
-fi
-if [ -n "$EDITOR" ]; then
-  editor_info="\033[1;34m$EDITOR\033[0m"
-else
-  editor_info="\033[1;31m(not set)\033[0m"
-fi
-echo -e "FROM: $from_info | LANG: $lang_info | EDITOR: $editor_info"
-

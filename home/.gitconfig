@@ -40,3 +40,5 @@
 ;     signingkey = ...
 ; [commit]
 ;     gpgsign = true
+[remote "origin"]
+	tagopt = --tags
