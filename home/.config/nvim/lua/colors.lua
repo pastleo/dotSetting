@@ -1,4 +1,7 @@
-vim.opt.termguicolors = true
+if os.getenv("TERM_RGB") == 'true' then -- from ~/.shrc.once
+  vim.opt.termguicolors = true
+end
+
 vim.opt.background = 'dark'
 
 vim.g.everforest_background = 'soft'

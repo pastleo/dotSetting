@@ -92,6 +92,24 @@ if hash locale 2> /dev/null; then
   fi
 fi
 
+if [[ $TERM =~ tmux-* ]]; then
+  export TERM_RGB=true
+elif [[ $TERM =~ iterm-* ]]; then
+  export TERM_RGB=true
+elif [[ $TERM =~ vte-* ]]; then
+  export TERM_RGB=true
+elif [[ $TERM =~ gnome-* ]]; then
+  export TERM_RGB=true
+elif [[ $TERM =~ xterm-* ]]; then
+  if [[ $XTERM_VERSION ]]; then
+    export TERM_RGB=true
+  elif [[ $KONSOLE_VERSION ]]; then
+    export TERM_RGB=true
+  elif [[ $VTE_VERSION ]]; then
+    export TERM_RGB=true
+  fi
+fi
+
 # -----------------------------
 # Host's specific rc
 # -----------------------------
