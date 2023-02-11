@@ -8,6 +8,7 @@ vim.g.everforest_background = 'soft'
 vim.g.everforest_enable_italic = 1
 vim.g.everforest_better_performance = 1
 vim.g.everforest_transparent_background = 1
+vim.g.everforest_colors_override = { bg_visual = { '#4f5b58',  '240' } }
 
 vim.cmd[[
   silent! colorscheme everforest
