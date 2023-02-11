@@ -105,6 +105,8 @@ elif [[ $TERM =~ xterm-* ]]; then
     export TERM_RGB=true
   elif [[ $KONSOLE_VERSION ]]; then
     export TERM_RGB=true
+  elif [[ $ITERM_SESSION_ID ]]; then
+    export TERM_RGB=true
   elif [[ $VTE_VERSION ]]; then
     export TERM_RGB=true
   fi
@@ -114,21 +116,36 @@ fi
 # Host's specific rc
 # -----------------------------
 
-# NOTICE: only environment variables will be kept
 if [ -f "$HOME/.shrc.local" ]; then
-  source "$HOME/.shrc.local"
+  export SHRC_LOCAL_EXISTS=true
 fi
 
-# example of ~/.shrc.local, for ssh-agent:
-# !/bin/sh
-# eval $(ssh-agent)
-# ssh-add
-
-# for each session
-if [ -f "$HOME/.shrc.local.each" ]; then
-  . "$HOME/.shrc.local.each"
-  export SHRC_LOCAL_EACH=true
-fi
+# see ~/.shrc for ~/.shrc.local template
+# example for ssh-agent:
+#
+# ```
+# # vim: set ft=sh:
+#
+# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+#   export SHRC_LOCAL_SOURCED=true
+#
+#   eval $(ssh-agent)
+#   ssh-add
+# fi
+# ```
+#
+# example for gpg-agent as ssh agent:
+#
+# ```
+# # vim: set ft=sh:
+#
+# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+#   export SHRC_LOCAL_SOURCED=true
+#
+#   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+#   gpgconf --launch gpg-agent
+# fi
+# ```
 
 # -----------------------------
 # Terminal startup report

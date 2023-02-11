@@ -23,6 +23,7 @@ export SHRC_SOURCED=true
 # -----------------------------
 # Required by each session
 # -----------------------------
+
 # asdf-vm
 if [ -f "$HOME/.asdf/asdf.sh" ]; then
   . "$HOME/.asdf/asdf.sh"
@@ -33,9 +34,29 @@ if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
   source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fi
 
-if [ "$SHRC_LOCAL_EACH" ]; then
-  . "$HOME/.shrc.local.each"
+# -----------------------------
+# Host's specific rc
+# -----------------------------
+
+if [ "$SHRC_LOCAL_EXISTS" ]; then
+  source "$HOME/.shrc.local"
 fi
+
+# template of ~/.shrc.local:
+#
+# ```
+# # vim: set ft=sh:
+#
+# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+#   export SHRC_LOCAL_SOURCED=true
+#
+#   # local rc that only runs on top level of terminal
+# fi
+#
+# # local rc that only runs on every shell
+# ```
+#
+# more example at ~/.shrc.once
 
 # -----------------------------
 # Session startup & report

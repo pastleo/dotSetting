@@ -60,10 +60,10 @@ PS1.PastLeoDynamicPrompt()
   # user type:
   if [[ ${USER} == "root" ]]; then
     # user is root:
-    promptTmp="\[\033[41m\]\[\033[30m\]\u "
+    promptTmp="\[\033[41m\]\[\033[30m\] \u "
     color="Red"
   else
-    promptTmp="\[\033[42m\]\[\033[30m\]\u "
+    promptTmp="\[\033[42m\]\[\033[30m\] \u "
     color="Green"
   fi
 
