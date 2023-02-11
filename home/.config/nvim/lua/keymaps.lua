@@ -51,8 +51,11 @@ vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
 -- delete without changing clipboard
 vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 
--- replace current word
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+-- search current word in normal mode
+-- just type "*" for next, "#" for prev
+
+-- replace current selected (ref: https://stackoverflow.com/a/676619)
+vim.keymap.set("v", "<leader>r", [["hy:%s/<C-r>h//gc<left><left><left>]])
 
 -- not yet migrated --
 -- Show current file (buffer) full path
@@ -60,49 +63,3 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- " for current visual/selected text, search without moving
 -- " https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
 -- " https://vim.fandom.com/wiki/Highlight_all_search_pattern_matches#Highlight_matches_without_moving
--- vnoremap <silent> / :call setreg("/",
---     \ substitute(<SID>getSelectedText(),
---     \ '\_s\+',
---     \ '\\_s\\+', 'g')
---     \ )<CR>:set hlsearch<CR>
--- " Search and replace for selected text
--- vnoremap <leader>r :<C-U>
---   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
---   \gvy/<C-R><C-R>=substitute(
---   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
---   \gV:call setreg('"', old_reg, old_regtype)<CR>
---   \:%s//
-
--- plugins --
-vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>")
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
-vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
-
-local telescopeBuiltin = safe_require('telescope.builtin')
-if telescopeBuiltin ~= false then
-  vim.keymap.set(
-    "n",
-    "<leader>t",
-    ":Telescope file_browser<CR>", -- TODO: make it remember last cwd
-    {}
-  )
-  vim.keymap.set(
-    "n",
-    "<leader>w",
-    "<cmd>lua require 'telescope'.extensions.file_browser.file_browser({ path = vim.fn.expand(vim.fn.expand('%:p:h'))  })<CR>",
-    {}
-  )
-  vim.keymap.set('n', '<leader>ff', function()
-    if table.getn(vim.fs.find(".git", { type = "directory", upward = true })) > 0 then
-      telescopeBuiltin.git_files()
-    else
-      telescopeBuiltin.find_files()
-    end
-  end, {})
-  vim.keymap.set('n', '<leader>fF', function()
-    telescopeBuiltin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true })
-  end, {})
-  vim.keymap.set('n', '<leader>fg', telescopeBuiltin.live_grep, {})
-  vim.keymap.set('n', '<leader>fb', telescopeBuiltin.buffers, {})
-  vim.keymap.set('n', '<leader>fh', telescopeBuiltin.help_tags, {})
-end
