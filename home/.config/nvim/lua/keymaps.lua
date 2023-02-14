@@ -53,6 +53,7 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 
 -- search current word in normal mode
 -- just type "*" for next, "#" for prev
+-- "*" can also be used to search selected texts
 
 -- replace current selected (ref: https://stackoverflow.com/a/676619)
 vim.keymap.set("v", "<leader>r", [["hy:%s/<C-r>h//gc<left><left><left>]])

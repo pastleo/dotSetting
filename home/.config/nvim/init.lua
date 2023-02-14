@@ -7,11 +7,6 @@
 --   https://github.com/BurntSushi/ripgrep
 
 -- ## TODO: checkout nvim plugins & configs
--- * https://github.com/VonHeikemen/lsp-zero.nvim
---   * need to config keymap for it
--- * https://github.com/rmagatti/auto-session
---   * config to prompt instead of always auto
--- * https://github.com/nvim-lualine/lualine.nvim
 -- * https://github.com/nvim-tree/nvim-tree.lua
 --   * https://github.com/elihunter173/dirbuf.nvim
 --   * floating like in telescope
@@ -21,8 +16,10 @@
 require('settings')
 require('keymaps')
 
--- Define safe_require() globally to get Packer plugins,
---   while preventing error when Packer plugins not installed
+--- Define safe_require() globally to get Packer plugins,
+---   while preventing error when Packer plugins not installed
+--- @param module_name string
+--- @return any
 function safe_require(module_name)
   local status_ok, module = pcall(require, module_name)
   if not status_ok then return false end
@@ -37,7 +34,8 @@ if not packer then
     'packer.nvim not found, run this to install:\n\n' ..
     '  git clone --depth 1 https://github.com/wbthomason/packer.nvim \\\n' ..
     '    "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/packer/start/packer.nvim\n\n' ..
-    'or visit https://github.com/wbthomason/packer.nvim#quickstart'
+    'or visit https://github.com/wbthomason/packer.nvim#quickstart\n' ..
+    'after installing packer.nvim, run :PackerSync to install plugins'
   )
   return false
 end
@@ -62,7 +60,8 @@ packer.startup(function(use)
     end,
   }
 
-  use {'akinsho/bufferline.nvim', tag = "v3.*"}
+  use {'akinsho/bufferline.nvim', tag = 'v3.*'}
+  use 'nvim-lualine/lualine.nvim'
 
   use 'tpope/vim-commentary'
 
@@ -80,7 +79,6 @@ packer.startup(function(use)
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
-  use { "nvim-telescope/telescope-file-browser.nvim" }
 
   use 'tpope/vim-fugitive'
   use {
@@ -113,14 +111,16 @@ packer.startup(function(use)
     }
   }
 
-	use 'rmagatti/auto-session'
+  use 'rmagatti/auto-session'
 end)
 
 require('colors')
 
 require('treesitter-config')
-require('telescope-config')
 require('bufferline-config')
+require('lualine-config')
+require('telescope-config')
 require('lsp-zero-config')
+require('auto-session-config')
 
 require('plugins-keymaps')
