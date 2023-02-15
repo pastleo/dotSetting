@@ -37,11 +37,15 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<space>', vim.lsp.buf.hover, opts)
   vim.keymap.set('n', '<leader><space>', vim.diagnostic.open_float, opts)
 
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-  vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
-
   if telescopeBuiltin ~= false then
+    vim.keymap.set('n', 'gd', function()
+      vim.cmd[[set nopaste]]
+      telescopeBuiltin.lsp_definitions()
+    end, {})
+    vim.keymap.set('n', 'go', function()
+      vim.cmd[[set nopaste]]
+      telescopeBuiltin.lsp_type_definitions()
+    end, {})
     vim.keymap.set('n', '<leader>cr', function()
       vim.cmd[[set nopaste]]
       telescopeBuiltin.lsp_references()
@@ -54,7 +58,11 @@ lsp.on_attach(function(client, bufnr)
       vim.cmd[[set nopaste]]
       telescopeBuiltin.diagnostics({ bufnr = 0 })
     end, {})
+  else
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
   end
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
 
   vim.keymap.set('n', '<leader>cR', vim.lsp.buf.rename, opts)
   vim.keymap.set('n', '<leader>cA', vim.lsp.buf.code_action, opts)

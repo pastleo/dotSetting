@@ -9,7 +9,7 @@ bufferline.setup {
     },
     buffer_close_icon = 'x',
     show_close_icon = false,
-    modified_icon = '~',
+    modified_icon = '!',
     left_trunc_marker = '',
     right_trunc_marker = '',
     show_buffer_icons = false,

@@ -2,12 +2,12 @@
 vim.g.mapleader = "t"
 
 -- New tab and split
-vim.keymap.set("n", "<leader>n", ":tabnew<CR>")
-vim.keymap.set("n", "<leader>N", ":tab split<CR>")
-vim.keymap.set("n", "<leader>i", ":new<CR>")
-vim.keymap.set("n", "<leader>I", ":split<CR>")
-vim.keymap.set("n", "<leader>s", ":vnew<CR>")
-vim.keymap.set("n", "<leader>S", ":vsplit<CR>")
+vim.keymap.set("n", "<leader>n", ":tab split<CR>")
+vim.keymap.set("n", "<leader>N", ":tabnew<CR>")
+vim.keymap.set("n", "<leader>i", ":split<CR>")
+vim.keymap.set("n", "<leader>I", ":new<CR>")
+vim.keymap.set("n", "<leader>s", ":vsplit<CR>")
+vim.keymap.set("n", "<leader>S", ":vnew<CR>")
 
 -- split vertically and diff with a file
 vim.keymap.set("n", "<leader>d", ":vert diffsplit<SPACE>")
@@ -59,8 +59,12 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 vim.keymap.set("v", "<leader>r", [["hy:%s/<C-r>h//gc<left><left><left>]])
 
 -- not yet migrated --
--- Show current file (buffer) full path
--- nnoremap <leader>W :call ShowCurrentFilePaths()<CR>
--- " for current visual/selected text, search without moving
--- " https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
--- " https://vim.fandom.com/wiki/Highlight_all_search_pattern_matches#Highlight_matches_without_moving
+-- Show current file (buffer) path and full path
+vim.keymap.set("n", "<leader>W", function()
+  vim.ui.input({
+    prompt =
+      "Showing current file (buffer) paths, press enter to continue:\n" ..
+      vim.fn.expand('%:p') .. "\n" ..
+      vim.fn.expand('%') .. "\n"
+  }, function() end)
+end)

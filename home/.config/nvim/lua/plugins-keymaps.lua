@@ -24,15 +24,18 @@ vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>")
 vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
 vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
 
+-- nvim-tree/nvim-tree.lua
+-- >> see ./nvim-tree-config.lua <<
+
 -- VonHeikemen/-zero.nvim
 -- >> see ./-zero-config.lua <<
 --
 -- if lsp available, keymaps:
 -- * `<space>`: displays hover information
 -- * `<leader><space>`: displays diagnostics information (errors/warnings/hints...)
--- * `gd`: jump to definition, same as lsp-zero & vim default keymap
+-- * `gd`: jump to definition, or list using telescope, same as lsp-zero & vim default keymap
 -- * `gD`: jump to declaration, same as lsp-zero & vim default keymap
--- * `go`: jump to definition of type, same as lsp-zero default keymap
+-- * `go`: jump to definition of type, or list using telescope, same as lsp-zero default keymap
 -- * `<leader>cr`: lists references using telescope
 -- * `<leader>ci`: lists implementations using telescope
 -- * `<leader>cd`: lists diagnostics (errors/warnings/hints...) of current buffer using telescope

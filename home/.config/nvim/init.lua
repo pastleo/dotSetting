@@ -67,6 +67,8 @@ packer.startup(function(use)
 
   use 'mattn/emmet-vim'
 
+  use 'nvim-tree/nvim-tree.lua'
+
   use {
     'mbbill/undotree',
     config = function()
@@ -119,6 +121,7 @@ require('colors')
 require('treesitter-config')
 require('bufferline-config')
 require('lualine-config')
+require('nvim-tree-config')
 require('telescope-config')
 require('lsp-zero-config')
 require('auto-session-config')

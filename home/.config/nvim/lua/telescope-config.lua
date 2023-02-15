@@ -18,13 +18,13 @@ vim.keymap.set('n', '<leader>t', function()
     telescopeBuiltin.find_files({ hidden = true, follow = true })
   end
 end, {})
-vim.keymap.set('n', '<leader>w', function()
-  vim.cmd[[set nopaste]]
-  telescopeBuiltin.find_files({
-    cwd = vim.fn.expand(vim.fn.expand('%:p:h')),
-    hidden = true, no_ignore = true, no_ignore_parent = true, follow = true
-  })
-end, {})
+-- vim.keymap.set('n', '<leader>w', function()
+--   vim.cmd[[set nopaste]]
+--   telescopeBuiltin.find_files({
+--     cwd = vim.fn.expand(vim.fn.expand('%:p:h')),
+--     hidden = true, no_ignore = true, no_ignore_parent = true, follow = true
+--   })
+-- end, {})
 vim.keymap.set('n', '<leader>ff', function()
   vim.cmd[[set nopaste]]
   telescopeBuiltin.find_files({

@@ -11,6 +11,3 @@ vim.opt.undodir = vim.fn.stdpath('data') .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-
--- disable vim's built-in netrw (file manager)
-vim.g.loaded_netrwPlugin = 1
