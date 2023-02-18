@@ -10,7 +10,10 @@
 -- * https://github.com/nvim-tree/nvim-tree.lua
 --   * https://github.com/elihunter173/dirbuf.nvim
 --   * floating like in telescope
---   * replace telescope-file-browser
+-- * a `gb` to go back after after goto definition or sth
+-- * bufferline tab group
+-- * prevent <C-c> causing error when `<leader>W` showing path
+-- * find folder in telescope and open in nvim-tree
 
 -- neovim built-in settings
 require('settings')

@@ -58,7 +58,6 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 -- replace current selected (ref: https://stackoverflow.com/a/676619)
 vim.keymap.set("v", "<leader>r", [["hy:%s/<C-r>h//gc<left><left><left>]])
 
--- not yet migrated --
 -- Show current file (buffer) path and full path
 vim.keymap.set("n", "<leader>W", function()
   vim.ui.input({
