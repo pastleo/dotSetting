@@ -5,15 +5,14 @@
 -- ## Requirements
 -- * `rg`: faster searcher like `ag`
 --   https://github.com/BurntSushi/ripgrep
+--
+-- ## Nvim lua config dev tips
+-- * `<leader>fh` to search for docs, like `:h ...` but better
+-- * `print(vim.inspect(some_value))` to debug lua values
 
 -- ## TODO: checkout nvim plugins & configs
--- * https://github.com/nvim-tree/nvim-tree.lua
---   * https://github.com/elihunter173/dirbuf.nvim
---   * floating like in telescope
--- * a `gb` to go back after after goto definition or sth
--- * bufferline tab group
--- * prevent <C-c> causing error when `<leader>W` showing path
--- * find folder in telescope and open in nvim-tree
+-- * bufferline tab group, or prevent `(duplicated) [No Name]`
+-- * LSP Autocompletion tab selection behavior when only 1 item
 
 -- neovim built-in settings
 require('settings')
@@ -61,6 +60,16 @@ packer.startup(function(use)
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()
     end,
+  }
+  use {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("indent_blankline").setup {
+        space_char_blankline = " ",
+        show_current_context = true,
+        show_current_context_start = true,
+      }
+    end
   }
 
   use {'akinsho/bufferline.nvim', tag = 'v3.*'}

@@ -9,26 +9,35 @@ vim.keymap.set("n", "<leader>e", ":Emmet<space>")
 -- mbbill/undotree
 vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>")
 
+-- tpope/vim-fugitive
+vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
+vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
+
 -- nvim-telescope/telescope.nvim
 -- >> see ./telescope-config.lua <<
 --
 -- * `<leader>t`:
 --   * if under a git repo, fuzzy search through the output of git ls-files command, respects .gitignore
 --   * otherwise lists files in current working directory, respects .gitignore
--- * `<leader>w`: lists all files in the same folder of current buffer, including hidden, gitignore files
--- * `<leader>ff`: lists all files in current working directory, including hidden, gitignore files
+-- * `<leader>ff`: lists telescope built-in pickers to run
+-- * `<leader>fa`: lists all files in current working directory, including hidden, gitignore files
 -- * `<leader>fg`: search for a string in file content under current working directory and get results live as you type, respects .gitignore. (requires ripgrep)
 -- * `<leader>fh`: lists available nvim help tags
-
--- tpope/vim-fugitive
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
-vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
+--
+-- when using file pickers (`<leader>t`, `<leader>fa` and `<leader>fg`),
+--   `<CR>` will bring up nvim-tree to focus on the file first (and enter again to open file with nvim-tree),
+--     if not available then use open-file from nvim-tree to choose split to open
+--   `<C-o>` to open file with telescope's default select behavior
 
 -- nvim-tree/nvim-tree.lua
 -- >> see ./nvim-tree-config.lua <<
+--
+-- * `<leader>w`: open nvim-tree and focus on current file is available, o.w. open nvim-tree
+-- * within nvim-tree,
+--   * added `<C-c>` in addition to `q` to close nvim-tree, align with telescope
 
--- VonHeikemen/-zero.nvim
--- >> see ./-zero-config.lua <<
+-- VonHeikemen/lsp-zero.nvim
+-- >> see ./lsp-zero-config.lua <<
 --
 -- if lsp available, keymaps:
 -- * `<space>`: displays hover information

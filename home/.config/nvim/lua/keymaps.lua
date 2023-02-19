@@ -1,9 +1,11 @@
 -- set leader to t key
 vim.g.mapleader = "t"
 
--- New tab and split
-vim.keymap.set("n", "<leader>n", ":tab split<CR>")
-vim.keymap.set("n", "<leader>N", ":tabnew<CR>")
+-- New tab
+vim.keymap.set("n", "<leader>n", ":tabnew<CR>")
+vim.keymap.set("n", "<leader>N", ":tab split<CR>")
+
+-- split
 vim.keymap.set("n", "<leader>i", ":split<CR>")
 vim.keymap.set("n", "<leader>I", ":new<CR>")
 vim.keymap.set("n", "<leader>s", ":vsplit<CR>")
@@ -54,16 +56,36 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 -- search current word in normal mode
 -- just type "*" for next, "#" for prev
 -- "*" can also be used to search selected texts
+--   but some characters are not allowed
 
 -- replace current selected (ref: https://stackoverflow.com/a/676619)
 vim.keymap.set("v", "<leader>r", [["hy:%s/<C-r>h//gc<left><left><left>]])
 
 -- Show current file (buffer) path and full path
+local show_current_path = function()
+  local fullpath = vim.fn.expand('%:p')
+  local cwd = vim.fn.getcwd()
+  local fileInCwd = fullpath:match(cwd)
+  if fileInCwd == nil then
+    vim.ui.input({
+      prompt =
+        "Showing current file (buffer) full paths (outside of cwd), press enter to continue:\n" ..
+        fullpath .. "\n"
+    }, function() end)
+  else
+    vim.ui.input({
+      prompt =
+        "Showing current file (buffer) paths, press enter to continue:\n" ..
+        fullpath .. "\n" ..
+        fullpath:sub(cwd:len() + 2) .. "\n"
+    }, function() end)
+  end
+end
 vim.keymap.set("n", "<leader>W", function()
-  vim.ui.input({
-    prompt =
-      "Showing current file (buffer) paths, press enter to continue:\n" ..
-      vim.fn.expand('%:p') .. "\n" ..
-      vim.fn.expand('%') .. "\n"
-  }, function() end)
+  pcall(show_current_path) -- wrap show_current_path to prevent <C-c> cancel error
 end)
+
+-- jumping back and forth after jumping definitions
+-- * `<C-o>` to go back
+-- * `<C-i>` to go forth
+-- `i` and `o` are next to each other ;)

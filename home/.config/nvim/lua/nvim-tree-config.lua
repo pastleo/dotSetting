@@ -2,10 +2,10 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-local nvimTree = safe_require('nvim-tree')
-if nvimTree == false then return end
+local nvim_tree = safe_require('nvim-tree')
+if nvim_tree == false then return end
 
-nvimTree.setup({
+nvim_tree.setup({
   hijack_netrw = true,
   hijack_directories = {
     enable = true,
@@ -15,6 +15,9 @@ nvimTree.setup({
     enable = true,
     show_on_dirs = true,
     show_on_open_dirs = true,
+  },
+  git = {
+    ignore = false,
   },
   view = {
     float = {
@@ -27,15 +30,20 @@ nvimTree.setup({
           width = math.floor(vim.o.columns / 3),
           height = vim.o.lines - 10,
           row = 5,
-          col = math.floor(vim.o.columns / 10),
+          col = math.floor(vim.o.columns / 3),
         }
       end,
     },
+    mappings = {
+      list = {
+        { key = "<C-c>", action = "close" },
+      }
+    }
   },
   renderer = {
+    -- as quick manual:
+    root_folder_label = ":~:s?$?/ [ q: close, -: up, o: open, a: create, d: remove, c: copy, p: paste, R: refresh ]?",
     highlight_git = true,
-    highlight_opened_files = "#FFFF00",
-    highlight_modified = "#FFFFFF",
     indent_markers = {
       enable = true,
       inline_arrows = true,
@@ -76,11 +84,17 @@ nvimTree.setup({
       },
     },
   },
+  update_focused_file = {
+    enable = true,
+    update_root = true,
+    ignore_list = {},
+  },
 })
 
 vim.keymap.set("n", "<leader>w", function()
-  vim.api.nvim_command(":NvimTreeOpen")
-end)
-vim.keymap.set("n", "<leader>q", function()
-  vim.api.nvim_command(":NvimTreeClose")
+  if vim.fn.expand('%') == '' then
+    vim.api.nvim_command(":NvimTreeOpen")
+  else
+    vim.api.nvim_command(":NvimTreeFindFile")
+  end
 end)
