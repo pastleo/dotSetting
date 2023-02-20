@@ -25,9 +25,9 @@ vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
 -- * `<leader>fh`: lists available nvim help tags
 --
 -- when using file pickers (`<leader>t`, `<leader>fa` and `<leader>fg`),
---   `<CR>` will bring up nvim-tree to focus on the file first (and enter again to open file with nvim-tree),
---     if not available then use open-file from nvim-tree to choose split to open
---   `<C-o>` to open file with telescope's default select behavior
+--   `<C-o>` to open file with telescope's default select/pick behavior
+--   `<CR>` use open-file from nvim-tree to choose split to open picked file
+--   `<C-w>` will bring up nvim-tree to focus on the file
 
 -- nvim-tree/nvim-tree.lua
 -- >> see ./nvim-tree-config.lua <<

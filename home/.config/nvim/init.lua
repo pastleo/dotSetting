@@ -13,6 +13,10 @@
 -- ## TODO: checkout nvim plugins & configs
 -- * bufferline tab group, or prevent `(duplicated) [No Name]`
 -- * LSP Autocompletion tab selection behavior when only 1 item
+-- * cursor not obvious enough
+-- * better JSX support
+--   * https://github.com/windwp/nvim-autopairs
+-- * `<leader>W` has some problem on mac
 
 -- neovim built-in settings
 require('settings')
@@ -61,13 +65,13 @@ packer.startup(function(use)
       ts_update()
     end,
   }
+
   use {
-    "lukas-reineke/indent-blankline.nvim",
+    'lukas-reineke/indent-blankline.nvim',
     config = function()
       require("indent_blankline").setup {
         space_char_blankline = " ",
         show_current_context = true,
-        show_current_context_start = true,
       }
     end
   }
@@ -96,9 +100,9 @@ packer.startup(function(use)
 
   use 'tpope/vim-fugitive'
   use {
-    'airblade/vim-gitgutter',
+    'lewis6991/gitsigns.nvim',
     config = function()
-      vim.g.gitgutter_map_keys = 0
+      require('gitsigns').setup()
     end
   }
 

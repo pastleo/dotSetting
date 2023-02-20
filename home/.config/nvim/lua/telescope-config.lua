@@ -9,33 +9,31 @@ local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
 local file_picker_config = (function()
-  local nvimTreeApi = safe_require('nvim-tree.api')
-  if nvimTreeApi == false then return {} end
+  local nvim_tree_api = safe_require('nvim-tree.api')
+  if nvim_tree_api == false then return {} end
+  local nvim_tree_open_file = require("nvim-tree.actions.node.open-file").fn
+
+  local get_picked_fullpath = function()
+    -- get selected path, take from:
+    --   https://github.com/nvim-telescope/telescope.nvim/blob/master/developers.md#replacing-actions
+    return vim.fn.getcwd() .. "/" .. action_state.get_selected_entry()[1]
+  end
 
   return {
     mappings = {
       i = {
-        ['<CR>'] = function(prompt_bufnr)
-          -- close telescope and get selected path, take from:
-          --   https://github.com/nvim-telescope/telescope.nvim/blob/master/developers.md#replacing-actions
+        ['<C-o>'] = actions.select_default, -- move telescope's `<CR>` select_default to `<C-o>`
+        ['<CR>'] = function(prompt_bufnr) -- open the file directly with nvim-tree open-file action
+          --  open-file from nvim-tree is able to choose what split to open
           actions.close(prompt_bufnr)
-          local picked_fullpath = vim.fn.getcwd() .. "/" .. action_state.get_selected_entry()[1]
-
-          -- try to open in nvim-tree first
-          nvimTreeApi.tree.open()
-          nvimTreeApi.tree.find_file(picked_fullpath)
-
-          local nvim_tree_find_file_ok =
-            nvimTreeApi.tree.get_node_under_cursor().absolute_path == vim.fn.expand(picked_fullpath)
-
-          if not nvim_tree_find_file_ok then -- selected file not available under nvim-tree
-            -- fallback to open the file directly with nvim-tree open-file action
-            --   because open-file from nvim-tree is able to choose what split to open
-            nvimTreeApi.tree.close()
-            require("nvim-tree.actions.node.open-file").fn(nil, picked_fullpath)
-          end
+          nvim_tree_open_file(nil, get_picked_fullpath())
         end,
-        ['<C-o>'] = actions.select_default,
+        ['<C-w>'] = function(prompt_bufnr) -- open in nvim-tree
+          actions.close(prompt_bufnr)
+
+          nvim_tree_api.tree.open()
+          nvim_tree_api.tree.find_file(get_picked_fullpath())
+        end,
       }
     }
   }

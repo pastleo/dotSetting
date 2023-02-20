@@ -4,11 +4,13 @@ vim.opt.guicursor = ""
 -- keep 8 lines above/below when jk cursors
 vim.opt.scrolloff = 8
 
--- show space and newline characters
---   with lukas-reineke/indent-blankline.nvim
+-- show trailing spaces
 vim.opt.list = true
-vim.opt.listchars:append "space:⋅"
-vim.opt.listchars:append "eol:↴"
+
+-- line numbers
+-- vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.numberwidth = 1
 
 -- indention
 vim.opt.tabstop = 2
