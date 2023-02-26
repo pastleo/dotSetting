@@ -8,9 +8,22 @@ vim.opt.scrolloff = 8
 vim.opt.list = true
 
 -- line numbers
--- vim.opt.number = true
-vim.opt.relativenumber = true
 vim.opt.numberwidth = 1
+vim.cmd[[
+  " only show (relative) line number on current window/split
+  augroup ToggleLineNumber
+    autocmd!
+    autocmd WinEnter * set relativenumber
+    autocmd WinEnter * set number
+    autocmd WinLeave * set norelativenumber
+    autocmd WinLeave * set nonumber
+  augroup END
+]]
+
+-- make CursorLineNr (current line number) highlighted
+--   https://vi.stackexchange.com/a/24914
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = 'number'
 
 -- indention
 vim.opt.tabstop = 2

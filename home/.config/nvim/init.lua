@@ -15,7 +15,6 @@
 -- ## TODO: checkout nvim plugins & configs
 -- * bufferline tab group, or prevent `(duplicated) [No Name]`
 -- * LSP Autocompletion tab selection behavior when only 1 item
--- * cursor not obvious enough
 -- * better JSX support
 --   * https://github.com/windwp/nvim-autopairs
 -- * `<leader>W` has some problem on mac

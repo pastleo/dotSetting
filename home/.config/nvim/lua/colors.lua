@@ -22,6 +22,16 @@ vim.g.everforest_colors_override = {
 }
 
 vim.cmd[[
+  function! s:everforest_custom() abort
+    let l:palette = everforest#get_palette('medium', g:everforest_colors_override)
+    call everforest#highlight('TabLine', l:palette.grey2, l:palette.bg1)
+    call everforest#highlight('TabLineSel', l:palette.bg0, l:palette.bg1)
+  endfunction
+  augroup EverforestCustom
+    autocmd!
+    autocmd ColorScheme everforest call s:everforest_custom()
+  augroup END
+
   silent! colorscheme everforest
 ]]
 
