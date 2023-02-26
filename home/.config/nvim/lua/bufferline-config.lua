@@ -7,13 +7,15 @@ bufferline.setup {
     indicator = {
       style = 'underline'
     },
-    buffer_close_icon = 'x',
-    show_close_icon = false,
-    modified_icon = '!',
-    left_trunc_marker = '',
-    right_trunc_marker = '',
-    show_buffer_icons = false,
+    always_show_bufferline = false,
     separator_style = { '', '' },
-    always_show_bufferline = false
+    show_close_icon = false,
+
+    -- when no NERD_FONT
+    -- buffer_close_icon = 'x',
+    -- modified_icon = '!',
+    -- left_trunc_marker = '',
+    -- right_trunc_marker = '',
+    -- show_buffer_icons = false,
   },
 }

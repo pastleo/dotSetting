@@ -1,9 +1,15 @@
 local treeSitterConfig = safe_require('nvim-treesitter.configs')
 if treeSitterConfig == false then return end
 
+vim.cmd[[
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+  set nofoldenable
+]]
+
 treeSitterConfig.setup {
   -- A list of parser names, or "all" (the four listed parsers should always be installed)
-  ensure_installed = { "javascript", "typescript", "lua", "vim", "help" },
+  ensure_installed = { "javascript", "typescript", "tsx", "lua", "vim", "help" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -21,5 +27,8 @@ treeSitterConfig.setup {
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true
   },
 }

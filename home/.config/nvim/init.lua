@@ -5,6 +5,8 @@
 -- ## Requirements
 -- * `rg`: faster searcher like `ag`
 --   https://github.com/BurntSushi/ripgrep
+-- * Nerd fonts on terminal emulator
+--   https://www.nerdfonts.com/
 --
 -- ## Nvim lua config dev tips
 -- * `<leader>fh` to search for docs, like `:h ...` but better
@@ -17,6 +19,7 @@
 -- * better JSX support
 --   * https://github.com/windwp/nvim-autopairs
 -- * `<leader>W` has some problem on mac
+-- * https://github.com/wfxr/minimap.vim
 
 -- neovim built-in settings
 require('settings')
@@ -66,31 +69,28 @@ packer.startup(function(use)
     end,
   }
 
-  use {
-    'lukas-reineke/indent-blankline.nvim',
-    config = function()
-      require("indent_blankline").setup {
-        space_char_blankline = " ",
-        show_current_context = true,
-      }
-    end
-  }
+  use 'lukas-reineke/indent-blankline.nvim'
 
-  use {'akinsho/bufferline.nvim', tag = 'v3.*'}
-  use 'nvim-lualine/lualine.nvim'
+  use {
+    'akinsho/bufferline.nvim',
+    tag = 'v3.*',
+    requires = { {'nvim-tree/nvim-web-devicons'} },
+  }
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { {'nvim-tree/nvim-web-devicons'} },
+  }
 
   use 'tpope/vim-commentary'
 
   use 'mattn/emmet-vim'
 
-  use 'nvim-tree/nvim-tree.lua'
-
   use {
-    'mbbill/undotree',
-    config = function()
-      vim.g.undotree_SetFocusWhenToggle = 1
-    end
+    'nvim-tree/nvim-tree.lua',
+    requires = { {'nvim-tree/nvim-web-devicons'} },
   }
+
+  use 'mbbill/undotree'
 
   use 'nvim-lua/plenary.nvim'
   use {
@@ -140,6 +140,6 @@ require('lualine-config')
 require('nvim-tree-config')
 require('telescope-config')
 require('lsp-zero-config')
-require('auto-session-config')
 
+require('plugins-config')
 require('plugins-keymaps')
