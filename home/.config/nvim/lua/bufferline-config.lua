@@ -9,7 +9,6 @@ local bufferlineOptions = {
   always_show_bufferline = false,
   separator_style = { '', '' },
   show_close_icon = false,
-  show_duplicate_prefix = false,
 }
 
 if vim.g.disable_devicons then
@@ -50,6 +49,7 @@ bufferline.setup {
     },
     buffer_selected = {
       bg = { highlight = "TabLineSel", attribute = "bg" },
+      fg = { highlight = "TabLineSel", attribute = "fg" },
     },
     numbers = {
       bg = { highlight = "TabLine", attribute = "bg" },

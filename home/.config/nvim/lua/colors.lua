@@ -23,9 +23,9 @@ vim.g.everforest_colors_override = {
 
 vim.cmd[[
   function! s:everforest_custom() abort
-    let l:palette = everforest#get_palette('medium', g:everforest_colors_override)
-    call everforest#highlight('TabLine', l:palette.grey2, l:palette.bg1)
-    call everforest#highlight('TabLineSel', l:palette.bg0, l:palette.bg1)
+    let g:everforest_palette = everforest#get_palette('medium', g:everforest_colors_override)
+    call everforest#highlight('TabLine', g:everforest_palette.grey2, g:everforest_palette.bg1)
+    call everforest#highlight('TabLineSel', g:everforest_palette.fg, g:everforest_palette.bg1)
   endfunction
   augroup EverforestCustom
     autocmd!
@@ -35,6 +35,8 @@ vim.cmd[[
   silent! colorscheme everforest
 ]]
 
--- if vim.g.colors_name =~ 'everforest' then
---   vim.notify "no termguicolors support or color scheme not installed"
--- end
+if vim.g.colors_name == 'everforest' and vim.g.everforest_palette ~= nil then
+  return vim.g.everforest_palette
+else
+  return nil -- everforest colorscheme not found
+end

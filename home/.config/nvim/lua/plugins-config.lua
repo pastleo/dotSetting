@@ -38,3 +38,13 @@ if autoSession ~= false then
     {}
   )
 end
+
+local nvimAutopairs = safe_require('nvim-autopairs')
+if nvimAutopairs ~= false then
+  nvimAutopairs.setup {}
+end
+
+local nvimTsAutotag = safe_require('nvim-ts-autotag')
+if nvimTsAutotag ~= false then
+  nvimTsAutotag.setup {}
+end

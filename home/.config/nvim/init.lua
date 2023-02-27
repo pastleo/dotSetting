@@ -86,6 +86,8 @@ packer.startup(function(use)
   use 'tpope/vim-commentary'
 
   use 'mattn/emmet-vim'
+  use 'windwp/nvim-autopairs'
+  use 'windwp/nvim-ts-autotag'
 
   use {
     'nvim-tree/nvim-tree.lua',
@@ -130,6 +132,8 @@ packer.startup(function(use)
       {'rafamadriz/friendly-snippets'}, -- Optional
     }
   }
+
+  use 'arkav/lualine-lsp-progress'
 
   use 'rmagatti/auto-session'
 end)
