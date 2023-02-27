@@ -12,12 +12,12 @@ local filenameComp = {
 
 lualine.setup({
   options = {
-    icons_enabled = true,
+    icons_enabled = not vim.g.disable_devicons,
     theme = 'everforest',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
   },
-  -- sections = {
+  sections = {
   --   lualine_b = {
   --     'branch', 'diff',
   --     {
@@ -25,9 +25,9 @@ lualine.setup({
   --       symbols = { error = 'E', warn = 'W', info = 'I', hint = 'H' },
   --     }
   --   },
-  --   lualine_c = {
-  --     filenameComp
-  --   },
+    lualine_c = {
+      filenameComp
+    },
   --   lualine_x = {
   --     'encoding',
   --     { 'fileformat', symbols = { unix = '', dos = 'dos', mac = '' } },
@@ -43,5 +43,5 @@ lualine.setup({
   --   lualine_x = {'location'},
   --   lualine_y = {},
   --   lualine_z = {},
-  -- },
+  },
 })

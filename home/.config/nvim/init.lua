@@ -2,18 +2,21 @@
 -- =========================
 -- taking ideas from https://github.com/ThePrimeagen/init.lua, thanks
 
--- ## Requirements
--- * `rg`: faster searcher like `ag`
+-- ## Dependencies
+-- * `rg`: faster searcher like `ag`, for telescope content searching
 --   https://github.com/BurntSushi/ripgrep
--- * Nerd fonts on terminal emulator
+--   * yay -S ripgrep
+--   * brew install ripgrep
+-- * Nerd fonts on terminal emulator, and set NERD_FONT env to enable
 --   https://www.nerdfonts.com/
+--   * yay -S ttf-sourcecodepro-nerd
+--   * brew tap homebrew/cask-fonts && brew install --cask font-sauce-code-pro-nerd-font
 --
 -- ## Nvim lua config dev tips
 -- * `<leader>fh` to search for docs, like `:h ...` but better
 -- * `print(vim.inspect(some_value))` to debug lua values
 
 -- ## TODO: checkout nvim plugins & configs
--- * bufferline tab group, or prevent `(duplicated) [No Name]`
 -- * LSP Autocompletion tab selection behavior when only 1 item
 -- * better JSX support
 --   * https://github.com/windwp/nvim-autopairs
@@ -131,6 +134,7 @@ packer.startup(function(use)
   use 'rmagatti/auto-session'
 end)
 
+vim.g.disable_devicons = vim.env.NERD_FONT == nil
 require('colors')
 
 require('treesitter-config')

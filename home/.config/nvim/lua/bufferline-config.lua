@@ -1,24 +1,25 @@
 local bufferline = safe_require('bufferline')
 if bufferline == false then return end
 
-bufferline.setup {
-  options = {
-    mode = "tabs",
-    indicator = {
-      style = 'underline'
-    },
-    always_show_bufferline = false,
-    separator_style = { '', '' },
-    show_close_icon = false,
-
-    -- when no NERD_FONT
-    -- buffer_close_icon = 'x',
-    -- modified_icon = '!',
-    -- left_trunc_marker = '',
-    -- right_trunc_marker = '',
-    -- show_buffer_icons = false,
-
+local bufferlineOptions = {
+  mode = "tabs",
+  indicator = {
+    style = 'underline'
   },
+  always_show_bufferline = false,
+  separator_style = { '', '' },
+  show_close_icon = false,
+  show_duplicate_prefix = false,
+}
+
+if vim.g.disable_devicons then
+  bufferlineOptions.buffer_close_icon = 'x'
+  bufferlineOptions.modified_icon = '!'
+  bufferlineOptions.show_buffer_icons = false
+end
+
+bufferline.setup {
+  options = bufferlineOptions,
   highlights = {
     fill = {
       bg = { highlight = "TabLine", attribute = "bg" },

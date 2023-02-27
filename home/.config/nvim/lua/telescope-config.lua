@@ -20,6 +20,7 @@ local file_picker_config = (function()
   end
 
   return {
+    disable_devicons = vim.g.disable_devicons,
     mappings = {
       i = {
         ['<C-o>'] = actions.select_default, -- move telescope's `<CR>` select_default to `<C-o>`
@@ -51,6 +52,7 @@ telescope.setup({
   pickers = {
     git_files = file_picker_config,
     find_files = file_picker_config,
+    live_grep = { disable_devicons = vim.g.disable_devicons },
   }
 })
 

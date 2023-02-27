@@ -5,7 +5,7 @@ vim.g.loaded_netrwPlugin = 1
 local nvim_tree = safe_require('nvim-tree')
 if nvim_tree == false then return end
 
-nvim_tree.setup({
+local nvim_tree_config = {
   hijack_netrw = true,
   hijack_directories = {
     enable = true,
@@ -62,26 +62,12 @@ nvim_tree.setup({
       padding = " ",
       symlink_arrow = " -> ",
       show = {
-        file = true,
+        file = not vim.g.disable_devicons,
         folder = true,
         folder_arrow = false,
         git = false,
         modified = true,
       },
-      -- glyphs = {
-      --   default = "",
-      --   symlink = "",
-      --   bookmark = "",
-      --   modified = "!",
-      --   folder = {
-      --     default = "-",
-      --     open = "+",
-      --     empty = "-",
-      --     empty_open = "+",
-      --     symlink = "=",
-      --     symlink_open = "*",
-      --   },
-      -- },
     },
   },
   update_focused_file = {
@@ -89,7 +75,26 @@ nvim_tree.setup({
     update_root = true,
     ignore_list = {},
   },
-})
+}
+
+if vim.g.disable_devicons then
+  nvim_tree_config.renderer.icons.glyphs = {
+    default = "",
+    symlink = "",
+    bookmark = "",
+    modified = "!",
+    folder = {
+      default = "-",
+      open = "+",
+      empty = "-",
+      empty_open = "+",
+      symlink = "=",
+      symlink_open = "*",
+    },
+  }
+end
+
+nvim_tree.setup(nvim_tree_config)
 
 vim.keymap.set("n", "<leader>w", function()
   if vim.fn.expand('%') == '' then
