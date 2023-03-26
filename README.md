@@ -1,15 +1,20 @@
 dotSetting
 ==========
 
-After few years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...  
+After few years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...
 [Homeshick](https://github.com/andsens/homeshick) is used to manage my dotSetting
 
 ## Software
 
-* `bash`
-  * `zsh` for advance shell
+* `zsh`
+  * `bash` as fallback
+  * on macos, just use built-in one
+  * for `.shrc.local`, see `.shrc` / `.shrc.once`
 * `git`
-* `vim`
+  * for `.gitconfig.local`, see `.gitconfig`
+* `nvim`
+  * see `.config/nvim/init.lua` for IDE-like features requirements
+  * `vim` as fallback, TODO: clean up .vimrc
 
 > on mac, it is recommanded to install and use `git`, `vim`, `zsh` from [`brew`](https://brew.sh/)
 
