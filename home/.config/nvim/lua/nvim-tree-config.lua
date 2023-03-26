@@ -27,10 +27,10 @@ local nvim_tree_config = {
         return {
           relative = "editor",
           border = "rounded",
-          width = math.floor(vim.o.columns / 3),
+          width = math.floor(vim.o.columns / 2),
           height = vim.o.lines - 10,
           row = 5,
-          col = math.floor(vim.o.columns / 3),
+          col = math.floor(vim.o.columns / 4),
         }
       end,
     },
@@ -97,9 +97,5 @@ end
 nvim_tree.setup(nvim_tree_config)
 
 vim.keymap.set("n", "<leader>w", function()
-  if vim.fn.expand('%') == '' then
-    vim.api.nvim_command(":NvimTreeOpen")
-  else
-    vim.api.nvim_command(":NvimTreeFindFile")
-  end
+  vim.api.nvim_command(":NvimTreeOpen")
 end)

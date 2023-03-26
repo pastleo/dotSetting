@@ -56,3 +56,6 @@ vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
 -- * `<C-n>`: select and insert next item
 -- * `<C-p>`: select and insert previous item
 -- * `<C-b>`: abort auto-completion, as if nothing happens
+
+-- stevearc/aerial.nvim
+vim.keymap.set('n', '<leader>a', '<cmd>AerialOpen<CR>')

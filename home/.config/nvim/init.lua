@@ -16,12 +16,8 @@
 -- * `<leader>fh` to search for docs, like `:h ...` but better
 -- * `print(vim.inspect(some_value))` to debug lua values
 
--- ## TODO: checkout nvim plugins & configs
--- * LSP Autocompletion tab selection behavior when only 1 item
--- * better JSX support
---   * https://github.com/windwp/nvim-autopairs
--- * `<leader>W` has some problem on mac
--- * https://github.com/wfxr/minimap.vim
+-- ## TODOs:
+-- * https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero
 
 -- neovim built-in settings
 require('settings')
@@ -134,6 +130,7 @@ packer.startup(function(use)
   }
 
   use 'arkav/lualine-lsp-progress'
+  use 'stevearc/aerial.nvim'
 
   use 'rmagatti/auto-session'
 end)

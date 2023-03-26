@@ -39,12 +39,30 @@ if autoSession ~= false then
   )
 end
 
+-- windwp/nvim-autopairs
 local nvimAutopairs = safe_require('nvim-autopairs')
 if nvimAutopairs ~= false then
   nvimAutopairs.setup {}
 end
 
+-- windwp/nvim-ts-autotag
 local nvimTsAutotag = safe_require('nvim-ts-autotag')
 if nvimTsAutotag ~= false then
   nvimTsAutotag.setup {}
+end
+
+-- stevearc/aerial.nvim
+local aerial = safe_require('aerial')
+if aerial ~= false then
+  aerial.setup {
+    layout = {
+      default_direction = "right",
+      placement = "edge",
+    },
+    attach_mode = "global",
+    keymaps = {
+      ["k"] = "actions.prev",
+      ["j"] = "actions.next",
+    }
+  }
 end

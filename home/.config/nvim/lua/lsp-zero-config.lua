@@ -12,6 +12,7 @@ if lsp == false or cmp == false then return end
 lsp.preset({
   name = 'recommended',
   set_lsp_keymaps = false, -- disable first because I don't want most of them
+  manage_nvim_cmp = true,
   sign_icons = {
     error = 'E', warn = 'W', hint = 'H', info = 'I'
   }
@@ -67,34 +68,5 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<leader>cR', vim.lsp.buf.rename, opts)
   vim.keymap.set('n', '<leader>cA', vim.lsp.buf.code_action, opts)
 end)
-
-local cmpSelectInsert = { behavior = cmp.SelectBehavior.Insert }
-lsp.setup_nvim_cmp({
-  mapping = {
-    -- modified from https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#intellij-like-mapping
-		['<Tab>'] = cmp.mapping(function(fallback)
-      -- lsp.setup_nvim_cmp's preselect opt doesn't work, this is a workaround that:
-      -- * first <tab> to select and insert pre-selected (first) item
-      -- * press <tab> again to select and insert next item
-			if cmp.visible() then
-				local entry = cmp.get_active_entry() -- nil if is pre-selected
-				if not entry then
-					cmp.select_next_item({
-            count = 0, -- keep at pre-selected item
-            behavior = cmp.SelectBehavior.Insert
-          })
-				else
-					cmp.select_next_item(cmpSelectInsert)
-				end
-			else
-				fallback()
-			end
-		end, { 'i' }),
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(cmpSelectInsert),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmpSelectInsert),
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmpSelectInsert),
-    ['<C-b>'] = cmp.mapping.abort(),
-  }
-})
 
 lsp.setup()

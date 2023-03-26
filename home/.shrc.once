@@ -129,8 +129,10 @@ fi
 # if [ -z "$SHRC_LOCAL_SOURCED" ]; then
 #   export SHRC_LOCAL_SOURCED=true
 #
-#   eval $(ssh-agent)
-#   ssh-add
+#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this if for macos
+#     eval $(ssh-agent)
+#     ssh-add
+#   fi
 # fi
 # ```
 #
@@ -142,8 +144,10 @@ fi
 # if [ -z "$SHRC_LOCAL_SOURCED" ]; then
 #   export SHRC_LOCAL_SOURCED=true
 #
-#   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-#   gpgconf --launch gpg-agent
+#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this if for macos
+#     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+#     gpgconf --launch gpg-agent
+#   fi
 # fi
 # ```
 
