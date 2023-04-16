@@ -178,60 +178,6 @@ function! ShowCurrentFilePaths()
   call input("Showing current file (buffer) paths, press enter to continue:\n" . expand('%:p') . "\n" . @% . "\n")
 endfunction
 
-fun! PresentationMode()
-  call PresentationTheme()
-  :RainbowToggleOff
-endfun
-fun! PresentationTheme()
-  colorscheme default
-  set background=light
-  hi IndentGuidesEven guibg=NONE ctermbg=NONE
-endfun
-command! PresentationMode call PresentationMode()
-
-" https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
-function! s:getSelectedText()
-  let l:old_reg = getreg('"')
-  let l:old_regtype = getregtype('"')
-  norm gvy
-  let l:ret = getreg('"')
-  call setreg('"', l:old_reg, l:old_regtype)
-  exe "norm \<Esc>"
-  return l:ret
-endfunction
-
-fun! EnterTasks()
-  if s:plug_not_ready
-    echom " [ plug(s) not ready ] :PlugS to sync"
-  endif
-
-  if exists(":NERDTree") &&
-    \ (
-      \ argc() == 0 && !exists("s:std_in") &&
-      \ !filereadable(expand(g:session_directory . '/' . g:session_default_name . g:session_extension))
-    \ )
-    NERDTree
-  endif
-endfun
-
-if !exists(":PlugS")
-  fun! PlugS()
-    if s:plug_not_ready == 1
-      if executable('curl')
-        !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-      else
-        echo 'curl not found in this system'
-      endif
-      :source ~/.vimrc
-    endif
-    if s:plug_not_ready != 1
-      PlugInstall --sync
-      :source ~/.vimrc
-    endif
-  endfun
-  command! PlugS call PlugS()
-endif
-
 " Processors
 
 fun! Linend_DosToUnix()
@@ -284,19 +230,17 @@ let g:mapleader='t'
 " New tab and split
 nnoremap <leader>n :tabnew<CR>
 nnoremap <leader>N :tab split<CR>
-nnoremap <leader>i :new<CR>
-nnoremap <leader>I :split<CR>
-nnoremap <leader>s :vnew<CR>
-nnoremap <leader>S :vsplit<CR>
+nnoremap <leader>i :split<CR>
+nnoremap <leader>I :new<CR>
+nnoremap <leader>s :vsplit<CR>
+nnoremap <leader>S :vnew<CR>
 
 " split vertically and diff with a file
-nnoremap <leader>d :vert diffsplit<SPACE>
+nnoremap <leader>D :vert diffsplit<SPACE>
 
 " Navigation before tabs
 nnoremap <leader>h :tabprevious<CR>
 nnoremap <leader>l :tabnext<CR>
-
-" Navigation between splits
 nnoremap <leader>j <C-W>w
 nnoremap <leader>k <C-W>W
 
@@ -310,23 +254,15 @@ nnoremap <S-H> :vertical resize -2<CR>
 nnoremap <leader>L :tabmove +<CR>
 nnoremap <leader>H :tabmove -<CR>
 
-" Show current file (buffer) full path
-nnoremap <leader>W :call ShowCurrentFilePaths()<CR>
+" allow multiple indentation/deindentation in visual mode
+vnoremap < <gv
+vnoremap > >gv
 
 " Block Visual
 nnoremap <leader>v <C-v>
 
-" for current visual/selected text, search without moving
-" https://vim.fandom.com/wiki/Search_for_visually_selected_text#Readable_equivalent
-" https://vim.fandom.com/wiki/Highlight_all_search_pattern_matches#Highlight_matches_without_moving
-vnoremap <silent> / :call setreg("/",
-    \ substitute(<SID>getSelectedText(),
-    \ '\_s\+',
-    \ '\\_s\\+', 'g')
-    \ )<CR>:set hlsearch<CR>
-
-" Replace
-nnoremap <leader>r :%s/
+" <leader>p toggles paste mode
+nnoremap <leader>p :set paste!<BAR>set paste?<CR>
 
 " Search and replace for selected text
 vnoremap <leader>r :<C-U>
@@ -336,258 +272,22 @@ vnoremap <leader>r :<C-U>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
   \:%s//
 
-" <leader>p toggles paste mode
-nnoremap <leader>p :set paste!<BAR>set paste?<CR>
-
-" allow multiple indentation/deindentation in visual mode
-vnoremap < <gv
-vnoremap > >gv
-
-" fussy search and Open (edit) file
-nnoremap <leader>o :e **/*
-
-" Toggle line numbers
-nnoremap <leader>U :set nu!<CR>
-nnoremap <leader>R :set rnu!<CR>
+" Show current file (buffer) full path
+nnoremap <leader>W :call ShowCurrentFilePaths()<CR>
 
 "---------------------------------------------------------------------------
 " Autocmds
 "---------------------------------------------------------------------------
 " open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * call EnterTasks()
-
-" file types
-autocmd BufNewFile,BufRead,BufWritePost *.jbuilder set filetype=ruby
-autocmd BufNewFile,BufRead,BufWritePost *.mdx set filetype=markdown
-
-"---------------------------------------------------------------------------
-" Plugins : vim-plug
-"---------------------------------------------------------------------------
-
-if !filereadable(glob("~/.vim/autoload/plug.vim"))
-  let s:plug_not_ready=1
-  finish
-endif
-
-call plug#begin('~/.vim/plugged')
-
-" Common packages
-Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
-Plug 'tpope/vim-sleuth'
-Plug 'nathanaelkane/vim-indent-guides'
-Plug 'luochen1990/rainbow'
-Plug 'pbrisbin/vim-mkdir'
-
-if !empty($VIM_ENABLE_COC)
-  " https://github.com/neoclide/coc.nvim
-  " add this line to ~/.shrc.local and restart session to enable COC:
-  "   export VIM_ENABLE_COC=true
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " To verify installation, run: :CocInfo
-  " To install language bridge/server, see g:coc_global_extensions below
-
-  Plug 'OmniSharp/omnisharp-vim'
-endif
-
-" install fzf on system to enable fzf.vim
-if executable('fzf')
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
-  Plug 'junegunn/fzf.vim'
-endif
-
-" Theme
-Plug 'jnurmine/Zenburn'
-Plug 'vim-airline/vim-airline-themes'
-
-" Load only when being called
-Plug 'mattn/emmet-vim', {'on': 'Emmet'}
-
-" Languages
-Plug 'MaxMEllon/vim-jsx-pretty', {'for': ['js', 'jsx', 'tsx']}
-Plug 'jparise/vim-graphql', {'for': ['graphql', 'graphqls', 'gql', 'js', 'jsx', 'ts', 'tsx']}
-Plug 'posva/vim-vue', {'for': 'vue'}
-Plug 'elixir-lang/vim-elixir', {'for': 'ex'}
-Plug 'tomlion/vim-solidity', {'for': 'sol'}
-Plug 'pprovost/vim-ps1', {'for': 'ps1'}
-Plug 'cespare/vim-toml', {'for': 'toml'}
-
-" Add plugins to &runtimepath
-call plug#end()
-
-if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  let s:plug_not_ready=2
-  finish
-else
-  let s:plug_not_ready=0
-endif
-
-"---------------------------------------------------------------------------
-" Plugin settings
-"---------------------------------------------------------------------------
-
-" NERDTree
-let g:NERDTreeDirArrowExpandable = '>'
-let g:NERDTreeDirArrowCollapsible = '+'
-
-" Air-line
-set laststatus=2 " Always show status line
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_section_b = ''
-let g:airline_theme='bubblegum'
-
-" vim-gitgutter
-let g:gitgutter_map_keys = 0
-
-" vim-session
-let g:session_directory = expand('~/.vim/sessions')
-let g:session_default_name = substitute(substitute(getcwd(), '^/', '', ''), '\([^/]\)[^/]*/', '\1-', 'g')
-let g:session_autosave = 'no'
-let g:session_lock_enabled = 0
-
-" vim-indent-guides
-let g:indent_guides_enable_on_vim_startup = 1
-
-" Rainbow Parentheses Improved
-if !exists('$COLOR_PRESENTATION')
-  let g:rainbow_active = 1
-endif
-
-let g:rainbow_conf = {
-\  'separately': {
-\    'html': {
-\      'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-\    },
-\    'css': 0,
-\  }
-\}
-
-" coc.vim
-let g:coc_global_extensions = ['coc-tsserver']
-let g:coc_disable_transparent_cursor = 1
-
-"---------------------------------------------------------------------------
-" Functions and commands with plugins
-"---------------------------------------------------------------------------
-
-" Actions
-
-fun! SaveSessionAndQuit()
-  if exists(":SaveSession")
-    SaveSession
-  endif
-  :qa
-endfun
-:command! Q :call SaveSessionAndQuit()
-
-" fzf
-" enter :E => :Files, then input path prefix
-" hit enter to start fzf's main feature: file name fuzzy searcher
-cnoreabbrev E Files
-
-"---------------------------------------------------------------------------
-" Autocmds with plugins
-"---------------------------------------------------------------------------
-" leave vim if :q on last buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-autocmd VimEnter * nunmap <leader>ig
-
-" coc.vim
-if !empty($VIM_ENABLE_COC)
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-endif
-
-"---------------------------------------------------------------------------
-" Key mappings with Plugins
-"---------------------------------------------------------------------------
-
-" gitgutter
-nnoremap <leader>G :GitGutterToggle<CR>
-nmap <leader>gh <Plug>(GitGutterStageHunk)
-
-" vim-fugitive
-nnoremap <silent> <leader>gb :Git blame<CR>
-nnoremap <silent> <leader>gs :Gdiffsplit<CR>
-
-" NERDTree
-nnoremap <leader>t :NERDTreeFocus<CR>
-nnoremap <leader>w :NERDTreeFind<CR>
-nnoremap <leader>q :NERDTreeClose<CR>
-
-" Commentary
-xmap <leader>/  <Plug>Commentary
-nmap <leader>/ <Plug>CommentaryLine
-omap <leader>/  <Plug>Commentary
-
-" Emmet
-nnoremap <leader>e :Emmet<space>
-
-" coc.vim
-if !empty($VIM_ENABLE_COC)
-  " Use tab for trigger completion with characters ahead and navigate.
-  " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-  " other plugin before putting this into your config.
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " coc.vim actions
-  nmap <silent> <leader>cd <Plug>(coc-definition)
-  nmap <silent> <leader>cr <Plug>(coc-references)
-  nmap <silent> <leader>ci <Plug>(coc-implementation)
-  nmap <silent> <leader>cD <Plug>(coc-type-definition)
-  nmap <silent> <leader>cR <Plug>(coc-rename)
-
-  nnoremap <silent> <leader>cc :call ShowDocumentation()<CR>
-
-  xmap <leader>ca  <Plug>(coc-codeaction-selected)
-  nmap <leader>ca  <Plug>(coc-codeaction-selected)
-
-  function! ShowDocumentation()
-    if CocAction('hasProvider', 'hover')
-      call CocActionAsync('doHover')
-    else
-      call feedkeys('K', 'in')
-    endif
-  endfunction
-endif
-
-" fzf.vim
-nnoremap <silent> <leader>ff :Files<CR>
-nnoremap <silent> <leader>fl :Lines<CR>
-nnoremap <silent> <leader>fg :GFiles<CR>
-" ag (The Silver Searcher) needs to be installed manually
-" https://github.com/ggreer/the_silver_searcher
-nnoremap <silent> <leader>fa :Ag<CR>
 
 "---------------------------------------------------------------------------
 " Theme
 "---------------------------------------------------------------------------
 if s:bad_term == 0
-  if exists('$COLOR_PRESENTATION')
-    call PresentationTheme()
-  else
-    set background=dark
-    colorscheme zenburn
-    hi IndentGuidesEven guibg=#36382f ctermbg=235
-  endif
+  set background=dark
+  colorscheme zenburn
+  hi IndentGuidesEven guibg=#36382f ctermbg=235
 
   " Overwrite some settings
   hi Normal ctermfg=NONE ctermbg=NONE guifg=#75f1ab guibg=#272822

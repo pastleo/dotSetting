@@ -12,7 +12,7 @@ vim.keymap.set("n", "<leader>s", ":vsplit<CR>")
 vim.keymap.set("n", "<leader>S", ":vnew<CR>")
 
 -- split vertically and diff with a file
-vim.keymap.set("n", "<leader>d", ":vert diffsplit<SPACE>")
+vim.keymap.set("n", "<leader>D", ":vert diffsplit<SPACE>")
 
 -- Tabs & split navigations
 vim.keymap.set("n", "<leader>h", ':tabprevious<CR>')
