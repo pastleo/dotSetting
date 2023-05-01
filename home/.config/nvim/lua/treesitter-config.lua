@@ -9,7 +9,7 @@ vim.cmd[[
 
 treeSitterConfig.setup {
   -- A list of parser names, or "all" (the four listed parsers should always be installed)
-  ensure_installed = { "javascript", "typescript", "tsx", "lua", "vim", "help" },
+  ensure_installed = { "javascript", "typescript", "tsx", "lua", "vim" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,

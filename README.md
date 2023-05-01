@@ -14,7 +14,7 @@ After few years of usage in commandline, I got a lot of setting like `.bashrc`, 
   * for `.gitconfig.local`, see `.gitconfig`
 * `nvim`
   * see `.config/nvim/init.lua` for IDE-like features requirements
-  * `vim` as fallback, TODO: clean up .vimrc
+  * `vim` as fallback
 
 > on mac, it is recommanded to install and use `git`, `vim`, `zsh` from [`brew`](https://brew.sh/)
 

@@ -1,61 +1,69 @@
 -- tpope/vim-commentary
-vim.keymap.set("x", "<leader>/", "<Plug>Commentary")
-vim.keymap.set("n", "<leader>/", "<Plug>CommentaryLine")
-vim.keymap.set("o", "<leader>/", "<Plug>Commentary")
+vim.keymap.set('x', '<leader>/', ':CommentToggle<CR>')
+vim.keymap.set('n', '<leader>/', ':CommentToggle<CR>')
+vim.keymap.set('o', '<leader>/', ':CommentToggle<CR>')
 
 -- mattn/emmet-vim
-vim.keymap.set("n", "<leader>e", ":Emmet<space>")
+vim.keymap.set('n', '<leader>e', ':Emmet<space>')
 
 -- mbbill/undotree
-vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>")
+vim.keymap.set('n', '<leader>u', function() vim.cmd('UndotreeToggle') end)
 
 -- tpope/vim-fugitive
-vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
-vim.keymap.set("n", "<leader>gs", ":Gdiffsplit<CR>")
+vim.keymap.set('n', '<leader>gb', function() vim.cmd('Git blame<CR>') end)
+vim.keymap.set('n', '<leader>gs', function() vim.cmd('Gdiffsplit<CR>') end)
 
 -- nvim-telescope/telescope.nvim
--- >> see ./telescope-config.lua <<
---
--- * `<leader>t`:
---   * if under a git repo, fuzzy search through the output of git ls-files command, respects .gitignore
---   * otherwise lists files in current working directory, respects .gitignore
--- * `<leader>ff`: lists telescope built-in pickers to run
--- * `<leader>fa`: lists all files in current working directory, including hidden, gitignore files
--- * `<leader>fg`: search for a string in file content under current working directory and get results live as you type, respects .gitignore. (requires ripgrep)
--- * `<leader>fh`: lists available nvim help tags
---
--- when using file pickers (`<leader>t`, `<leader>fa` and `<leader>fg`),
---   `<C-o>` to open file with telescope's default select/pick behavior
---   `<CR>` use open-file from nvim-tree to choose split to open picked file
---   `<C-w>` will bring up nvim-tree to focus on the file
+local telescopeBuiltin = safe_require('telescope.builtin')
+if telescopeBuiltin ~= false then
+  vim.keymap.set('n', '<leader>t', function()
+    if table.getn(vim.fs.find(".git", { type = "directory", upward = true })) > 0 then
+      telescopeBuiltin.git_files()
+    else
+      telescopeBuiltin.find_files({ hidden = true, follow = true })
+    end
+  end, {})
+
+  vim.keymap.set('n', '<leader>ff', telescopeBuiltin.builtin, {})
+  vim.keymap.set('n', '<leader>fa', function()
+    telescopeBuiltin.find_files({
+      hidden = true, no_ignore = true, no_ignore_parent = true, follow = true
+    })
+  end, {})
+  vim.keymap.set('n', '<leader>fg', telescopeBuiltin.live_grep, {})
+
+  vim.keymap.set('n', '<leader>fh', telescopeBuiltin.help_tags, {})
+
+  -- lsp related
+  vim.keymap.set('n', 'gd', function()
+    vim.cmd[[set nopaste]]
+    telescopeBuiltin.lsp_definitions()
+  end, {})
+  vim.keymap.set('n', 'go', function()
+    vim.cmd[[set nopaste]]
+    telescopeBuiltin.lsp_type_definitions()
+  end, {})
+  vim.keymap.set('n', '<leader>cr', function()
+    vim.cmd[[set nopaste]]
+    telescopeBuiltin.lsp_references()
+  end, {})
+  vim.keymap.set('n', '<leader>ci', function()
+    vim.cmd[[set nopaste]]
+    telescopeBuiltin.lsp_implementations()
+  end, {})
+  vim.keymap.set('n', '<leader>cd', function()
+    vim.cmd[[set nopaste]]
+    telescopeBuiltin.diagnostics({ bufnr = 0 })
+  end, {})
+else
+  -- fallback
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+  vim.keymap.set('n', 'go', vim.lsp.buf.type_definition)
+end
+-- NOTE: some lsp keymaps are in ./keymaps.lua
 
 -- nvim-tree/nvim-tree.lua
--- >> see ./nvim-tree-config.lua <<
---
--- * `<leader>w`: open nvim-tree and focus on current file is available, o.w. open nvim-tree
--- * within nvim-tree,
---   * added `<C-c>` in addition to `q` to close nvim-tree, align with telescope
-
--- VonHeikemen/lsp-zero.nvim
--- >> see ./lsp-zero-config.lua <<
---
--- if lsp available, keymaps:
--- * `<space>`: displays hover information
--- * `<leader><space>`: displays diagnostics information (errors/warnings/hints...)
--- * `gd`: jump to definition, or list using telescope, same as lsp-zero & vim default keymap
--- * `gD`: jump to declaration, same as lsp-zero & vim default keymap
--- * `go`: jump to definition of type, or list using telescope, same as lsp-zero default keymap
--- * `<leader>cr`: lists references using telescope
--- * `<leader>ci`: lists implementations using telescope
--- * `<leader>cd`: lists diagnostics (errors/warnings/hints...) of current buffer using telescope
--- * `<leader>cR`: rename
--- * `<leader>cA`: code actions
--- auto-completion keymaps:
--- * `<Tab>`: select and insert first or next item
--- * `<S-Tab>`: select and insert previous item
--- * `<C-n>`: select and insert next item
--- * `<C-p>`: select and insert previous item
--- * `<C-b>`: abort auto-completion, as if nothing happens
+vim.keymap.set('n', '<leader>w', function() vim.cmd('NvimTreeOpen') end)
 
 -- stevearc/aerial.nvim
-vim.keymap.set('n', '<leader>a', '<cmd>AerialOpen<CR>')
+vim.keymap.set('n', '<leader>a', function() vim.cmd('AerialOpen') end)
