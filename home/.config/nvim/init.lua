@@ -59,8 +59,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-vim.g.disable_devicons = vim.env.NERD_FONT == nil
-
 require('lazy').setup({
   -- colorscheme & permanent view plugins
   {
@@ -189,7 +187,7 @@ require('lazy').setup({
 
   -- lsp plugins
   {
-    "williamboman/mason.nvim",
+    'williamboman/mason.nvim',
     cond = not vim.g.vscode,
     build = function()
       pcall(vim.cmd, 'MasonUpdate')
@@ -224,6 +222,14 @@ require('lazy').setup({
     cmd = {
       'Git', 'Gdiffsplit',
     },
+  },
+  {
+    'rmagatti/auto-session',
+    cond = not vim.g.vscode,
+    lazy = false,
+    config = function()
+      require('auto-session-config')
+    end
   },
 })
 

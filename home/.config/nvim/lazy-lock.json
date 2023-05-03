@@ -1,5 +1,6 @@
 {
   "aerial.nvim": { "branch": "master", "commit": "07039ea63b562caf9017a223d14eebfa1fc085c1" },
+  "auto-session": { "branch": "main", "commit": "9752e6b11327329ed3ba5ec2bec36abe4535a8e0" },
   "bufferline.nvim": { "branch": "main", "commit": "a4bd44523316928a7c4a5c09a3407d02c30b6027" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "0e6b2ed705ddcff9738ec4ea838141654f12eeef" },

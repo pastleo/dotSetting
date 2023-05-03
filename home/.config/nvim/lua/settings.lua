@@ -1,3 +1,10 @@
+-- detect if has NERD_FONT
+vim.g.disable_devicons = vim.env.NERD_FONT == nil
+
+-- disable netrw in favor of nvim-tree/nvim-tree.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- always block cursor
 vim.opt.guicursor = ""
 

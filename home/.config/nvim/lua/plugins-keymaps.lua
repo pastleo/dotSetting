@@ -10,8 +10,7 @@ vim.keymap.set('n', '<leader>e', ':Emmet<space>')
 vim.keymap.set('n', '<leader>u', function() vim.cmd('UndotreeToggle') end)
 
 -- tpope/vim-fugitive
-vim.keymap.set('n', '<leader>gb', function() vim.cmd('Git blame<CR>') end)
-vim.keymap.set('n', '<leader>gs', function() vim.cmd('Gdiffsplit<CR>') end)
+vim.keymap.set('n', '<leader>gb', function() vim.cmd('Git blame') end)
 
 -- nvim-telescope/telescope.nvim
 local telescopeBuiltin = safe_require('telescope.builtin')
@@ -55,6 +54,23 @@ if telescopeBuiltin ~= false then
     vim.cmd[[set nopaste]]
     telescopeBuiltin.diagnostics({ bufnr = 0 })
   end, {})
+
+  local autoSessionLens = safe_require('auto-session.session-lens')
+  if autoSessionLens ~= false then
+    local autoSession = safe_require('auto-session')
+
+    vim.keymap.set('n', '<leader>`', autoSessionLens.search_session, {
+      noremap = true,
+    })
+    vim.keymap.set('n', '<leader>~', function()
+      local sessions_dir = (
+        vim.fn.getcwd() .. '/' ..
+        vim.fn.input('saving session for current cwd, name: ', vim.fn.strftime('%y-%m-%d_%H-%M-%S'))
+      )
+      autoSession.AutoSaveSession(sessions_dir)
+      print('session saved: ' .. sessions_dir)
+    end)
+  end
 else
   -- fallback
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition)

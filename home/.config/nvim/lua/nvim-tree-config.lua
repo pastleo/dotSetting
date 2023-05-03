@@ -1,7 +1,3 @@
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 local nvim_tree = safe_require('nvim-tree')
 if nvim_tree == false then return end
 
