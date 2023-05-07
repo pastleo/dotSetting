@@ -34,6 +34,12 @@ if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
   source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fi
 
+# GitHub Copilot CLI
+# npm install -g @githubnext/github-copilot-cli
+if hash github-copilot-cli 2> /dev/null; then
+  eval "$(github-copilot-cli alias -- "$0")"
+fi
+
 # -----------------------------
 # Host's specific rc
 # -----------------------------
