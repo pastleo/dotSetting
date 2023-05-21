@@ -118,6 +118,14 @@ require('lazy').setup({
       require('lualine-config')
     end,
   },
+  {
+    'beauwilliams/focus.nvim',
+    cond = not vim.g.vscode,
+    lazy = false,
+    config = function()
+      require("focus").setup({})
+    end,
+  },
 
   -- coding helper plugins
   {
