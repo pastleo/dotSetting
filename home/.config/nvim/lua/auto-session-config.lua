@@ -2,7 +2,7 @@ local autoSession = safe_require('auto-session')
 
 if autoSession == false then return end
 
-vim.o.sessionoptions='blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+vim.o.sessionoptions='blank,buffers,curdir,folds,help,tabpages'
 
 autoSession.setup({
   log_level = 'info',
