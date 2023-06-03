@@ -1,3 +1,5 @@
+if vim.g.vscode then return end
+
 local cmp = safe_require('cmp')
 
 if cmp == false then return end

@@ -63,6 +63,7 @@ require('lazy').setup({
   -- colorscheme & permanent view plugins
   {
     'sainnhe/everforest',
+    cond = not vim.g.vscode,
     lazy = false,
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
@@ -71,6 +72,7 @@ require('lazy').setup({
   },
   {
     'nvim-treesitter/nvim-treesitter',
+    cond = not vim.g.vscode,
     lazy = false,
     build = function()
       vim.cmd('TSUpdate')
@@ -81,6 +83,7 @@ require('lazy').setup({
   },
   {
     'lukas-reineke/indent-blankline.nvim',
+    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('indent_blankline').setup({
@@ -91,6 +94,7 @@ require('lazy').setup({
   },
   {
     'lewis6991/gitsigns.nvim',
+    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('gitsigns').setup()
@@ -148,6 +152,7 @@ require('lazy').setup({
   },
   {
     'windwp/nvim-ts-autotag',
+    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('nvim-ts-autotag').setup({})

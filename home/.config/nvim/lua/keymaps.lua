@@ -22,6 +22,14 @@ if vim.g.vscode then
   vim.keymap.set("n", "<S-K>", function() vim.fn.VSCodeNotify('workbench.action.decreaseViewHeight') end)
   vim.keymap.set("n", "<S-L>", function() vim.fn.VSCodeNotify('workbench.action.increaseViewWidth') end)
   vim.keymap.set("n", "<S-H>", function() vim.fn.VSCodeNotify('workbench.action.decreaseViewWidth') end)
+
+  -- vscode built-in action, imitating my nvim setup
+  vim.keymap.set("n", "<space>", function() vim.fn.VSCodeNotify('editor.action.showHover') end)
+  vim.keymap.set("n", "<leader>cr", function() vim.fn.VSCodeNotify('references-view.findReferences') end)
+  vim.keymap.set("n", "<leader>t", function() vim.fn.VSCodeNotify('workbench.action.quickOpen') end)
+  vim.keymap.set("n", "<leader>w", function() vim.fn.VSCodeNotify('workbench.view.explorer') end)
+  vim.keymap.set("n", "<leader>fg", function() vim.fn.VSCodeNotify('workbench.action.findInFiles') end)
+  vim.keymap.set("n", "<leader>a", function() vim.fn.VSCodeNotify('outline.focus') end)
 else
   -- New tab
   vim.keymap.set("n", "<leader>n", function() vim.cmd('tabnew') end)
