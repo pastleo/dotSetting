@@ -14,7 +14,7 @@ if not vim.g.vscode then
   local telescopeBuiltin = safe_require('telescope.builtin')
   if telescopeBuiltin ~= false then
     vim.keymap.set('n', '<leader>t', function()
-      if table.getn(vim.fs.find(".git", { type = "directory", upward = true })) > 0 then
+      if table.getn(vim.fs.find('.git', { type = 'directory', upward = true })) > 0 then
         telescopeBuiltin.git_files()
       else
         telescopeBuiltin.find_files({ hidden = true, follow = true })
@@ -60,7 +60,7 @@ if not vim.g.vscode then
       vim.keymap.set('n', '<leader>`', function()
         local opt = vim.fn.input('1: list sessions, 2: save session with sub-name, 3: force save session (after fixing from a failed restoring)\nYour choice ([1]|2|3): ')
         if opt == '3' then
-          vim.cmd("SessionSave")
+          vim.cmd('SessionSave')
         elseif opt == '2' then
           local sessions_dir = (
             vim.fn.getcwd() .. '/' ..
@@ -86,4 +86,42 @@ if not vim.g.vscode then
 
   -- stevearc/aerial.nvim
   vim.keymap.set('n', '<leader>a', function() vim.cmd('AerialOpen') end)
+
+  -- pick a tab with akinsho/bufferline.nvim and a split (window) with gbrlsnchs/winpick.nvim
+  vim.keymap.set('n', 'g<space>', function()
+    vim.print('Pick a tab (or hit space again to continue)...')
+    vim.cmd('BufferLinePick')
+    vim.print('')
+
+    local winid = require('winpick').select({ prompt = 'Pick a split...' })
+    if winid then
+      vim.api.nvim_set_current_win(winid)
+    end
+  end)
+
+  -- pick a split (window) to show & copy path with gbrlsnchs/winpick.nvim
+  vim.keymap.set('n', '<leader>W', function()
+    local winid, bufnr = require('winpick').select({ prompt = 'Pick a split to get file path...' })
+
+    if winid then
+      local name = vim.api.nvim_buf_get_name(bufnr)
+      if name then
+        local fullpath = vim.fn.fnamemodify(name, ':p')
+        local relpath = vim.fn.fnamemodify(name, ':~:.')
+
+        vim.fn.setreg('+', fullpath)
+        vim.ui.input({
+          prompt =
+            'Copied full path to system clipboard:\n' ..
+            fullpath .. '\n' ..
+            'Path relative to editor:\n' ..
+            relpath
+        }, function() end)
+      end
+    end
+  end)
+
+  -- anuvyklack/windows.nvim
+  vim.keymap.set('n', '<leader>z', function() vim.cmd('WindowsMaximize') end)
+  vim.keymap.set('n', '<leader>Z', function() vim.cmd('WindowsEqualize') end)
 end

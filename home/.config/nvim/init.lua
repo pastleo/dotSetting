@@ -52,13 +52,16 @@ if not vim.loop.fs_stat(lazypath) then
     '--branch=stable', -- latest stable release
     lazypath,
   }
-  print('lazy.nvim (plugins manager) not detected, running to install:')
-  print(table.concat(cmd, ' '))
+  vim.print('lazy.nvim (plugins manager) not detected, running to install:')
+  vim.print(table.concat(cmd, ' '))
 
   vim.fn.system(cmd)
 end
 vim.opt.rtp:prepend(lazypath)
 
+local lazyNvimOpts = {
+  concurrency = 8
+}
 require('lazy').setup({
   -- colorscheme & permanent view plugins
   {
@@ -123,11 +126,18 @@ require('lazy').setup({
     end,
   },
   {
-    'beauwilliams/focus.nvim',
+    'anuvyklack/windows.nvim',
+    dependencies = {
+      'anuvyklack/middleclass',
+      'anuvyklack/animation.nvim',
+    },
     cond = not vim.g.vscode,
     lazy = false,
     config = function()
-      require("focus").setup({})
+      vim.o.winwidth = 10
+      vim.o.winminwidth = 10
+      vim.o.equalalways = false
+      require('windows').setup()
     end,
   },
 
@@ -166,6 +176,10 @@ require('lazy').setup({
   },
 
   -- exploring plugins
+  {
+    'gbrlsnchs/winpick.nvim',
+    cond = not vim.g.vscode,
+  },
   {
     'nvim-tree/nvim-tree.lua',
     cond = not vim.g.vscode,
@@ -244,7 +258,7 @@ require('lazy').setup({
       require('auto-session-config')
     end
   },
-})
+}, lazyNvimOpts)
 
 require('plugins-keymaps')
 require('lsp-config')
