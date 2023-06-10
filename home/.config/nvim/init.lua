@@ -10,7 +10,7 @@
 -- * Nerd fonts on terminal emulator, and set NERD_FONT env to enable
 --   https://www.nerdfonts.com/
 --   * yay -S ttf-sourcecodepro-nerd
---   * brew tap homebrew/cask-fonts && brew install --cask font-sauce-code-pro-nerd-font
+--   * brew tap homebrew/cask-fonts && brew install --cask font-source-code-pro font-sauce-code-pro-nerd-font
 --
 -- ## Plugins are managed by lazy.nvim
 -- * type `:Lzay<CR>` to launch its UI
