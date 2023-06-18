@@ -89,9 +89,9 @@ if not vim.g.vscode then
 
   -- pick a tab with akinsho/bufferline.nvim and a split (window) with gbrlsnchs/winpick.nvim
   vim.keymap.set('n', 'g<space>', function()
-    vim.print('Pick a tab (or hit space again to continue)...')
+    print('Pick a tab (or hit space again to continue)...')
     vim.cmd('BufferLinePick')
-    vim.print('')
+    print('　') -- clear
 
     local winid = require('winpick').select({ prompt = 'Pick a split...' })
     if winid then

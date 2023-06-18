@@ -52,8 +52,8 @@ if not vim.loop.fs_stat(lazypath) then
     '--branch=stable', -- latest stable release
     lazypath,
   }
-  vim.print('lazy.nvim (plugins manager) not detected, running to install:')
-  vim.print(table.concat(cmd, ' '))
+  print('lazy.nvim (plugins manager) not detected, running to install:')
+  print(table.concat(cmd, ' '))
 
   vim.fn.system(cmd)
 end
