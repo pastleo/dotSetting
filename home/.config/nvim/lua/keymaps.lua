@@ -30,6 +30,24 @@ if vim.g.vscode then
   vim.keymap.set("n", "<leader>w", function() vim.fn.VSCodeNotify('workbench.view.explorer') end)
   vim.keymap.set("n", "<leader>fg", function() vim.fn.VSCodeNotify('workbench.action.findInFiles') end)
   vim.keymap.set("n", "<leader>a", function() vim.fn.VSCodeNotify('outline.focus') end)
+
+  vim.cmd[[
+    function! s:vscodeCommentary(...) abort
+      if !a:0
+        let &operatorfunc = matchstr(expand('<sfile>'), '[^. ]*$')
+        return 'g@'
+      elseif a:0 > 1
+        let [line1, line2] = [a:1, a:2]
+      else
+        let [line1, line2] = [line("'["), line("']")]
+      endif
+
+      call VSCodeCallRange("editor.action.commentLine", line1, line2, 0)
+    endfunction
+
+    xnoremap <expr> <leader>/ <SID>vscodeCommentary()
+    nnoremap <expr> <leader>/ <SID>vscodeCommentary() . '_'
+  ]]
 else
   -- New tab
   vim.keymap.set("n", "<leader>n", function() vim.cmd('tabnew') end)

@@ -32,6 +32,11 @@
 require('settings')
 require('keymaps')
 
+if vim.g.vscode then
+  print('neovim: started with vim.g.vscode')
+  return
+end
+
 --- Define safe_require() globally to get plugins,
 ---   while preventing error when plugins not installed
 --- @param module_name string
@@ -66,7 +71,6 @@ require('lazy').setup({
   -- colorscheme & permanent view plugins
   {
     'sainnhe/everforest',
-    cond = not vim.g.vscode,
     lazy = false,
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
@@ -75,7 +79,6 @@ require('lazy').setup({
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    cond = not vim.g.vscode,
     lazy = false,
     build = function()
       vim.cmd('TSUpdate')
@@ -86,7 +89,6 @@ require('lazy').setup({
   },
   {
     'lukas-reineke/indent-blankline.nvim',
-    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('indent_blankline').setup({
@@ -97,7 +99,6 @@ require('lazy').setup({
   },
   {
     'lewis6991/gitsigns.nvim',
-    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('gitsigns').setup()
@@ -105,7 +106,6 @@ require('lazy').setup({
   },
   {
     'akinsho/bufferline.nvim', version = '*',
-    cond = not vim.g.vscode,
     lazy = false,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
@@ -116,7 +116,6 @@ require('lazy').setup({
   },
   {
     'nvim-lualine/lualine.nvim',
-    cond = not vim.g.vscode,
     lazy = false,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
@@ -131,7 +130,6 @@ require('lazy').setup({
       'anuvyklack/middleclass',
       'anuvyklack/animation.nvim',
     },
-    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       vim.o.winwidth = 10
@@ -162,7 +160,6 @@ require('lazy').setup({
   },
   {
     'windwp/nvim-ts-autotag',
-    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('nvim-ts-autotag').setup({})
@@ -178,11 +175,9 @@ require('lazy').setup({
   -- exploring plugins
   {
     'gbrlsnchs/winpick.nvim',
-    cond = not vim.g.vscode,
   },
   {
     'nvim-tree/nvim-tree.lua',
-    cond = not vim.g.vscode,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
@@ -195,7 +190,6 @@ require('lazy').setup({
   },
   {
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
-    cond = not vim.g.vscode,
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('telescope-config')
@@ -203,7 +197,6 @@ require('lazy').setup({
   },
   {
     'stevearc/aerial.nvim',
-    cond = not vim.g.vscode,
     cmd = {
       'AerialOpen',
     },
@@ -215,24 +208,20 @@ require('lazy').setup({
   -- lsp plugins
   {
     'williamboman/mason.nvim',
-    cond = not vim.g.vscode,
     build = function()
       pcall(vim.cmd, 'MasonUpdate')
     end,
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    cond = not vim.g.vscode,
   },
   {
     'neovim/nvim-lspconfig',
-    cond = not vim.g.vscode,
   },
 
 	-- autocomplete plugins
   {
     'hrsh7th/nvim-cmp',
-    cond = not vim.g.vscode,
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
@@ -245,14 +234,12 @@ require('lazy').setup({
   -- misc plugins
   {
     'tpope/vim-fugitive',
-    cond = not vim.g.vscode,
     cmd = {
       'Git', 'Gdiffsplit',
     },
   },
   {
     'rmagatti/auto-session',
-    cond = not vim.g.vscode,
     lazy = false,
     config = function()
       require('auto-session-config')

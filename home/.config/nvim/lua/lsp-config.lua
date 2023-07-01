@@ -1,5 +1,3 @@
-if vim.g.vscode then return end
-
 local mason = safe_require('mason')
 local masonLspconfig = safe_require('mason-lspconfig')
 local cmpNvimLsp = safe_require('cmp_nvim_lsp')
