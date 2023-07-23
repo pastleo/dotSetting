@@ -1,4 +1,5 @@
 {
+  "StripWhiteSpaces": { "branch": "master", "commit": "85b5753204d07a064e58a6c64db6d84e318f5f49" },
   "aerial.nvim": { "branch": "master", "commit": "aff1bb8fecff83d3e3a2d544c4d4e6d65718bd19" },
   "animation.nvim": { "branch": "main", "commit": "fb77091ab72ec9971aee0562e7081182527aaa6a" },
   "auto-session": { "branch": "main", "commit": "d91509611981759419ee2fe5e2ef436d5ec8d0eb" },

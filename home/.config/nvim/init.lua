@@ -171,6 +171,12 @@ require('lazy').setup({
       'Emmet',
     },
   },
+  {
+    'gagoar/StripWhiteSpaces',
+    cmd = {
+      'StripWhiteSpaces',
+    },
+  },
 
   -- exploring plugins
   {
