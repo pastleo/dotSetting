@@ -50,3 +50,13 @@ if ! [[ "$existing_log" == *"YAY_SYU"* ]]; then
 else
   log "YAY_SYU already done, skipping..."
 fi
+
+if ! [[ "$existing_log" == *"PACCACHE"* ]]; then
+  log ">> paccache -rk3"
+  # yay -Sy pacman-contrib # to get paccache
+  paccache -rk3 # keep last 3 versions
+
+  log "PACCACHE done"
+else
+  log "PACCACHE already done, skipping..."
+fi
