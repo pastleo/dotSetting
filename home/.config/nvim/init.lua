@@ -88,14 +88,9 @@ require('lazy').setup({
     end,
   },
   {
-    'lukas-reineke/indent-blankline.nvim',
-    lazy = false,
-    config = function()
-      require('indent_blankline').setup({
-        space_char_blankline = ' ',
-        show_current_context = true,
-      })
-    end,
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {},
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -195,7 +190,7 @@ require('lazy').setup({
     end,
   },
   {
-    'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    'nvim-telescope/telescope.nvim', branch = '0.1.x',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('telescope-config')
