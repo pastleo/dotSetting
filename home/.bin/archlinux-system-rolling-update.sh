@@ -19,6 +19,17 @@ function log {
 
 log "archlinux-system-rolling-update.sh starting, log_path: $log_path"
 
+if ! [[ "$existing_log" == *"UPDATE_HOMESHICK"* ]]; then
+  if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
+    log ">> homeshick check"
+    bash -c 'source "$HOME/.homesick/repos/homeshick/homeshick.sh"; homeshick check;' &
+    wait
+    echo "OK to continue? Press enter or Ctrl-C to exit and run 'homeshick' to do maintenance"
+    read
+    log "UPDATE_HOMESHICK OK"
+  fi
+fi
+
 if ! [[ "$existing_log" == *"UPDATE_MIRRORLIST"* ]]; then
   log ">> reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
   reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
