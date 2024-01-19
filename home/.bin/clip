@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if command -v xsel &> /dev/null
+then # Xorg/linux
+  if [ -p /dev/stdin ]; then
+    cat | xsel -b
+  else
+    xsel -b
+  fi
+elif command -v pbcopy &> /dev/null
+then # Macos
+  if [ -p /dev/stdin ]; then
+    cat | pbcopy
+  else
+    pbpaste
+  fi
+elif command -v termux-clipboard-set &> /dev/null
+then # Termux
+  if [ -p /dev/stdin ]; then
+    cat | termux-clipboard-set
+  else
+    termux-clipboard-get
+  fi
+else
+  >&2 echo "No clipboard command found:"
+  >&2 echo " * xsel: Xorg/linux"
+  >&2 echo " * pbcopy/pbpaste: Macos"
+  >&2 echo " * termux-clipboard-set/termux-clipboard-get: Termux:API"
+  exit 127
+fi

@@ -105,6 +105,8 @@ elif [[ $TERM =~ xterm-* ]]; then
     export TERM_RGB=true
   elif [[ $KONSOLE_VERSION ]]; then
     export TERM_RGB=true
+  elif [[ $TERMUX_VERSION ]]; then
+    export TERM_RGB=true
   elif [[ $ITERM_SESSION_ID ]]; then
     export TERM_RGB=true
   elif [[ $VTE_VERSION ]]; then

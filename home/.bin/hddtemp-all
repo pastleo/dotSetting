@@ -1,7 +1,0 @@
-#!/bin/sh
-
-set -e
-hddtemp -v
-
-# https://stackoverflow.com/a/67340134/3736279
-lsblk --include 8 --raw --output path --nodeps --nohead | xargs hddtemp | sort -rnk4

@@ -42,10 +42,10 @@
 ;     signingkey = ...
 ; [commit]
 ;     gpgsign = true
-;[credential]
-    ; see https://github.com/git-ecosystem/git-credential-manager/blob/main/README.md
-    ;   yay -S git-credential-manager-core-bin # archlinux
-    ;   brew install --cask git-credential-manager # macos
-    ;   git credential-manager github login
-    ;helper = /usr/bin/git-credential-manager
-    ;helper = /usr/local/share/gcm-core/git-credential-manager
+; [credential]
+;     ; see https://github.com/git-ecosystem/git-credential-manager/blob/main/README.md
+;     ;   yay -S git-credential-manager-core-bin # archlinux
+;     ;   brew install --cask git-credential-manager # macos
+;     ;   git credential-manager github login
+;     helper = /usr/bin/git-credential-manager
+;     helper = /usr/local/share/gcm-core/git-credential-manager
