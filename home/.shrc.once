@@ -123,35 +123,6 @@ if [ -f "$HOME/.shrc.local" ]; then
 fi
 
 # see ~/.shrc for ~/.shrc.local template
-# example for ssh-agent:
-#
-# ```
-# # vim: set ft=sh:
-#
-# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
-#   export SHRC_LOCAL_SOURCED=true
-#
-#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this if for macos
-#     eval $(ssh-agent)
-#     ssh-add
-#   fi
-# fi
-# ```
-#
-# example for gpg-agent as ssh agent:
-#
-# ```
-# # vim: set ft=sh:
-#
-# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
-#   export SHRC_LOCAL_SOURCED=true
-#
-#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this if for macos
-#     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-#     gpgconf --launch gpg-agent
-#   fi
-# fi
-# ```
 
 # -----------------------------
 # Terminal startup report

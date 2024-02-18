@@ -62,7 +62,37 @@ fi
 # # local rc that only runs on every shell
 # ```
 #
-# more example at ~/.shrc.once
+# example for ssh-agent:
+#
+# ```
+# # vim: set ft=sh:
+#
+# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+#   export SHRC_LOCAL_SOURCED=true
+#
+#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this in macos
+#     eval $(ssh-agent)
+#     ssh-add
+#   fi
+# fi
+# ```
+#
+# example for gpg-agent as ssh agent:
+#
+# ```
+# # vim: set ft=sh:
+#
+# if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+#   export SHRC_LOCAL_SOURCED=true
+#
+#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this in macos
+#     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+#     gpgconf --launch gpg-agent
+#   fi
+# fi
+#
+# GPG_TTY=$(tty) # for pinentry-tty
+# ```
 
 # -----------------------------
 # Session startup & report
