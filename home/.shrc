@@ -88,6 +88,7 @@ fi
 #   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this in macos
 #     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 #     gpgconf --launch gpg-agent
+#     gpg-connect-agent updatestartuptty /bye
 #   fi
 # fi
 #
