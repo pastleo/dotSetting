@@ -1,4 +1,3 @@
 #!/bin/sh
 
 using_sys_path ls $LS_PARAM -l $@
-

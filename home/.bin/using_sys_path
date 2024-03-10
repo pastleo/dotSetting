@@ -1,8 +1,13 @@
 #!/bin/bash
 
 path_user=$PATH
-export PATH=$PATH_SYS
+
+if [ -n "$PATH_SYS" ]; then
+  export PATH=$PATH_SYS
+fi
 
 $@
+ret=$?
 
 export PATH=$path_user
+exit $ret
