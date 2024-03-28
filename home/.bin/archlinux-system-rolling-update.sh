@@ -53,6 +53,15 @@ else
   log "UPDATE_KEYRING already done, skipping..."
 fi
 
+if ! [[ "$existing_log" == *"UPDATE_YAY"* ]]; then
+  log ">> sudo pacman -Sy yay"
+  yay -Sy yay
+
+  log "UPDATE_YAY done"
+else
+  log "UPDATE_YAY already done, skipping..."
+fi
+
 if ! [[ "$existing_log" == *"YAY_SYU"* ]]; then
   log ">> yay -Syu"
   yay -Syu
