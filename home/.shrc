@@ -70,10 +70,8 @@ fi
 # if [ -z "$SHRC_LOCAL_SOURCED" ]; then
 #   export SHRC_LOCAL_SOURCED=true
 #
-#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this in macos
-#     eval $(ssh-agent)
-#     ssh-add
-#   fi
+#   eval $(ssh-agent)
+#   ssh-add
 # fi
 # ```
 #
@@ -85,11 +83,9 @@ fi
 # if [ -z "$SHRC_LOCAL_SOURCED" ]; then
 #   export SHRC_LOCAL_SOURCED=true
 #
-#   if [ -z "$SSH_AUTH_SOCK" ]; then # should not have this in macos
-#     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-#     gpgconf --launch gpg-agent
-#     gpg-connect-agent updatestartuptty /bye
-#   fi
+#   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+#   gpgconf --launch gpg-agent
+#   gpg-connect-agent updatestartuptty /bye > /dev/null
 # fi
 #
 # GPG_TTY=$(tty) # for pinentry-tty
