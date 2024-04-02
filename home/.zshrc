@@ -44,10 +44,9 @@ export ZSH_STACK=$((ZSH_STACK + 1))
 
 export ZPLUG_HOME="$HOME/.zplug"
 if ! [ -f "$ZPLUG_HOME/init.zsh" ]; then
-  echo "zplug not installed, run this to clone zplug:"
-  echo "  git clone https://github.com/zplug/zplug \"$ZPLUG_HOME\""
-  echo "for more info: https://github.com/zplug/zplug"
-  return
+  echo "zplug not installed, downloading zplug:"
+  echo "> git clone https://github.com/zplug/zplug \"$ZPLUG_HOME\""
+  git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
 fi
 source "$ZPLUG_HOME/init.zsh"
 
