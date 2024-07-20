@@ -27,6 +27,11 @@
     diffn = diff --stat
     diffs = diff --staged
     stashd = stash show -p ; get diff of the latest stash
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [commit]
     gpgsign = false
     ; enable signing on a repo:
