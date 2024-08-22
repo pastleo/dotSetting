@@ -1,3 +1,6 @@
+-- early return under vscode
+if vim.g.vscode then return end
+
 -- detect if has NERD_FONT
 vim.g.disable_devicons = vim.env.NERD_FONT == nil
 
@@ -33,9 +36,6 @@ vim.opt.backup = false
 -- split behavior
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-
--- early return under vscode
-if vim.g.vscode then return end
 
 -- line numbers
 vim.opt.numberwidth = 1
