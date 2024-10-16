@@ -1,6 +1,13 @@
 #!/bin/bash
 
-if command -v xsel &> /dev/null
+if command -v wl-copy &> /dev/null
+then # Xorg/linux
+  if [ -p /dev/stdin ]; then
+    cat | wl-copy
+  else
+    wl-paste
+  fi
+elif command -v xsel &> /dev/null
 then # Xorg/linux
   if [ -p /dev/stdin ]; then
     cat | xsel -b

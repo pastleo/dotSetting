@@ -3,6 +3,7 @@
     fileMode = false
     autocrlf = input
     editor = vim
+    quotePath = false
 [fetch]
     prune = true
 [push]
