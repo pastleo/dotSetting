@@ -31,35 +31,25 @@ if ! [[ "$existing_log" == *"UPDATE_HOMESHICK"* ]]; then
 fi
 
 if ! [[ "$existing_log" == *"UPDATE_MIRRORLIST"* ]]; then
-  log ">> reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
-  reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
+  if command -v pacman-mirrors 2>&1 > /dev/null; then
+    log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
+    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 
-  log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
-  sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-  log ">> sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist"
-  sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist
+    log ">> sudo pacman-mirrors -c Taiwan,Japan,United_States"
+    sudo pacman-mirrors -c Taiwan,Japan,United_States
+  else
+    log ">> reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
+    reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
+
+    log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
+    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+    log ">> sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist"
+    sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist
+  fi
 
   log "UPDATE_MIRRORLIST done"
 else
   log "UPDATE_MIRRORLIST already done, skipping..."
-fi
-
-if ! [[ "$existing_log" == *"UPDATE_KEYRING"* ]]; then
-  log ">> sudo pacman -Sy archlinux-keyring"
-  sudo pacman -Sy archlinux-keyring
-
-  log "UPDATE_KEYRING done"
-else
-  log "UPDATE_KEYRING already done, skipping..."
-fi
-
-if ! [[ "$existing_log" == *"UPDATE_YAY"* ]]; then
-  log ">> sudo pacman -Sy yay"
-  yay -Sy yay pacman-contrib
-
-  log "UPDATE_YAY done"
-else
-  log "UPDATE_YAY already done, skipping..."
 fi
 
 if ! [[ "$existing_log" == *"YAY_SYU"* ]]; then
