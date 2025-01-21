@@ -29,27 +29,35 @@
     diffs = diff --staged
     stashd = stash show -p ; get diff of the latest stash
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [commit]
     gpgsign = false
     ; enable signing on a repo:
     ;   git config commit.gpgsign true
 [credential]
     credentialStore = cache
-    helper = /usr/bin/git-credential-manager
-    helper = /usr/local/share/gcm-core/git-credential-manager
-    ; see https://github.com/git-ecosystem/git-credential-manager/blob/main/README.md
-    ;   yay -S git-credential-manager-core-bin # archlinux
-    ;   brew install --cask git-credential-manager # macos
-    ;   git credential-manager github login
-
 [include]
     path = .gitconfig.local
-; to overwrite config per machine, create ~/.gitconfig.local with:
+
+; ~/.gitconfig.local for per-machine config:
 ; [user]
 ;     name = PastLeo
 ;     email = ...
 ;     signingkey = ...
+
+; setup git-credential-manager:
+;   yay -S git-credential-manager-bin # archlinux
+;   brew install --cask git-credential-manager # macos
+;   git credential-manager github login
+;   git credential-manager github list
+;
+; [credential]
+;     helper = /usr/bin/git-credential-manager
+;     username = pastleo # github
+;
+; assign github username for a repo/remote:
+;   git config credential.username pastleo
+;   git config credential.https://github.com/xxx/xxx.git.username pastleo
