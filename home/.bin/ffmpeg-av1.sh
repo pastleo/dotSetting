@@ -8,7 +8,8 @@ if [ "$#" -lt 2 ]; then
   echo "  # path/to/xxxx1.mp4 => path/to/xxxx1-av1.mp4"
   echo "  # path/to/xxxx2.mp4 => path/to/xxxx2-av1.mp4"
   echo "Envs:"
-  echo "  WIDTH, (DATETIME for exiftool-cp.sh)"
+  echo "  WIDTH"
+  echo "  EXIF_CP=1 to enable exiftool-cp.sh (DATETIME)"
   exit 1
 fi
 
@@ -49,8 +50,10 @@ do
       ;;
   esac
 
-  echo '>' exiftool-cp.sh "$SRC" "$DES"
-  exiftool-cp.sh "$SRC" "$DES"
+  if [ $EXIF_CP ]; then
+    echo '>' exiftool-cp.sh "$SRC" "$DES"
+    exiftool-cp.sh "$SRC" "$DES"
+  fi
 
   echo "OK: $SRC => $DES"
   echo ""
