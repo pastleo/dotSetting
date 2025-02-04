@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if command -v helix &> /dev/null; then
+  exec helix $@
+fi
+
+using_sys_path hx $@

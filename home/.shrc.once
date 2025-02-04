@@ -59,6 +59,8 @@ fi
 # homebrew
 if [ -e "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -e "$HOME/.local/homebrew/bin/brew" ]; then
+  eval $("$HOME/.local/homebrew/bin/brew" shellenv)
 fi
 
 # asdf-vm

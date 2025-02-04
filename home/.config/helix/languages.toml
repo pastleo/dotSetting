@@ -1,0 +1,4 @@
+# LSP support is done by command in path, for example:
+#   `hx --health typescript` may say `typescript-language-server` not found in `$PATH`
+#   `npm install -g typescript-language-server` to install
+# to debug, `:open-log` in helix
