@@ -1,6 +1,18 @@
+# https://ghostty.org/docs/config/reference
+
 font-family = "Source Code Pro"
 
-font-size = 9
+config-file = ?config.local
+
+# ~/.config/ghostty/config.local for linux:
+# font-size = 9
+
+# ~/.config/ghostty/config.local for mac:
+# font-size = 12
+# adjust-cell-width = -1
+# font-thicken = true
+# font-thicken-strength = 128
+
 background-opacity = "0.84"
 
 foreground = 2bf2ab

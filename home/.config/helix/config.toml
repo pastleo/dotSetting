@@ -41,6 +41,19 @@ mode.select = "SELECT"
 display-messages = true
 display-inlay-hints = false
 
+[keys.normal.t]
+j = "rotate_view"
+k = "rotate_view_reverse"
+h = ":buffer-previous"
+l = ":buffer-next"
+
+n = ":new"
+
+s = ":vsplit"
+S = ":vsplit-new"
+i = ":hsplit"
+I = ":hsplit-new"
+
 # =====================================
 # https://github.com/LGUG2Z/helix-vim
 # make helix like vim, well I need this
