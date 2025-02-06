@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Firefox Profile Manager
+GenericName=Web Browser
+Exec=firefox --ProfileManager
+Icon=firefox
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+StartupNotify=true
+StartupWMClass=firefox
+Categories=Network;WebBrowser;
