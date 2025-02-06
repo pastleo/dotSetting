@@ -1,43 +1,23 @@
 dotSetting
 ==========
 
-After few years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...
-[Homeshick](https://github.com/andsens/homeshick) is used to manage my dotSetting
-
-## Software
-
-* `zsh`
-  * `bash` as fallback
-  * on macos, just use built-in one
-  * for `.shrc.local`, see `.shrc` / `.shrc.once`
-* `git`
-  * for `.gitconfig.local`, see `.gitconfig`
-* `nvim`
-  * see `.config/nvim/init.lua` for IDE-like features requirements
-  * `vim` as fallback
-
-> on mac, it is recommanded to install and use `git`, `vim`, `zsh` from [`brew`](https://brew.sh/)
+After many years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...
+[GNU stow](https://www.gnu.org/software/stow/) is used to manage my dotSetting
 
 ## How to install
 
-Using `curl`:
+First install `stow` via `yay` or `brew`, then:
 
-```
-bash <(curl -s https://raw.githubusercontent.com/pastleo/dotSetting/master/install.sh)
-```
-
-Or from local disk (this will make a link pointing existing repo)
-
-```
-bash path/to/repo/install.sh
+```bash
+mkdir -p ~/.config/
+git clone https://github.com/pastleo/dotSetting.git ~/.config/dotSetting
+cd ~/.config/dotSetting
+stow -t ~ home [other modules ...]
 ```
 
-## Use real file instead of symlink
-
-> `rsync` is required for this
-
-WARNING: This will overwrite existing files!
+### Uninstall installed modules
 
 ```
-path/to/repo/rsync.sh
+cd ~/.config/dotSetting
+stow -t ~ -D home [other modules ...]
 ```

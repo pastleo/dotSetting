@@ -19,17 +19,6 @@ function log {
 
 log "archlinux-system-rolling-update.sh starting, log_path: $log_path"
 
-if ! [[ "$existing_log" == *"UPDATE_HOMESHICK"* ]]; then
-  if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
-    log ">> homeshick check"
-    bash -c 'source "$HOME/.homesick/repos/homeshick/homeshick.sh"; homeshick check;' &
-    wait
-    echo "OK to continue? Press enter or Ctrl-C to exit and run 'homeshick' to do maintenance"
-    read
-    log "UPDATE_HOMESHICK OK"
-  fi
-fi
-
 if ! [[ "$existing_log" == *"UPDATE_MIRRORLIST"* ]]; then
   if command -v pacman-mirrors 2>&1 > /dev/null; then
     log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"

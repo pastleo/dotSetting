@@ -1,0 +1,6 @@
+font-size = 12
+adjust-cell-width = -1
+font-thicken = true
+font-thicken-strength = 128
+
+macos-option-as-alt = true

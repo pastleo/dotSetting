@@ -29,11 +29,6 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
   . "$HOME/.asdf/asdf.sh"
 fi
 
-# homeshick
-if [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ]; then
-  source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-fi
-
 # GitHub Copilot CLI
 # npm install -g @githubnext/github-copilot-cli
 if hash github-copilot-cli 2> /dev/null; then

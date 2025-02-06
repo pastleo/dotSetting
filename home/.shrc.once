@@ -43,6 +43,7 @@ if [ -z "$PATH_SYS" ]; then
   export PATH_SYS=$PATH
 fi
 add_path "$HOME/.bin"
+add_path "$HOME/.local/bin"
 
 # ls
 if ls --help 2>&1 | grep -q -- --color; then

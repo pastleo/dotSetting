@@ -2,21 +2,13 @@
 
 font-family = "Source Code Pro"
 
+config-file = ?config.platform
 config-file = ?config.local
 
-# ~/.config/ghostty/config.local for linux:
-# font-size = 9
-
-# ~/.config/ghostty/config.local for mac:
-# font-size = 12
-# adjust-cell-width = -1
-# font-thicken = true
-# font-thicken-strength = 128
-
 background-opacity = "0.84"
+cursor-invert-fg-bg = true
 
 foreground = 2bf2ab
-cursor-color = 869395
 background = 2b2b2b
 selection-foreground = 9af3ab
 selection-background = 415345
@@ -37,5 +29,3 @@ palette = 12=#60baf6
 palette = 13=#e2a2f4
 palette = 14=#8ee5e2
 palette = 15=#f0f0f0
-
-macos-option-as-alt = true
