@@ -11,3 +11,4 @@ Icon\r\r
 .vim-sessions
 .sync_rule
 _pleo_local
+.aider*

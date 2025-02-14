@@ -2,10 +2,7 @@
 
 font-family = "Source Code Pro"
 
-config-file = ?config.platform
-config-file = ?config.local
-
-background-opacity = "0.84"
+background-opacity = 0.84
 cursor-invert-fg-bg = true
 
 foreground = 2bf2ab
@@ -29,3 +26,6 @@ palette = 12=#60baf6
 palette = 13=#e2a2f4
 palette = 14=#8ee5e2
 palette = 15=#f0f0f0
+
+config-file = ?config.platform
+config-file = ?config.local
