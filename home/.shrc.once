@@ -52,9 +52,12 @@ else
   export LS_PARAM='-Gh'
 fi
 
-# rootless docker
+# docker
 if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
   export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
+fi
+if [ -e "$HOME/.docker/bin" ]; then
+  add_path "$HOME/.docker/bin"
 fi
 
 # homebrew
