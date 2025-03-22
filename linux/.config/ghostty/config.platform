@@ -1,2 +1,3 @@
 # linux platform
 font-size = 9
+gtk-tabs-location = "bottom"
