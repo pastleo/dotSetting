@@ -13,7 +13,7 @@ First install `stow` via `yay` or `brew`, then:
 mkdir -p ~/.config/
 git clone https://github.com/pastleo/dotSetting.git ~/.config/dotSetting
 cd ~/.config/dotSetting
-stow -t ~ --no-folding home [other modules ...]
+stow -t ~ --no-folding home [other modules ...] # delete manually if some files already exist
 ```
 
 ### Uninstall installed modules
