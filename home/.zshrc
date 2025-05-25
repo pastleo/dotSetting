@@ -80,12 +80,4 @@ fi
 # Then, source plugins and add commands to $PATH
 zplug load # --verbose
 
-# asdf-vm completion
-if [ "$ASDF_DIR" ]; then
-  # append completions to fpath
-  fpath=(${ASDF_DIR}/completions $fpath)
-  # initialise completions with ZSH's compinit
-  autoload -Uz compinit && compinit
-fi
-
 type shrc_session_start_report > /dev/null 2>&1 && shrc_session_start_report

@@ -25,14 +25,8 @@ export SHRC_SOURCED=true
 # -----------------------------
 
 # asdf-vm
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
-  . "$HOME/.asdf/asdf.sh"
-fi
-
-# GitHub Copilot CLI
-# npm install -g @githubnext/github-copilot-cli
-if hash github-copilot-cli 2> /dev/null; then
-  eval "$(github-copilot-cli alias -- "$0")"
+if command -v asdf 2>&1 >/dev/null; then
+  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 fi
 
 # -----------------------------

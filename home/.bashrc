@@ -57,25 +57,15 @@ PS1.PastLeoDynamicPrompt()
   local promptTmp
   local color
 
-  # user type:
-  if [[ ${USER} == "root" ]]; then
-    # user is root:
-    promptTmp="\[\033[41m\]\[\033[30m\] \u "
-    color="Red"
-  else
-    promptTmp="\[\033[42m\]\[\033[30m\] \u "
-    color="Green"
-  fi
-
   # shell start from:
   if [ -n "${SSH_CONNECTION}" ]; then
     # via ssh:
     promptTmp=$promptTmp"\[\033[30m\]\[\033[44m\] \H "
     color="Blue"
-  elif [[ "${DISPLAY%%:0*}" != "" ]]; then
-    # not via ssh:
-    promptTmp=$promptTmp"\[\033[30m\]\[\033[45m\] \H "
-    color="Purple"
+  else
+    # probably local:
+    promptTmp="\[\033[42m\]\[\033[30m\] \u "
+    color="Green"
   fi 
   case $color in
     Red)
