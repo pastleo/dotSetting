@@ -12,3 +12,4 @@ Icon\r\r
 .sync_rule
 _pleo_local
 .aider*
+.claude/settings.local.json
