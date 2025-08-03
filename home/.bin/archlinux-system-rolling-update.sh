@@ -27,8 +27,8 @@ if ! [[ "$existing_log" == *"UPDATE_MIRRORLIST"* ]]; then
     log ">> sudo pacman-mirrors -c Taiwan,Japan,United_States"
     sudo pacman-mirrors -c Taiwan,Japan,United_States
   else
-    log ">> reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
-    reflector --protocol https --age 48 --country tw,jp,us --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
+    log ">> reflector --protocol https --age 48 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
+    reflector --protocol https --age 48 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
 
     log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
     sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak

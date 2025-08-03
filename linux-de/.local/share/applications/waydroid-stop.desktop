@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Exec=echo "waydroid session stop" && waydroid session stop
+GenericName[en_US]=
+GenericName=
+Icon=waydroid
+MimeType=
+Name[en_US]=Waydroid Stop
+Name=Waydroid Stop
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
