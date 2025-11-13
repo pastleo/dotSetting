@@ -74,7 +74,7 @@ fi
 
 # SDK envs
 export GOPATH="$HOME/.golang/"
-export ANDROID_HOME="$HOME/.android-sdk/"
+export ANDROID_HOME="$HOME/Android/Sdk"
 
 # UTF-8 locale
 if hash locale 2> /dev/null; then
