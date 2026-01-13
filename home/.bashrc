@@ -1,8 +1,6 @@
 # vim: set ft=sh:
 # PastLeo's ~/.bashrc
 
-printf "  > starting bash...\n\033[1A"
-
 # -----------------------------
 # Pre-check and host bashrc
 # -----------------------------
@@ -14,6 +12,8 @@ printf "  > starting bash...\n\033[1A"
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
+
+printf "  > starting bash...\n\033[1A"
 
 # -----------------------------
 # Shared rc for bash/zsh

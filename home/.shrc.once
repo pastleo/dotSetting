@@ -72,6 +72,9 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
   . "$HOME/.asdf/asdf.sh"
 fi
 
+# opencode
+export OPENCODE_CONFIG="$HOME/.config/opencode.json"
+
 # SDK envs
 export GOPATH="$HOME/.golang/"
 export ANDROID_HOME="$HOME/Android/Sdk"

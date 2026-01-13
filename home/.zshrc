@@ -1,5 +1,8 @@
 # PastLeo's ~/.zshrc
 
+# if not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 printf "  > starting zsh...\n\033[1A"
 
 # -----------------------------
