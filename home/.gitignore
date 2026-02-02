@@ -13,4 +13,5 @@ Icon\r\r
 _pleo_local
 .aider*
 .claude/settings.local.json
-CLAUDE.local.md
+.local/
+AGENTS.local.md
