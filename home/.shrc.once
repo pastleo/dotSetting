@@ -44,6 +44,7 @@ if [ -z "$PATH_SYS" ]; then
 fi
 add_path "$HOME/.bin"
 add_path "$HOME/.local/bin"
+add_path "$HOME/.npm-global/bin"
 
 # ls
 if ls --help 2>&1 | grep -q -- --color; then
