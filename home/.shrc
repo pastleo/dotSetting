@@ -24,10 +24,6 @@ export SHRC_SOURCED=true
 # Required by each session
 # -----------------------------
 
-# asdf-vm
-if command -v asdf 2>&1 >/dev/null; then
-  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-fi
 
 # -----------------------------
 # Host's specific rc

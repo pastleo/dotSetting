@@ -1,8 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "everforest-no-bg",
-  "instructions": ["AGENTS.local.md"],
-  "keybinds": {
-    "app_exit": "none"
-  }
+  "instructions": ["AGENTS.local.md"]
 }

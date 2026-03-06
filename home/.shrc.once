@@ -45,6 +45,7 @@ fi
 add_path "$HOME/.bin"
 add_path "$HOME/.local/bin"
 add_path "$HOME/.npm-global/bin"
+add_path "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 
 # ls
 if ls --help 2>&1 | grep -q -- --color; then
@@ -66,11 +67,6 @@ if [ -e "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [ -e "$HOME/.local/homebrew/bin/brew" ]; then
   eval $("$HOME/.local/homebrew/bin/brew" shellenv)
-fi
-
-# asdf-vm
-if [ -f "$HOME/.asdf/asdf.sh" ]; then
-  . "$HOME/.asdf/asdf.sh"
 fi
 
 # opencode
