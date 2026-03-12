@@ -37,8 +37,8 @@ else
   echo "DATETIME from Env: $DATETIME"
 fi
 
-echo '>' exiftool -TagsFromFile "$SRC" -All:All -AllDates="$DATETIME" "$DES"
-exiftool -TagsFromFile "$SRC" -All:All -AllDates="$DATETIME" "$DES"
+echo '>' exiftool -m -TagsFromFile "$SRC" -All:All -AllDates="$DATETIME" "$DES"
+exiftool -m -TagsFromFile "$SRC" -All:All -AllDates="$DATETIME" "$DES"
 
 echo '>' rm "${DES}_original" "# cleaning..."
 rm "${DES}_original"
