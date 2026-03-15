@@ -42,6 +42,16 @@ add_path "/usr/local/sbin"
 if [ -z "$PATH_SYS" ]; then
   export PATH_SYS=$PATH
 fi
+
+# homebrew
+if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -e "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -e "$HOME/.local/homebrew/bin/brew" ]; then
+  eval $("$HOME/.local/homebrew/bin/brew" shellenv)
+fi
+
 add_path "$HOME/.bin"
 add_path "$HOME/.local/bin"
 add_path "$HOME/.npm-global/bin"
@@ -60,13 +70,6 @@ if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
 fi
 if [ -e "$HOME/.docker/bin" ]; then
   add_path "$HOME/.docker/bin"
-fi
-
-# homebrew
-if [ -e "/opt/homebrew/bin/brew" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -e "$HOME/.local/homebrew/bin/brew" ]; then
-  eval $("$HOME/.local/homebrew/bin/brew" shellenv)
 fi
 
 # opencode
