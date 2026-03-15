@@ -84,3 +84,8 @@ fi
 zplug load # --verbose
 
 type shrc_session_start_report > /dev/null 2>&1 && shrc_session_start_report
+
+# OpenClaw Completion
+if [ -f "$HOME/.openclaw/completions/openclaw.zsh" ]; then
+  source "$HOME/.openclaw/completions/openclaw.zsh"
+fi
