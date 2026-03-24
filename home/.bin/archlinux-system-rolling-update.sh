@@ -20,21 +20,13 @@ function log {
 log "archlinux-system-rolling-update.sh starting, log_path: $log_path"
 
 if ! [[ "$existing_log" == *"UPDATE_MIRRORLIST"* ]]; then
-  if command -v pacman-mirrors 2>&1 > /dev/null; then
-    log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+  log ">> reflector --protocol https --age 48 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
+  reflector --protocol https --age 24 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
 
-    log ">> sudo pacman-mirrors -c Taiwan,Japan,United_States"
-    sudo pacman-mirrors -c Taiwan,Japan,United_States
-  else
-    log ">> reflector --protocol https --age 48 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist"
-    reflector --protocol https --age 48 --country tw,jp --sort rate --threads 8 --verbose --save /tmp/pacman-new-mirrorlist
-
-    log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-    log ">> sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist"
-    sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist
-  fi
+  log ">> sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak"
+  sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+  log ">> sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist"
+  sudo cp /tmp/pacman-new-mirrorlist /etc/pacman.d/mirrorlist
 
   log "UPDATE_MIRRORLIST done"
 else
