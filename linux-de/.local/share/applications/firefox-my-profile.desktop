@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Firefox With My Profile
 GenericName=Web Browser
-Exec=firefox -P $FIREFOX_MY_PROFILE %u
+Exec=sh -c 'firefox -P "${FIREFOX_MY_PROFILE:-default-release}" "$@"' sh %u
 Icon=firefox
 Terminal=false
 X-MultipleArgs=false
@@ -14,11 +14,11 @@ Actions=new-window;new-private-window;profile-manager
 
 [Desktop Action new-window]
 Name=New Window
-Exec=firefox -P $FIREFOX_MY_PROFILE --new-window %u
+Exec=sh -c 'firefox -P "${FIREFOX_MY_PROFILE:-default-release}" --new-window "$@"' sh %u
 
 [Desktop Action new-private-window]
 Name=New Private Window
-Exec=firefox -P $FIREFOX_MY_PROFILE --private-window %u
+Exec=sh -c 'firefox -P "${FIREFOX_MY_PROFILE:-default-release}" --private-window "$@"' sh %u
 
 [Desktop Action profile-manager]
 Name=Profile Manager
