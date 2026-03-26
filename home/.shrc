@@ -42,6 +42,7 @@ fi
 #   export SHRC_LOCAL_SOURCED=true
 #
 #   # local rc that only runs on top level of terminal
+#   # add_path "$HOME/.some/bin" # add_path exposed from .shrc.once
 # fi
 #
 # # local rc that only runs on every shell

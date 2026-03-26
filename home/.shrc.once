@@ -36,6 +36,8 @@ add_path()
   tmp="$1:${PATH//$1/}"
   export PATH="${tmp//::/:}"
 }
+export -f add_path
+
 add_path "/usr/local/bin"
 add_path "/usr/local/sbin"
 
