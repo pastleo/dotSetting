@@ -1,6 +1,19 @@
 # vim: set ft=sh:
 # shared env for bash/zsh and non-interactive mode
 
+# user systemd unit can source this file to run with shell-like env
+# for example ~/.config/systemd/user/xxx.service as example:
+# [Unit]
+# Description=xxx
+# After=network-online.target
+# Wants=network-online.target
+# [Service]
+# Type=simple
+# WorkingDirectory=%h
+# ExecStart=/usr/bin/bash -lc 'source ~/.config/shrc/env; exec ...'
+# [Install]
+# WantedBy=default.target
+
 # _HOST env
 if [ -z "$_HOST" ]; then
   if [ "$(which hostname 2> /dev/null)" ]; then

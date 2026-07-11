@@ -40,6 +40,22 @@ if ! grep -q "$BASHRC_SOURCE" "$HOME/.bashrc"; then
   fi
 fi
 
+if ! grep -q "$BASHRC_SOURCE" "$HOME/.bash_profile"; then
+  echo ""
+  echo "Injecting .bash_profile:"
+  echo "  echo \"$BASHRC_SOURCE\" >> \"\$HOME/.bash_profile\""
+  echo ""
+
+  read -p "(Press Y to continue) " -n 1 -r
+  echo ""
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "$BASHRC_SOURCE" >> "$HOME/.bash_profile"
+    echo ".bash_profile injected"
+  else
+    echo ".bash_profile skipped"
+  fi
+fi
+
 ZSHRC_SOURCE='source "$HOME/.config/shrc/zshrc"'
 if ! grep -q "$ZSHRC_SOURCE" "$HOME/.zshrc"; then
   echo ""
