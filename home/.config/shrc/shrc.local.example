@@ -1,0 +1,20 @@
+# vim: set ft=sh:
+
+# init local from example:
+# cp ~/.config/shrc/shrc.local.example ~/.config/shrc/shrc.local
+
+if [ -z "$SHRC_LOCAL_SOURCED" ]; then
+  export SHRC_LOCAL_SOURCED=true
+  # local rc that only runs on top level of terminal
+
+  # gpg-agent as ssh agent:
+  # export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  # gpgconf --launch gpg-agent
+  # gpg-connect-agent updatestartuptty /bye > /dev/null
+
+  # ssh-agent:
+  # eval $(ssh-agent)
+  # ssh-add
+fi
+
+# GPG_TTY=$(tty) # for gpg pinentry-tty

@@ -1,0 +1,43 @@
+# vim: set ft=sh:
+# shared rc for bash/zsh
+
+# -----------------------------
+# Restore PATH if TMUX_PATH
+# to prevent tmux or system shell reset PATH
+# see TMUX_PATH in .tmux.conf
+# -----------------------------
+
+if [ "$TMUX_PATH" ]; then
+  export PATH=$TMUX_PATH
+fi
+
+# NOTICE ====
+# each session source until here, as environment will be inherited
+# a restart of whole tmux (closing all tmux session) is needed to reset
+# ===========
+if [ -z "$SHRC_SOURCED" ]; then
+  source "$HOME/.config/shrc/shrc.once"
+fi
+export SHRC_SOURCED=true
+
+# -----------------------------
+# Local rc
+# -----------------------------
+
+if [ "$SHRC_LOCAL_EXISTS" ]; then
+  source "$HOME/.config/shrc/shrc.local"
+fi
+
+# -----------------------------
+# Session startup & report
+# -----------------------------
+
+shrc_session_start_report() {
+  if [ -n "$_HOST" ]; then
+    hostname_info="\033[1;34m$_HOST\033[0m"
+  else
+    hostname_info="\033[1;31m(unknown)\033[0m"
+  fi
+
+  echo -e "PID: \033[1;32m$$\033[0m | HOST: $hostname_info | \033[1;36m$(date '+%Y/%m/%d %A %H:%M %Z (%z)')\033[0m"
+}

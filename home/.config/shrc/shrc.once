@@ -1,0 +1,48 @@
+# vim: set ft=sh:
+# PastLeo's shared rc for bash/zsh
+# this only run once per terminal
+
+# -----------------------------
+# Welcome message
+# -----------------------------
+
+if [ -f "$HOME/.config/shrc/welcomeMsg" ]; then
+  cat "$HOME/.config/shrc/welcomeMsg"
+fi
+
+# -----------------------------
+# Environment variables
+# -----------------------------
+
+source "$HOME/.config/shrc/env"
+
+# -----------------------------
+# Detect if local rc exists
+# -----------------------------
+
+if [ -f "$HOME/.config/shrc/shrc.local" ]; then
+  export SHRC_LOCAL_EXISTS=true
+fi
+
+# -----------------------------
+# Terminal startup report
+# -----------------------------
+
+if [ -n "$SSH_CLIENT" ]; then
+  from_info="\033[1;37m$SSH_CLIENT\033[0m"
+elif [ -n "$DISPLAY" ]; then
+  from_info="\033[1;34mDISPLAY $DISPLAY\033[0m"
+else
+  from_info="\033[1;35m$(tty)\033[0m"
+fi
+if [ -n "$LANG" ]; then
+  lang_info="\033[1;34m$LANG\033[0m"
+else
+  lang_info="\033[1;31m(not set)\033[0m"
+fi
+if [ -n "$EDITOR" ]; then
+  editor_info="\033[1;34m$EDITOR\033[0m"
+else
+  editor_info="\033[1;31m(not set)\033[0m"
+fi
+echo -e "FROM: $from_info | LANG: $lang_info | EDITOR: $editor_info"

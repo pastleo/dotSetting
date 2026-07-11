@@ -1,5 +1,4 @@
 # vim: set ft=sh:
-# PastLeo's ~/.bashrc
 
 # -----------------------------
 # Pre-check and host bashrc
@@ -8,19 +7,14 @@
 # if not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# source global definitions (if any)
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
-fi
-
 printf "  > starting bash...\n\033[1A"
 
 # -----------------------------
 # Shared rc for bash/zsh
 # -----------------------------
 
-if [ -f "$HOME/.shrc" ]; then
-  source "$HOME/.shrc"
+if [ -f "$HOME/.config/shrc/shrc" ]; then
+  source "$HOME/.config/shrc/shrc"
 fi
 
 # -----------------------------
@@ -45,7 +39,7 @@ fi
 # To disable zsh inside session / prevent launching zsh from bash:
 #   just call `bash` or `sh`
 # To disable zsh completely:
-#   export ZSH_STACK=2 in $HOME/.shrc.local
+#   export ZSH_STACK=2 in $HOME/.config/shrc/shrc.local
 # Search ZSH_STACK in .zshrc for more detail
 
 # -----------------------------

@@ -1,18 +1,5 @@
 # vim: set ft=sh:
-# PastLeo's shared rc for bash/zsh
-# this only run once per terminal
-
-# -----------------------------
-# Welcome message
-# -----------------------------
-
-if [ -f "$HOME/.welcomeMsg" ]; then
-  cat "$HOME/.welcomeMsg"
-fi
-
-# -----------------------------
-# Environment variables
-# -----------------------------
+# shared env for bash/zsh and non-interactive mode
 
 # _HOST env
 if [ -z "$_HOST" ]; then
@@ -31,15 +18,15 @@ if [ -z "$EDITOR" ]; then
 fi
 
 # PATH env
-add_path()
+prepend_path()
 {
   tmp="$1:${PATH//$1/}"
   export PATH="${tmp//::/:}"
 }
-export -f add_path
+export -f prepend_path
 
-add_path "/usr/local/bin"
-add_path "/usr/local/sbin"
+prepend_path "/usr/local/bin"
+prepend_path "/usr/local/sbin"
 
 if [ -z "$PATH_SYS" ]; then
   export PATH_SYS=$PATH
@@ -54,10 +41,10 @@ elif [ -e "$HOME/.local/homebrew/bin/brew" ]; then
   eval $("$HOME/.local/homebrew/bin/brew" shellenv)
 fi
 
-add_path "$HOME/.bin"
-add_path "$HOME/.local/bin"
-add_path "$HOME/.npm-global/bin"
-add_path "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+prepend_path "$HOME/.bin"
+prepend_path "$HOME/.local/bin"
+prepend_path "$HOME/.npm-global/bin"
+prepend_path "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 
 # ls
 if ls --help 2>&1 | grep -q -- --color; then
@@ -71,7 +58,7 @@ if [ "$XDG_RUNTIME_DIR" ] && [ -e "$XDG_RUNTIME_DIR/docker.sock" ]; then
   export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
 fi
 if [ -e "$HOME/.docker/bin" ]; then
-  add_path "$HOME/.docker/bin"
+  prepend_path "$HOME/.docker/bin"
 fi
 
 # opencode
@@ -126,34 +113,9 @@ elif [[ $TERM =~ xterm-* ]]; then
 fi
 
 # -----------------------------
-# Host's specific rc
+# Host's specific envs
 # -----------------------------
-
-if [ -f "$HOME/.shrc.local" ]; then
-  export SHRC_LOCAL_EXISTS=true
+if [ -f "$HOME/.config/shrc/env.local" ]; then
+  source "$HOME/.config/shrc/env.local"
 fi
 
-# see ~/.shrc for ~/.shrc.local template
-
-# -----------------------------
-# Terminal startup report
-# -----------------------------
-
-if [ -n "$SSH_CLIENT" ]; then
-  from_info="\033[1;37m$SSH_CLIENT\033[0m"
-elif [ -n "$DISPLAY" ]; then
-  from_info="\033[1;34mDISPLAY $DISPLAY\033[0m"
-else
-  from_info="\033[1;35m$(tty)\033[0m"
-fi
-if [ -n "$LANG" ]; then
-  lang_info="\033[1;34m$LANG\033[0m"
-else
-  lang_info="\033[1;31m(not set)\033[0m"
-fi
-if [ -n "$EDITOR" ]; then
-  editor_info="\033[1;34m$EDITOR\033[0m"
-else
-  editor_info="\033[1;31m(not set)\033[0m"
-fi
-echo -e "FROM: $from_info | LANG: $lang_info | EDITOR: $editor_info"

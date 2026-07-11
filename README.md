@@ -1,24 +1,22 @@
 dotSetting
 ==========
 
-After many years of usage in commandline, I got a lot of setting like `.bashrc`, `.vimrc`, `.tmux.conf`...
-
-[GNU stow](https://www.gnu.org/software/stow/) is used to manage my dotSetting
+home dot setting files managed by [GNU stow](https://www.gnu.org/software/stow/)
 
 ## How to install
 
-First install `stow` via `yay` or `brew`, then:
+First install `stow` via `pacman`, `yay` or `brew`, then:
 
 ```bash
 mkdir -p ~/.config/
 git clone https://github.com/pastleo/dotSetting.git ~/.config/dotSetting
 cd ~/.config/dotSetting
-stow -t ~ --no-folding home [other modules ...] # delete manually if some files already exist
+./install.sh
 ```
 
 ### Uninstall installed modules
 
 ```
 cd ~/.config/dotSetting
-stow -t ~ -D home [other modules ...]
+stow -v -t ~ -D home [other modules ...]
 ```
