@@ -30,5 +30,7 @@ palette = 15=#f0f0f0
 # https://github.com/sahaj-b/ghostty-cursor-shaders
 custom-shader = shaders/cursor_sweep.glsl
 
+confirm-close-surface = false
+
 config-file = ?config.platform
 config-file = ?config.local
