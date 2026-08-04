@@ -4,6 +4,8 @@
     autocrlf = input
     editor = vim
     quotePath = false
+[init]
+  defaultBranch = main
 [fetch]
     prune = true
 [push]
