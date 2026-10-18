@@ -1,0 +1,65 @@
+[core]
+    excludesfile = ~/.gitignore
+    fileMode = false
+    autocrlf = input
+    editor = vim
+    quotePath = false
+[init]
+  defaultBranch = main
+[fetch]
+    prune = true
+[push]
+    default = upstream
+    autoSetupRemote = true
+[pull]
+    default = current
+    rebase = true
+[alias]
+    s = status
+    h = rev-parse HEAD
+    ci = commit
+    cis = commit -S
+    br = branch
+    co = checkout
+    aa = add --all
+    rev = remote -v
+    logg = log --graph --oneline --decorate --all
+    logn = log --stat --graph --oneline --decorate --all
+    logl = log --pretty=short -u -L
+    tags = for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags
+    diffn = diff --stat
+    diffs = diff --staged
+    stashd = stash show -p ; get diff of the latest stash
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+[commit]
+    gpgsign = false
+    ; enable signing on a repo:
+    ;   git config commit.gpgsign true
+[credential]
+    credentialStore = cache
+    helper = /usr/bin/git-credential-manager
+[include]
+    path = .gitconfig.local
+
+; ~/.gitconfig.local for per-machine config:
+; [user]
+;     name = PastLeo
+;     email = ...
+;     signingkey = ...
+
+; setup git-credential-manager:
+;   yay -S git-credential-manager-bin # archlinux
+;   brew install --cask git-credential-manager # macos
+;   git credential-manager github login
+;   git credential-manager github list
+;
+; [credential]
+;     username = pastleo # github
+;
+; assign github username for a repo/remote:
+;   git config credential.username pastleo
+;   git config credential.https://github.com/xxx/xxx.git.username pastleo

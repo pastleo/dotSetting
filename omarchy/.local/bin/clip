@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -p /dev/stdin ] || [ -f /dev/stdin ]; then
+  exec wl-copy
+else
+  exec wl-paste
+fi

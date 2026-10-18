@@ -1,5 +1,5 @@
 // -- CONFIGURATION ---
-vec4 TRAIL_COLOR = iCurrentCursorColor; // can change to eg: vec4(0.2, 0.6, 1.0, 0.5);
+// Read the uniform inside mainImage; global initialization is not portable GLSL.
 const float DURATION = 0.2; // in seconds
 const float TRAIL_LENGTH = 0.5;
 const float BLUR = 2.0; // blur size in pixels (for antialiasing)
@@ -137,6 +137,7 @@ vec2 getRectangleCenter(vec4 rectangle) {
 
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord){
+    vec4 TRAIL_COLOR = iCurrentCursorColor; // or e.g. vec4(0.2, 0.6, 1.0, 0.5)
     #if !defined(WEB)
     fragColor = texture(iChannel0, fragCoord.xy / iResolution.xy);
     #endif

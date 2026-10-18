@@ -1,0 +1,16 @@
+# Replaces Stow's default ignore list. Install .gitignore as a home dotfile.
+RCS
+.+,v
+CVS
+\.\#.+
+\.cvsignore
+\.svn
+_darcs
+\.hg
+\.git
+\.gitmodules
+.+~
+\#.*\#
+^/README.*
+^/LICENSE.*
+^/COPYING

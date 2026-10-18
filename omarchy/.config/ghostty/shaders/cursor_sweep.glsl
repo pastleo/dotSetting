@@ -1,0 +1,1 @@
+../../../../home/.config/ghostty/shaders/cursor_sweep.glsl
