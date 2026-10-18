@@ -15,8 +15,7 @@ cd ~/.config/dotSetting
 ```
 
 The installer requires explicit module names and installs only those modules.
-For Omarchy, use `./install.sh omarchy` instead of the legacy `home` module;
-see [the Omarchy setup notes](omarchy/README.md).
+For Omarchy, use `./install.sh omarchy` instead of the legacy `home` module.
 
 For a legacy setup with additional modules, use e.g. `./install.sh home macos`.
 
