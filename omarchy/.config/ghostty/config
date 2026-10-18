@@ -1,9 +1,11 @@
 config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
+# Load our theme overrides after Omarchy's generated theme.
+config-file = theme
 font-family = "SauceCodePro Nerd Font"
 font-size = 9
 font-style = Regular
 
-background-opacity = 0.85
+background-opacity = 0.94
 background-opacity-cells = true
 background-blur = false
 
