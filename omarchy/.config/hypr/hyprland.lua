@@ -56,12 +56,5 @@ o.window({ float = true, pin = true }, {
 -- Restore saved workspace layouts and toggle config flags after overrides.
 require("default.hypr.toggles")
 
--- Load hyprmoncfg's generated monitor rules last, when present.
-do
-  local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"
-  local file = io.open(path, "r")
-  if file then
-    file:close()
-    dofile(path)
-  end
-end
+-- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
+do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end

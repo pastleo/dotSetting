@@ -9,7 +9,7 @@
 source "$OMARCHY_PATH/default/bash/rc"
 
 if [ -z "$RC_SOURCED" ]; then
-  # rc that only runs on top level of terminal
+  # rc that only runs on top level of terminal:
   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
   gpgconf --launch gpg-agent
   gpg-connect-agent updatestartuptty /bye > /dev/null
@@ -17,4 +17,7 @@ if [ -z "$RC_SOURCED" ]; then
   export RC_SOURCED=true
 fi
 
-# rc that runs on every session
+# rc that runs on every session:
+alias sl='ls'
+alias ll='ls'
+alias la='ls -a'
